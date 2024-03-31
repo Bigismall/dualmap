@@ -1,0 +1,99 @@
+:root {
+  font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height            : 1.5;
+  font-weight            : 400;
+  font-size              : 16px;
+  color                  : #333;
+  background-color       : white;
+  font-synthesis         : none;
+  text-rendering         : optimizeLegibility;
+  -webkit-font-smoothing : antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin  : 0;
+  padding : 0;
+  width   : 100%;
+  height  : 100vh;
+  overflow: hidden;
+  display : block;
+  position: relative;
+}
+
+.layout {
+  margin               : 0;
+  padding              : 0;
+  place-items          : center;
+  width                : 100%;
+  height               : 100vh;
+  overflow             : hidden;
+  display              : grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows   : 1fr;
+  gap                  : 0px 0px;
+  grid-template-areas  : "left center right";
+}
+
+.layout__left,
+.layout__center,
+.layout__right {
+  display: block;
+  width  : 100%;
+  height : 100%;
+}
+
+.layout__center {
+  grid-area: center;
+}
+
+.layout__left {
+  grid-area: left;
+}
+
+.layout__right {
+  grid-area: right;
+}
+
+.layout__frame {
+  display: block;
+  margin : 0;
+  padding: 0;
+  border : none;
+}
+
+.axis {
+  position        : absolute;
+  top             : 0;
+  left            : 0;
+  display         : block;
+  background-color: orangered;
+  z-index         : 2000;
+  pointer-events  : none;
+}
+
+.axis__horizontal {
+  top   : 50%;
+  left  : 0;
+  width : 100vw;
+  height: 1px;
+}
+
+.axis__vertical {
+  top   : 0;
+  left  : 0;
+  width : 1px;
+  height: 100vh;
+}
+
+.axis__vertical--left {
+  left: 16.66666667%;
+}
+
+.axis__vertical--center {
+  left: 50%;
+}
+
+.axis__vertical--right {
+  left: 83.33333333%;
+}
