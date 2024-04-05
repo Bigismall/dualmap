@@ -8,7 +8,7 @@ import './style.css';
 
 const DEFAULT_CENTER: [number, number] = [54.374705, 18.466730];
 const DEFAULT_ZOOM: number = 14;
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
+const GOOGLE_MAPS_API_KEY = 'AIzaSyD5tEvgJ-K0mjJ-4Nb18EKAEF3pGhVn27g';
 
 const googleMapSrc = (latlong: L.LatLng, zoom: number) => `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`
 
