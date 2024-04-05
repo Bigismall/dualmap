@@ -15,8 +15,7 @@ const googleMapSrc = (latlong: L.LatLng, zoom: number) => `https://www.google.co
 
 const wikimapiaSrc = (latlong: L.LatLng, zoom: number) => `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`
 
-//TODO add options to toggle axis 
-
+// TODO add options to toggle axis 
 
 window.addEventListener('load', function () {
 
