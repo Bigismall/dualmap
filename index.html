@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dual Map</title>
+  <script type="module" crossorigin src="/assets/index-Chz16mfP.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BeFDbuyy.css">
+</head>
+
+<body id="app">
+  <div class="layout">
+    <div class="layout__left">
+      <iframe width="100%" height="100%" referrerpolicy="no-referrer-when-downgrade" src="" loading="lazy"
+        title="Google maps" class="layout__frame js-googlemaps">
+      </iframe>
+    </div>
+    <div class="layout__center js-osm"></div>
+    <div class="layout__right">
+      <iframe src="" width="100%" height="100%" loading="lazy" class="layout__frame js-wikimapia"
+        title="Wikimapia"></iframe>
+    </div>
+  </div>
+
+  <div class="axis axis__horizontal"></div>
+  <div class="axis axis__vertical axis__vertical--left"></div>
+  <div class="axis axis__vertical axis__vertical--center"></div>
+  <div class="axis axis__vertical axis__vertical--right"></div>
+
+</body>
+
+</html>
