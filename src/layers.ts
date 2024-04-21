@@ -1,10 +1,13 @@
 import L from "leaflet";
+import { LayerName } from "./constants";
 
-export const osmLayers: Record<string, L.TileLayer> = {
-    'OSM': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+
+export const osmLayers: Record<LayerName, L.TileLayer> = {
+    'Open Street Map': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap'
     }),
-    'OSM DE': L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+    ['Open Street Map DE']: L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }),
     'Humanitarian': L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
