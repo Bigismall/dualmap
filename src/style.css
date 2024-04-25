@@ -21,6 +21,10 @@ body {
   position: relative;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .layout {
   margin               : 0;
   padding              : 0;

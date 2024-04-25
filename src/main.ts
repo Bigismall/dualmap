@@ -1,5 +1,5 @@
 import L from 'leaflet';
-import { $ } from './dom.ts';
+import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
 import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, LayerName, MAX_ZOOM } from './constants.ts';
@@ -16,6 +16,7 @@ window.addEventListener('load', function () {
     ['osm', $('.js-osm')],
     ['googlemaps', $('.js-googlemaps')],
     ['wikimapia', $('.js-wikimapia')],
+    ['axis', $$('.axis')],
   ]);
 
   const $somethingIsMissing = Array.from($elements.values()).some($element => $element === null);
@@ -29,6 +30,7 @@ window.addEventListener('load', function () {
   let currentLayer: LayerName = DEFAULT_LAYER
   const googlemaps = $elements.get('googlemaps') as HTMLIFrameElement;
   const wikimapia = $elements.get('wikimapia') as HTMLIFrameElement;
+  const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
   const urlParams = checkUrlParams();
 
   if (urlParams?.layer) {
@@ -69,11 +71,18 @@ window.addEventListener('load', function () {
     setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
   });
 
-
-
-
   const resizeObserver = new ResizeObserver(() => {
     osm.invalidateSize();
+  });
+
+  // When x key is pressed, turn on/off axis
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'a') {
+      Array.from(axis).map($element => {
+        $element.classList.toggle('hidden');
+      });
+
+    }
   });
 
   resizeObserver.observe($elements.get('osm') as HTMLDivElement);
