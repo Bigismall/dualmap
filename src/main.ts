@@ -2,6 +2,7 @@ import L from 'leaflet';
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
+import { log } from './console.ts';
 import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, LayerName, MAX_ZOOM } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import './style.css';
@@ -19,6 +20,7 @@ window.addEventListener('load', function () {
     ['axis', $$('.axis')],
   ]);
 
+
   const $somethingIsMissing = Array.from($elements.values()).some($element => $element === null);
 
   if ($somethingIsMissing) {
@@ -31,7 +33,14 @@ window.addEventListener('load', function () {
   const googlemaps = $elements.get('googlemaps') as HTMLIFrameElement;
   const wikimapia = $elements.get('wikimapia') as HTMLIFrameElement;
   const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
+  const app = $elements.get('app') as HTMLBodyElement;
   const urlParams = checkUrlParams();
+  const visibleColumns = new Map<string, boolean>([
+    ['googlemaps', true],
+    ['wikimapia', true],
+    ['axis', true],
+  ])
+
 
   if (urlParams?.layer) {
     currentLayer = urlParams.layer;
@@ -77,12 +86,25 @@ window.addEventListener('load', function () {
 
   // When x key is pressed, turn on/off axis
   window.addEventListener('keydown', (event) => {
-    if (event.key === 'a') {
+    if (event.key.toLowerCase() === 'a') {
       Array.from(axis).map($element => {
         $element.classList.toggle('hidden');
       });
-
     }
+
+    //That's quite ugly ....
+
+    if (event.key.toLowerCase() === 'r') {
+      wikimapia.parentElement?.classList.toggle('hidden');
+      visibleColumns.set('wikimapia', !visibleColumns.get('wikimapia'));
+    }
+
+    if (event.key.toLowerCase() === 'l') {
+      googlemaps.parentElement?.classList.toggle('hidden');
+      visibleColumns.set('googlemaps', !visibleColumns.get('googlemaps'));
+    }
+    log(visibleColumns);
+    app.style.setProperty('--num-columns', Array.from(visibleColumns.values()).filter(visible => visible).length.toString());
   });
 
   resizeObserver.observe($elements.get('osm') as HTMLDivElement);
