@@ -7,6 +7,9 @@ import { osmLayers } from './layers.ts';
 import './style.css';
 import { checkUrlParams, setUrlParams } from './url.ts';
 
+// TODO - Add columns visibility to URL
+// TODO - support url from google maps (with i key, display prompt to read google maps url)
+
 const googleMapSrc = (latlong: L.LatLng, zoom: number) => `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`
 const wikimapiaSrc = (latlong: L.LatLng, zoom: number) => `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`
 
@@ -19,10 +22,17 @@ window.addEventListener('load', function () {
     ['axis', $$('.axis')],
   ]);
 
+
   const $somethingIsMissing = Array.from($elements.values()).some($element => $element === null);
 
   if ($somethingIsMissing) {
     window.alert(`Some elements are missing`);
+    // display elements that are missing
+    Array.from($elements.entries()).map(([key, $element]) => {
+      if ($element === null) {
+        console.log(key);
+      }
+    });
     return;
   }
 
@@ -32,6 +42,7 @@ window.addEventListener('load', function () {
   const wikimapia = $elements.get('wikimapia') as HTMLIFrameElement;
   const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
   const urlParams = checkUrlParams();
+
 
   if (urlParams?.layer) {
     currentLayer = urlParams.layer;
@@ -75,13 +86,20 @@ window.addEventListener('load', function () {
     osm.invalidateSize();
   });
 
-  // When x key is pressed, turn on/off axis
+  // When a key is pressed, turn on/off axis
   window.addEventListener('keydown', (event) => {
-    if (event.key === 'a') {
+    if (event.key.toLowerCase() === 'a') {
       Array.from(axis).map($element => {
         $element.classList.toggle('hidden');
       });
+    }
 
+    if (event.key.toLowerCase() === 'r') {
+      wikimapia.parentElement?.classList.toggle('hidden');
+    }
+
+    if (event.key.toLowerCase() === 'l') {
+      googlemaps.parentElement?.classList.toggle('hidden');
     }
   });
 

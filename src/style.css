@@ -26,17 +26,18 @@ body {
 }
 
 .layout {
-  margin               : 0;
-  padding              : 0;
-  place-items          : center;
-  width                : 100%;
-  height               : 100vh;
-  overflow             : hidden;
-  display              : grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows   : 1fr;
-  gap                  : 0px 0px;
-  grid-template-areas  : "left center right";
+  margin     : 0;
+  padding    : 0;
+  place-items: center;
+  width      : 100%;
+  height     : 100vh;
+  overflow   : hidden;
+
+  display        : flex;
+  flex-direction : row;
+  justify-content: space-between;
+  align-items    : stretch;
+
 }
 
 .layout__left,
@@ -45,18 +46,6 @@ body {
   display: block;
   width  : 100%;
   height : 100%;
-}
-
-.layout__center {
-  grid-area: center;
-}
-
-.layout__left {
-  grid-area: left;
-}
-
-.layout__right {
-  grid-area: right;
 }
 
 .layout__frame {
@@ -83,6 +72,7 @@ body {
   height: 1px;
 }
 
+
 .axis__vertical {
   top   : 0;
   left  : 0;
@@ -100,4 +90,32 @@ body {
 
 .axis__vertical--right {
   left: 83.33333333%;
+}
+
+#app:has(.layout__left.hidden) .axis__vertical--left {
+  display: none;
+}
+
+#app:has(.layout__left.hidden) .axis__vertical--center {
+  left: 25%;
+}
+
+#app:has(.layout__left.hidden) .axis__vertical--right {
+  left: 75%;
+}
+
+#app:has(.layout__right.hidden) .axis__vertical--right {
+  display: none;
+}
+
+#app:has(.layout__right.hidden) .axis__vertical--left {
+  left: 25%;
+}
+
+#app:has(.layout__right.hidden) .axis__vertical--center {
+  left: 75%;
+}
+
+#app:has(.layout__left.hidden ~ .layout__right.hidden) .axis__vertical--center {
+  left: 50%;
 }
