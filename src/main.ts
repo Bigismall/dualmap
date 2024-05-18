@@ -5,10 +5,9 @@ import 'leaflet/dist/leaflet.css';
 import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, LayerName, MAX_ZOOM } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import './style.css';
-import { checkUrlParams, setUrlParams } from './url.ts';
+import { checkUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 
 // TODO - Add columns visibility to URL
-// TODO - support url from google maps (with i key, display prompt to read google maps url)
 
 const googleMapSrc = (latlong: L.LatLng, zoom: number) => `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`
 const wikimapiaSrc = (latlong: L.LatLng, zoom: number) => `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`
@@ -100,6 +99,18 @@ window.addEventListener('load', function () {
 
     if (event.key.toLowerCase() === 'l') {
       googlemaps.parentElement?.classList.toggle('hidden');
+    }
+
+    if (event.key.toLowerCase() === 'i') {
+      const url = prompt('Enter Google Maps URL');
+      if (url) {
+        const { lat, lon, zoom } = parseGoogleMapsUrl(url);
+        osm.setView([lat, lon], zoom);
+
+        googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
+        wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
+        setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
+      }
     }
   });
 

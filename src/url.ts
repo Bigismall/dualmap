@@ -1,3 +1,4 @@
+import { log } from "./console";
 import { DEFAULT_LAYER, DEFAULT_ZOOM, LayerName, MAX_ZOOM } from "./constants";
 
 export const setUrlParams = (latlong: L.LatLng, zoom: number, layer: LayerName) => {
@@ -26,3 +27,19 @@ export const checkUrlParams = () => {
     }
     return null;
 };
+
+// https://www.google.com/maps/@54.3854942,18.3370827,15.95z?entry=ttu
+export const parseGoogleMapsUrl = (url: string): { lat: number, lon: number, zoom: number } => {
+    const googleMapsUrl = new URL(url);
+    const params = googleMapsUrl.pathname.split('@')[1].split(',');
+    const lat = parseFloat(params[0]);
+    const lon = parseFloat(params[1]);
+    const zoom = parseInt(params[2].replace(/[^0-9.]*/, ''));
+
+    log({ lat, lon, zoom })
+    return {
+        lat: lat,
+        lon: lon,
+        zoom: zoom,
+    }
+}
