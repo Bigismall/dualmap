@@ -8,6 +8,9 @@ import './style.css';
 import { checkUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 
 // TODO - Add columns visibility to URL
+// TODO - Use abstrac class for each map. 
+// TODO - Use observer pattern to update other maps
+
 
 const googleMapSrc = (latlong: L.LatLng, zoom: number) => `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`
 const wikimapiaSrc = (latlong: L.LatLng, zoom: number) => `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`

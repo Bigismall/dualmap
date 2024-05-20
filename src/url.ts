@@ -7,6 +7,7 @@ export const setUrlParams = (latlong: L.LatLng, zoom: number, layer: LayerName) 
     url.searchParams.set('lon', latlong.lng.toString());
     url.searchParams.set('zoom', zoom.toString());
     url.searchParams.set('layer', layer);
+    // TODO add frame parameter to url that contains coma separated list of frame short names
     window.history.pushState({}, '', url.toString());
 }
 
