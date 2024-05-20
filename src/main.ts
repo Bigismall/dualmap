@@ -1,10 +1,11 @@
-import L from 'leaflet';
+import L, { LatLng } from 'leaflet';
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
 import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, LayerName, MAX_ZOOM } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import './style.css';
+import { MapOptions } from './types.ts';
 import { checkUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 
 // TODO - Add columns visibility to URL
@@ -73,15 +74,28 @@ window.addEventListener('load', function () {
   });
 
   osm.on('moveend', () => {
-    googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-    wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-    setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
+
+    const { lat, lng } = osm.getCenter();
+    const options: MapOptions = {
+      lat,
+      lng,
+      zoom: osm.getZoom(),
+    }
+    googlemaps.src = googleMapSrc(new LatLng(options.lat, options.lng), options.zoom);
+    wikimapia.src = wikimapiaSrc(new LatLng(options.lat, options.lng), options.zoom);
+    setUrlParams(new LatLng(options.lat, options.lng), options.zoom, currentLayer);
   });
 
   osm.on('zoomend', () => {
-    googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-    wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-    setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
+    const { lat, lng } = osm.getCenter();
+    const options: MapOptions = {
+      lat,
+      lng,
+      zoom: osm.getZoom(),
+    }
+    googlemaps.src = googleMapSrc(new LatLng(options.lat, options.lng), options.zoom);
+    wikimapia.src = wikimapiaSrc(new LatLng(options.lat, options.lng), options.zoom);
+    setUrlParams(new LatLng(options.lat, options.lng), options.zoom, currentLayer);
   });
 
   const resizeObserver = new ResizeObserver(() => {

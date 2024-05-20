@@ -2,14 +2,20 @@ import { GOOGLE_MAPS_API_KEY } from "./constants";
 import { MapOptions } from "./types";
 
 abstract class MapFrame {
-    constructor(public $element: HTMLElement, public options: MapOptions) {
+    constructor(public $element: HTMLIFrameElement, public options: MapOptions) {
     }
     abstract getUrl(): string;
+    public render(): void {
+        this.$element.src = this.getUrl();
+    }
+    public setOptions(options: MapOptions): void {
+        this.options = { ...options };
+    }
 }
 
 
 export class GoogleMapsFrame extends MapFrame {
-    getUrl() {
+    public getUrl() {
         return `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${this.options.lat},${this.options.lng}&zoom=${this.options.zoom}&maptype=satellite`;
     }
 }
