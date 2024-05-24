@@ -3,7 +3,8 @@ import { $, $$ } from './dom.ts';
 import 'leaflet/dist/leaflet.css';
 import { DEFAULT_CENTER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY } from './constants.ts';
 import './style.css';
-import { GoogleMapsFrame, OsmFrame, WikimapiaFrame } from './Map.class.ts';
+import { GoogleMapsFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
+import { log } from './console.ts';
 import { MapOptions } from './types.ts';
 import { checkUrlParams, parseGoogleMapsUrl } from './url.ts';
 
@@ -18,46 +19,16 @@ window.addEventListener('load', () => {
     ['axis', $$('.axis')],
   ]);
 
-  const $somethingIsMissing = Array.from($elements.values()).some(($element) => $element === null);
+  const $missingElements = Array.from($elements.values()).filter(($element) => $element === null);
 
-  if ($somethingIsMissing) {
+  if ($missingElements.length > 0) {
     window.alert('Some elements are missing');
-    // display elements that are missing
-    Array.from($elements.entries()).map(([key, $element]) => {
-      if ($element === null) {
-        console.log(key);
-      }
-    });
+    $missingElements.map(log);
     return;
   }
 
   const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
   const urlParams = checkUrlParams();
-
-  const googleMaps = new GoogleMapsFrame(
-    $elements.get('googlemaps') as HTMLIFrameElement,
-    {
-      lat: DEFAULT_CENTER[0],
-      lng: DEFAULT_CENTER[1],
-      zoom: DEFAULT_ZOOM,
-    },
-    {
-      apiKey: GOOGLE_MAPS_API_KEY,
-      key: 'l',
-    },
-  );
-  const wikiMapia = new WikimapiaFrame(
-    $elements.get('wikimapia') as HTMLIFrameElement,
-    {
-      lat: DEFAULT_CENTER[0],
-      lng: DEFAULT_CENTER[1],
-      zoom: DEFAULT_ZOOM,
-    },
-    {
-      key: 'r',
-    },
-  );
-
   const mapOptions: MapOptions = urlParams
     ? {
         zoom: urlParams.zoom,
@@ -75,6 +46,30 @@ window.addEventListener('load', () => {
   // }
   // mapOptions.layers = [osmLayers[currentLayer]];
   // mapOptions.maxZoom = MAX_ZOOM;
+
+  const googleMaps = new GoogleMapsFrame(
+    $elements.get('googlemaps') as HTMLIFrameElement,
+    {
+      lat: DEFAULT_CENTER[0],
+      lng: DEFAULT_CENTER[1],
+      zoom: DEFAULT_ZOOM,
+    },
+    {
+      apiKey: GOOGLE_MAPS_API_KEY,
+      key: 'l',
+    },
+  );
+  const wikiMapia = new WikiMapiaFrame(
+    $elements.get('wikimapia') as HTMLIFrameElement,
+    {
+      lat: DEFAULT_CENTER[0],
+      lng: DEFAULT_CENTER[1],
+      zoom: DEFAULT_ZOOM,
+    },
+    {
+      key: 'r',
+    },
+  );
 
   const osm = new OsmFrame($elements.get('osm') as HTMLIFrameElement, mapOptions, {});
 

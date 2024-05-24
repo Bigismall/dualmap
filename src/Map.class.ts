@@ -7,9 +7,9 @@ import { osmLayers } from './layers.ts';
 import { MapConfig, MapOptions } from './types';
 import { setUrlParams } from './url.ts';
 
-// add abstract for show hide
-
 abstract class MapFrame {
+  public $parent: HTMLElement | null = null;
+
   protected constructor(
     public $element: HTMLIFrameElement,
     public mapOptions: MapOptions,
@@ -18,16 +18,14 @@ abstract class MapFrame {
     this.$parent = $element.parentElement;
   }
 
-  public $parent: HTMLElement | null = null;
-
   abstract getUrl(): string;
+
   public render(): void {
     this.$element.src = this.getUrl();
   }
   public toggle(): void {
     this.$parent?.classList.toggle('hidden');
   }
-
   public setOptions(options: MapOptions): void {
     this.mapOptions = { ...options };
   }
@@ -47,7 +45,7 @@ class MapObserver extends MapFrame implements Observer {
   }
 
   public update(publication: Message) {
-    console.log('Publication [Observer]', publication);
+    console.log('Publication:', publication, 'Observer:', this.$element.title);
     if (publication.state === MessageState.MoveMap) {
       this.setOptions(publication.data);
       this.render();
@@ -88,7 +86,7 @@ export class GoogleMapsFrame extends MapObserver {
   }
 }
 
-export class WikimapiaFrame extends MapObserver {
+export class WikiMapiaFrame extends MapObserver {
   getUrl() {
     return `https://wikimapia.org/#lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&z=${this.mapOptions.zoom}&l=&ifr=1&m=w`;
   }
