@@ -1,26 +1,15 @@
 import { log } from './console';
 import { DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM } from './constants';
+import { MapOptions } from './types.ts';
 
-export const setUrlParams = (latlong: L.LatLng, zoom: number, layer: LayerName) => {
-<<<<<<< HEAD
-    const url = new URL(window.location.href);
-    url.searchParams.set('lat', latlong.lat.toString());
-    url.searchParams.set('lon', latlong.lng.toString());
-    url.searchParams.set('zoom', zoom.toString());
-    url.searchParams.set('layer', layer);
-    // TODO add frame parameter to url that contains coma separated list of frame short names
-    window.history.pushState({}, '', url.toString());
-}
-
-=======
+export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   const url = new URL(window.location.href);
-  url.searchParams.set('lat', latlong.lat.toString());
-  url.searchParams.set('lon', latlong.lng.toString());
-  url.searchParams.set('zoom', zoom.toString());
+  url.searchParams.set('lat', options.lat.toString());
+  url.searchParams.set('lon', options.lng.toString());
+  url.searchParams.set('zoom', options.zoom.toString());
   url.searchParams.set('layer', layer);
   window.history.pushState({}, '', url.toString());
 };
->>>>>>> dev
 
 export const checkUrlParams = () => {
   const urlParams = new URLSearchParams(window.location.search);

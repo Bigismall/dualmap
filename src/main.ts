@@ -1,29 +1,12 @@
-import L, { LatLng } from 'leaflet';
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
-import {
-  DEFAULT_CENTER,
-  DEFAULT_LAYER,
-  DEFAULT_ZOOM,
-  GOOGLE_MAPS_API_KEY,
-  type LayerName,
-  MAX_ZOOM,
-} from './constants.ts';
-import { osmLayers } from './layers.ts';
+import { DEFAULT_CENTER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY } from './constants.ts';
 import './style.css';
-import { MapOptions } from './types.ts';
-import { checkUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
+import { GoogleMapsFrame, OsmFrame, WikimapiaFrame } from './Map.class.ts';
+import { checkUrlParams, parseGoogleMapsUrl } from './url.ts';
 
 // TODO - Add columns visibility to URL
-// TODO - Use abstrac class for each map. 
-// TODO - Use observer pattern to update other maps
-
-
-const googleMapSrc = (latlong: L.LatLng, zoom: number) =>
-  `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`;
-const wikimapiaSrc = (latlong: L.LatLng, zoom: number) =>
-  `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`;
 
 window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
@@ -47,67 +30,67 @@ window.addEventListener('load', () => {
     return;
   }
 
-  let currentLayer: LayerName = DEFAULT_LAYER;
-  const googlemaps = $elements.get('googlemaps') as HTMLIFrameElement;
-  const wikimapia = $elements.get('wikimapia') as HTMLIFrameElement;
+  const googleMaps = new GoogleMapsFrame(
+    $elements.get('googlemaps') as HTMLIFrameElement,
+    {
+      lat: DEFAULT_CENTER[0],
+      lng: DEFAULT_CENTER[1],
+      zoom: DEFAULT_ZOOM,
+    },
+    {
+      apiKey: GOOGLE_MAPS_API_KEY,
+      key: 'l',
+    },
+  );
+  const wikiMapia = new WikimapiaFrame(
+    $elements.get('wikimapia') as HTMLIFrameElement,
+    {
+      lat: DEFAULT_CENTER[0],
+      lng: DEFAULT_CENTER[1],
+      zoom: DEFAULT_ZOOM,
+    },
+    {
+      key: 'r',
+    },
+  );
+
+  const osm = new OsmFrame(
+    $elements.get('osm') as HTMLIFrameElement,
+    {
+      lat: DEFAULT_CENTER[0],
+      lng: DEFAULT_CENTER[1],
+      zoom: DEFAULT_ZOOM,
+    },
+    {},
+  );
+
+  osm.subscribe(googleMaps);
+  osm.subscribe(wikiMapia);
+
   const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
   const urlParams = checkUrlParams();
 
   if (urlParams?.layer) {
-    currentLayer = urlParams.layer;
+    // currentLayer = urlParams.layer;
   }
 
-  const mapOptions: L.MapOptions = urlParams
-    ? {
-        zoom: urlParams.zoom,
-        center: [urlParams.lat, urlParams.lon] as [number, number],
-      }
-    : {
-        zoom: DEFAULT_ZOOM,
-        center: DEFAULT_CENTER,
-      };
-  mapOptions.layers = [osmLayers[currentLayer]];
-  mapOptions.maxZoom = MAX_ZOOM;
+  // const mapOptions: L.MapOptions = urlParams
+  //   ? {
+  //       zoom: urlParams.zoom,
+  //       center: [urlParams.lat, urlParams.lon] as [number, number],
+  //     }
+  //   : {
+  //       zoom: DEFAULT_ZOOM,
+  //       center: DEFAULT_CENTER,
+  //     };
+  // mapOptions.layers = [osmLayers[currentLayer]];
+  // mapOptions.maxZoom = MAX_ZOOM;
 
-  const osm = L.map($elements.get('osm') as HTMLDivElement, mapOptions);
-
-  L.control.layers(osmLayers).addTo(osm);
-
-  googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-  wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-
-  osm.on('baselayerchange', (event) => {
-    currentLayer = event.name as LayerName;
-    setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
-  });
-
-  osm.on('moveend', () => {
-
-    const { lat, lng } = osm.getCenter();
-    const options: MapOptions = {
-      lat,
-      lng,
-      zoom: osm.getZoom(),
-    }
-    googlemaps.src = googleMapSrc(new LatLng(options.lat, options.lng), options.zoom);
-    wikimapia.src = wikimapiaSrc(new LatLng(options.lat, options.lng), options.zoom);
-    setUrlParams(new LatLng(options.lat, options.lng), options.zoom, currentLayer);
-  });
-
-  osm.on('zoomend', () => {
-    const { lat, lng } = osm.getCenter();
-    const options: MapOptions = {
-      lat,
-      lng,
-      zoom: osm.getZoom(),
-    }
-    googlemaps.src = googleMapSrc(new LatLng(options.lat, options.lng), options.zoom);
-    wikimapia.src = wikimapiaSrc(new LatLng(options.lat, options.lng), options.zoom);
-    setUrlParams(new LatLng(options.lat, options.lng), options.zoom, currentLayer);
-  });
+  googleMaps.render();
+  wikiMapia.render();
 
   const resizeObserver = new ResizeObserver(() => {
-    osm.invalidateSize();
+    osm.getInstance().invalidateSize();
   });
 
   // When a key is pressed, turn on/off axis
@@ -119,25 +102,26 @@ window.addEventListener('load', () => {
     }
 
     if (event.key.toLowerCase() === 'r') {
-      wikimapia.parentElement?.classList.toggle('hidden');
+      // wikimapia.parentElement?.classList.toggle('hidden');
     }
 
     if (event.key.toLowerCase() === 'l') {
-      googlemaps.parentElement?.classList.toggle('hidden');
+      // googlemaps.parentElement?.classList.toggle('hidden');
     }
 
     if (event.key.toLowerCase() === 'i') {
       const url = prompt('Enter Google Maps URL');
       if (url) {
         const { lat, lon, zoom } = parseGoogleMapsUrl(url);
-        osm.setView([lat, lon], zoom);
+        osm.getInstance().setView([lat, lon], zoom);
+        // osm.setView([lat, lon], zoom);
 
-        googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-        wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-        setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
+        // googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
+        // wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
+        // setUrlParams(osm.getInstance().getCenter(), osm.getInstance().getZoom(), currentLayer);
       }
     }
   });
 
-  resizeObserver.observe($elements.get('osm') as HTMLDivElement);
+  resizeObserver.observe(osm.$element);
 });
