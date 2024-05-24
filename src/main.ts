@@ -2,7 +2,14 @@ import L, { LatLng } from 'leaflet';
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
-import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, LayerName, MAX_ZOOM } from './constants.ts';
+import {
+  DEFAULT_CENTER,
+  DEFAULT_LAYER,
+  DEFAULT_ZOOM,
+  GOOGLE_MAPS_API_KEY,
+  type LayerName,
+  MAX_ZOOM,
+} from './constants.ts';
 import { osmLayers } from './layers.ts';
 import './style.css';
 import { MapOptions } from './types.ts';
@@ -13,10 +20,12 @@ import { checkUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 // TODO - Use observer pattern to update other maps
 
 
-const googleMapSrc = (latlong: L.LatLng, zoom: number) => `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`
-const wikimapiaSrc = (latlong: L.LatLng, zoom: number) => `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`
+const googleMapSrc = (latlong: L.LatLng, zoom: number) =>
+  `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`;
+const wikimapiaSrc = (latlong: L.LatLng, zoom: number) =>
+  `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`;
 
-window.addEventListener('load', function () {
+window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
     ['app', $('#app')],
     ['osm', $('.js-osm')],
@@ -25,11 +34,10 @@ window.addEventListener('load', function () {
     ['axis', $$('.axis')],
   ]);
 
-
-  const $somethingIsMissing = Array.from($elements.values()).some($element => $element === null);
+  const $somethingIsMissing = Array.from($elements.values()).some(($element) => $element === null);
 
   if ($somethingIsMissing) {
-    window.alert(`Some elements are missing`);
+    window.alert('Some elements are missing');
     // display elements that are missing
     Array.from($elements.entries()).map(([key, $element]) => {
       if ($element === null) {
@@ -39,25 +47,25 @@ window.addEventListener('load', function () {
     return;
   }
 
-
-  let currentLayer: LayerName = DEFAULT_LAYER
+  let currentLayer: LayerName = DEFAULT_LAYER;
   const googlemaps = $elements.get('googlemaps') as HTMLIFrameElement;
   const wikimapia = $elements.get('wikimapia') as HTMLIFrameElement;
   const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
   const urlParams = checkUrlParams();
 
-
   if (urlParams?.layer) {
     currentLayer = urlParams.layer;
   }
 
-  const mapOptions: L.MapOptions = urlParams ? {
-    zoom: urlParams.zoom,
-    center: [urlParams.lat, urlParams.lon] as [number, number],
-  } : {
-    zoom: DEFAULT_ZOOM,
-    center: DEFAULT_CENTER,
-  }
+  const mapOptions: L.MapOptions = urlParams
+    ? {
+        zoom: urlParams.zoom,
+        center: [urlParams.lat, urlParams.lon] as [number, number],
+      }
+    : {
+        zoom: DEFAULT_ZOOM,
+        center: DEFAULT_CENTER,
+      };
   mapOptions.layers = [osmLayers[currentLayer]];
   mapOptions.maxZoom = MAX_ZOOM;
 
@@ -105,7 +113,7 @@ window.addEventListener('load', function () {
   // When a key is pressed, turn on/off axis
   window.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'a') {
-      Array.from(axis).map($element => {
+      Array.from(axis).map(($element) => {
         $element.classList.toggle('hidden');
       });
     }
@@ -132,5 +140,4 @@ window.addEventListener('load', function () {
   });
 
   resizeObserver.observe($elements.get('osm') as HTMLDivElement);
-
 });
