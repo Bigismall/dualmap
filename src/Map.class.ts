@@ -24,6 +24,9 @@ abstract class MapFrame {
   public render(): void {
     this.$element.src = this.getUrl();
   }
+  public toggle(): void {
+    this.$parent?.classList.toggle('hidden');
+  }
 
   public setOptions(options: MapOptions): void {
     this.mapOptions = { ...options };
@@ -99,8 +102,6 @@ export class OsmFrame extends MapPublisher {
   ) {
     super($element, mapOptions, config);
 
-    this.currentLayer = DEFAULT_LAYER;
-
     this.instance = L.map($element as HTMLDivElement, {
       center: [this.mapOptions.lat, this.mapOptions.lng],
       zoom: this.mapOptions.zoom,
@@ -110,7 +111,7 @@ export class OsmFrame extends MapPublisher {
 
     L.control.layers(osmLayers).addTo(this.instance);
 
-    this.instance.on('zoomend', this.updatePosition);
+    // this.instance.on('zoomend', this.updatePosition);
     this.instance.on('moveend', this.updatePosition);
     this.instance.on('baselayerchange', (event: L.LayersControlEvent) => {
       this.currentLayer = event.name as LayerName;
@@ -138,4 +139,9 @@ export class OsmFrame extends MapPublisher {
     lng: this.instance.getCenter().lng,
     zoom: this.instance.getZoom(),
   });
+
+  setMapOptions = (options: MapOptions) => {
+    this.instance.setView([options.lat, options.lng], options.zoom);
+    this.updatePosition();
+  };
 }
