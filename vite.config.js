@@ -1,3 +1,10 @@
+import biomePlugin from 'vite-plugin-biome';
+
 export default {
-    base: '/dualmap/'
-}
+    base: '/dualmap/',
+    plugins: [biomePlugin({
+        mode: 'check',
+        files: 'src/*.ts',
+        applyFixes: true
+    })],
+};
