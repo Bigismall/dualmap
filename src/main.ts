@@ -1,7 +1,15 @@
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
-import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
+import {
+  DEFAULT_CENTER,
+  DEFAULT_LAYER,
+  DEFAULT_ZOOM,
+  GOOGLE_MAPS_API_KEY,
+  KEY_GOOGLE_MAPS,
+  KEY_WIKIMAPIA,
+  MAX_ZOOM,
+} from './constants.ts';
 import './style.css';
 import { Axis } from './Axis.class.ts';
 import { GoogleMapsFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
@@ -14,7 +22,7 @@ import { checkUrlParams } from './url.ts';
 
 window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
-    ['app', $('#app')],
+    // ['app', $('#app')],
     ['osm', $('.js-osm')],
     ['googlemaps', $('.js-googlemaps')],
     ['wikimapia', $('.js-wikimapia')],
@@ -28,8 +36,6 @@ window.addEventListener('load', () => {
     $missingElements.map(log);
     return;
   }
-
-  // const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
 
   const urlParams = checkUrlParams();
   const mapOptions: MapOptions = urlParams
@@ -48,12 +54,12 @@ window.addEventListener('load', () => {
 
   const googleMaps = new GoogleMapsFrame($elements.get('googlemaps') as HTMLIFrameElement, mapOptions, {
     apiKey: GOOGLE_MAPS_API_KEY,
-    key: 'l',
+    key: KEY_GOOGLE_MAPS,
     maxZoom: MAX_ZOOM,
   });
 
   const wikiMapia = new WikiMapiaFrame($elements.get('wikimapia') as HTMLIFrameElement, mapOptions, {
-    key: 'r',
+    key: KEY_WIKIMAPIA,
     maxZoom: MAX_ZOOM,
   });
 

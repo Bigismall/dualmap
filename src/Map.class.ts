@@ -2,7 +2,7 @@ import L from 'leaflet';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
-import { LayerName } from './constants';
+import { HIDDEN_CLASS, KEY_IMPORT_URL, LayerName } from './constants';
 import { osmLayers } from './layers.ts';
 import { MapConfig, MapOptions } from './types';
 import { parseGoogleMapsUrl, setUrlParams } from './url.ts';
@@ -24,7 +24,7 @@ abstract class MapFrame {
     this.$element.src = this.getUrl();
   }
   public toggle(): void {
-    this.$parent?.classList.toggle('hidden');
+    this.$parent?.classList.toggle(HIDDEN_CLASS);
   }
   public setOptions(options: MapOptions): void {
     this.mapOptions = { ...options };
@@ -141,7 +141,7 @@ export class OsmFrame extends MapPublisherObserver {
     console.log('Publication:', publication, 'Observer: OSM');
 
     if (publication.state === MessageState.KeyPressed) {
-      if (publication.data.key.toLowerCase() === 'i') {
+      if (publication.data.key.toLowerCase() === KEY_IMPORT_URL) {
         const url = prompt('Enter Google Maps URL');
         if (url) {
           this.setMapOptions(parseGoogleMapsUrl(url));
