@@ -2,10 +2,10 @@ import L from 'leaflet';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
-import { DEFAULT_LAYER, GOOGLE_MAPS_API_KEY, LayerName, MAX_ZOOM } from './constants';
+import { LayerName } from './constants';
 import { osmLayers } from './layers.ts';
 import { MapConfig, MapOptions } from './types';
-import { setUrlParams } from './url.ts';
+import { parseGoogleMapsUrl, setUrlParams } from './url.ts';
 
 abstract class MapFrame {
   public $parent: HTMLElement | null = null;
@@ -50,10 +50,16 @@ class MapObserver extends MapFrame implements Observer {
       this.setOptions(publication.data);
       this.render();
     }
+
+    if (publication.state === MessageState.KeyPressed) {
+      if (publication.data.key.toLowerCase() === this.config.key) {
+        this.toggle();
+      }
+    }
   }
 }
 
-class MapPublisher extends MapFrame implements Publisher {
+class MapPublisherObserver extends MapFrame implements Publisher, Observer {
   constructor(
     public $element: HTMLIFrameElement,
     public mapOptions: MapOptions,
@@ -65,6 +71,10 @@ class MapPublisher extends MapFrame implements Publisher {
   public subscribers: Observer[] = [];
 
   getUrl(): string {
+    throw new Error('Method not implemented.');
+  }
+
+  update(_publication: Message): void {
     throw new Error('Method not implemented.');
   }
 
@@ -82,7 +92,7 @@ class MapPublisher extends MapFrame implements Publisher {
 
 export class GoogleMapsFrame extends MapObserver {
   public getUrl() {
-    return `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${this.mapOptions.lat},${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}&maptype=satellite`;
+    return `https://www.google.com/maps/embed/v1/view?key=${this.config.apiKey}&center=${this.mapOptions.lat},${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}&maptype=satellite`;
   }
 }
 
@@ -92,7 +102,7 @@ export class WikiMapiaFrame extends MapObserver {
   }
 }
 
-export class OsmFrame extends MapPublisher {
+export class OsmFrame extends MapPublisherObserver {
   constructor(
     public $element: HTMLIFrameElement,
     public mapOptions: MapOptions,
@@ -104,12 +114,11 @@ export class OsmFrame extends MapPublisher {
       center: [this.mapOptions.lat, this.mapOptions.lng],
       zoom: this.mapOptions.zoom,
       layers: [osmLayers[this.currentLayer]],
-      maxZoom: MAX_ZOOM,
+      maxZoom: this.config.maxZoom,
     });
 
     L.control.layers(osmLayers).addTo(this.instance);
 
-    // this.instance.on('zoomend', this.updatePosition);
     this.instance.on('moveend', this.updatePosition);
     this.instance.on('baselayerchange', (event: L.LayersControlEvent) => {
       this.currentLayer = event.name as LayerName;
@@ -118,7 +127,7 @@ export class OsmFrame extends MapPublisher {
   }
 
   private readonly instance: L.Map;
-  private currentLayer: LayerName = DEFAULT_LAYER;
+  private currentLayer: LayerName = this.config.layer as LayerName;
 
   private updatePosition = () => {
     this.publish({
@@ -127,6 +136,19 @@ export class OsmFrame extends MapPublisher {
     });
     setUrlParams(this.getMapOptions(), this.currentLayer);
   };
+
+  update(publication: Message) {
+    console.log('Publication:', publication, 'Observer: OSM');
+
+    if (publication.state === MessageState.KeyPressed) {
+      if (publication.data.key.toLowerCase() === 'i') {
+        const url = prompt('Enter Google Maps URL');
+        if (url) {
+          this.setMapOptions(parseGoogleMapsUrl(url));
+        }
+      }
+    }
+  }
 
   getUrl = () => '';
   getInstance() {

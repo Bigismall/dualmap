@@ -1,12 +1,14 @@
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
-import { DEFAULT_CENTER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY } from './constants.ts';
+import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
 import './style.css';
+import { Axis } from './Axis.class.ts';
 import { GoogleMapsFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
+import { Scene } from './Scene.class.ts';
 import { log } from './console.ts';
 import { MapOptions } from './types.ts';
-import { checkUrlParams, parseGoogleMapsUrl } from './url.ts';
+import { checkUrlParams } from './url.ts';
 
 // TODO - Add columns visibility to URL
 
@@ -27,7 +29,8 @@ window.addEventListener('load', () => {
     return;
   }
 
-  const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
+  // const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
+
   const urlParams = checkUrlParams();
   const mapOptions: MapOptions = urlParams
     ? {
@@ -41,74 +44,38 @@ window.addEventListener('load', () => {
         lng: DEFAULT_CENTER[1],
       };
 
-  // if (urlParams?.layer) {
-  // currentLayer = urlParams.layer;
-  // }
-  // mapOptions.layers = [osmLayers[currentLayer]];
-  // mapOptions.maxZoom = MAX_ZOOM;
+  const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
 
-  const googleMaps = new GoogleMapsFrame(
-    $elements.get('googlemaps') as HTMLIFrameElement,
-    {
-      lat: DEFAULT_CENTER[0],
-      lng: DEFAULT_CENTER[1],
-      zoom: DEFAULT_ZOOM,
-    },
-    {
-      apiKey: GOOGLE_MAPS_API_KEY,
-      key: 'l',
-    },
-  );
-  const wikiMapia = new WikiMapiaFrame(
-    $elements.get('wikimapia') as HTMLIFrameElement,
-    {
-      lat: DEFAULT_CENTER[0],
-      lng: DEFAULT_CENTER[1],
-      zoom: DEFAULT_ZOOM,
-    },
-    {
-      key: 'r',
-    },
-  );
+  const googleMaps = new GoogleMapsFrame($elements.get('googlemaps') as HTMLIFrameElement, mapOptions, {
+    apiKey: GOOGLE_MAPS_API_KEY,
+    key: 'l',
+    maxZoom: MAX_ZOOM,
+  });
 
-  const osm = new OsmFrame($elements.get('osm') as HTMLIFrameElement, mapOptions, {});
+  const wikiMapia = new WikiMapiaFrame($elements.get('wikimapia') as HTMLIFrameElement, mapOptions, {
+    key: 'r',
+    maxZoom: MAX_ZOOM,
+  });
+
+  const osm = new OsmFrame($elements.get('osm') as HTMLIFrameElement, mapOptions, {
+    layer: urlParams?.layer ?? DEFAULT_LAYER,
+    maxZoom: MAX_ZOOM,
+  });
+
+  const scene = new Scene();
 
   osm.subscribe(googleMaps);
   osm.subscribe(wikiMapia);
 
+  scene.subscribe(googleMaps);
+  scene.subscribe(wikiMapia);
+  scene.subscribe(osm);
+  scene.subscribe(axis);
+
   googleMaps.render();
   wikiMapia.render();
 
-  const resizeObserver = new ResizeObserver(() => {
+  new ResizeObserver(() => {
     osm.getInstance().invalidateSize();
-  });
-
-  // When a key is pressed, turn on/off axis
-  window.addEventListener('keydown', (event) => {
-    if (event.key.toLowerCase() === wikiMapia.config.key) {
-      wikiMapia.toggle();
-      return;
-    }
-
-    if (event.key.toLowerCase() === googleMaps.config.key) {
-      googleMaps.toggle();
-      return;
-    }
-
-    if (event.key.toLowerCase() === 'a') {
-      Array.from(axis).map(($element) => {
-        $element.classList.toggle('hidden');
-      });
-      return;
-    }
-
-    if (event.key.toLowerCase() === 'i') {
-      const url = prompt('Enter Google Maps URL');
-      if (url) {
-        osm.setMapOptions(parseGoogleMapsUrl(url));
-      }
-    }
-  });
-
-  resizeObserver.observe(osm.$element);
+  }).observe(osm.$element);
 });

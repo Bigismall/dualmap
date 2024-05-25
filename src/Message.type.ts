@@ -1,19 +1,16 @@
 import { MapOptions } from './types.ts';
 
 export enum MessageState {
-  Show = 'Show',
-  Hide = 'Hide',
   MoveMap = 'MoveMap', //Same as resize
+  KeyPressed = 'KeyPressed',
 }
 
 export type Message =
   | {
-      state: MessageState.Hide;
-      data?: never;
-    }
-  | {
-      state: MessageState.Show;
-      data?: never;
+      state: MessageState.KeyPressed;
+      data: {
+        key: string;
+      };
     }
   | {
       state: MessageState.MoveMap;
