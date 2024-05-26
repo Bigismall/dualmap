@@ -1,4 +1,3 @@
-import L from 'leaflet';
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
@@ -7,120 +6,82 @@ import {
   DEFAULT_LAYER,
   DEFAULT_ZOOM,
   GOOGLE_MAPS_API_KEY,
-  type LayerName,
+  KEY_GOOGLE_MAPS,
+  KEY_WIKIMAPIA,
   MAX_ZOOM,
 } from './constants.ts';
-import { osmLayers } from './layers.ts';
 import './style.css';
-import { checkUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
+import { Axis } from './Axis.class.ts';
+import { GoogleMapsFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
+import { Scene } from './Scene.class.ts';
+import { log } from './console.ts';
+import { MapOptions } from './types.ts';
+import { checkUrlParams } from './url.ts';
 
 // TODO - Add columns visibility to URL
 
-const googleMapSrc = (latlong: L.LatLng, zoom: number) =>
-  `https://www.google.com/maps/embed/v1/view?key=${GOOGLE_MAPS_API_KEY}&center=${latlong.lat},${latlong.lng}&zoom=${zoom}&maptype=satellite`;
-const wikimapiaSrc = (latlong: L.LatLng, zoom: number) =>
-  `https://wikimapia.org/#lat=${latlong.lat}&lon=${latlong.lng}&z=${zoom}&l=&ifr=1&m=w`;
-
 window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
-    ['app', $('#app')],
+    // ['app', $('#app')],
     ['osm', $('.js-osm')],
     ['googlemaps', $('.js-googlemaps')],
     ['wikimapia', $('.js-wikimapia')],
     ['axis', $$('.axis')],
   ]);
 
-  const $somethingIsMissing = Array.from($elements.values()).some(($element) => $element === null);
+  const $missingElements = Array.from($elements.values()).filter(($element) => $element === null);
 
-  if ($somethingIsMissing) {
+  if ($missingElements.length > 0) {
     window.alert('Some elements are missing');
-    // display elements that are missing
-    Array.from($elements.entries()).map(([key, $element]) => {
-      if ($element === null) {
-        console.log(key);
-      }
-    });
+    $missingElements.map(log);
     return;
   }
 
-  let currentLayer: LayerName = DEFAULT_LAYER;
-  const googlemaps = $elements.get('googlemaps') as HTMLIFrameElement;
-  const wikimapia = $elements.get('wikimapia') as HTMLIFrameElement;
-  const axis = $elements.get('axis') as NodeListOf<HTMLElement>;
   const urlParams = checkUrlParams();
-
-  if (urlParams?.layer) {
-    currentLayer = urlParams.layer;
-  }
-
-  const mapOptions: L.MapOptions = urlParams
+  const mapOptions: MapOptions = urlParams
     ? {
         zoom: urlParams.zoom,
-        center: [urlParams.lat, urlParams.lon] as [number, number],
+        lat: urlParams.lat,
+        lng: urlParams.lng,
       }
     : {
         zoom: DEFAULT_ZOOM,
-        center: DEFAULT_CENTER,
+        lat: DEFAULT_CENTER[0],
+        lng: DEFAULT_CENTER[1],
       };
-  mapOptions.layers = [osmLayers[currentLayer]];
-  mapOptions.maxZoom = MAX_ZOOM;
 
-  const osm = L.map($elements.get('osm') as HTMLDivElement, mapOptions);
+  const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
 
-  L.control.layers(osmLayers).addTo(osm);
-
-  googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-  wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-
-  osm.on('baselayerchange', (event) => {
-    currentLayer = event.name as LayerName;
-    setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
+  const googleMaps = new GoogleMapsFrame($elements.get('googlemaps') as HTMLIFrameElement, mapOptions, {
+    apiKey: GOOGLE_MAPS_API_KEY,
+    key: KEY_GOOGLE_MAPS,
+    maxZoom: MAX_ZOOM,
   });
 
-  osm.on('moveend', () => {
-    googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-    wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-    setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
+  const wikiMapia = new WikiMapiaFrame($elements.get('wikimapia') as HTMLIFrameElement, mapOptions, {
+    key: KEY_WIKIMAPIA,
+    maxZoom: MAX_ZOOM,
   });
 
-  osm.on('zoomend', () => {
-    googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-    wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-    setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
+  const osm = new OsmFrame($elements.get('osm') as HTMLIFrameElement, mapOptions, {
+    layer: urlParams?.layer ?? DEFAULT_LAYER,
+    maxZoom: MAX_ZOOM,
   });
 
-  const resizeObserver = new ResizeObserver(() => {
-    osm.invalidateSize();
-  });
+  const scene = new Scene();
 
-  // When a key is pressed, turn on/off axis
-  window.addEventListener('keydown', (event) => {
-    if (event.key.toLowerCase() === 'a') {
-      Array.from(axis).map(($element) => {
-        $element.classList.toggle('hidden');
-      });
-    }
+  osm.subscribe(googleMaps);
+  osm.subscribe(wikiMapia);
 
-    if (event.key.toLowerCase() === 'r') {
-      wikimapia.parentElement?.classList.toggle('hidden');
-    }
+  scene.subscribe(googleMaps);
+  scene.subscribe(wikiMapia);
+  scene.subscribe(osm);
+  scene.subscribe(axis);
 
-    if (event.key.toLowerCase() === 'l') {
-      googlemaps.parentElement?.classList.toggle('hidden');
-    }
+  googleMaps.render();
+  wikiMapia.render();
 
-    if (event.key.toLowerCase() === 'i') {
-      const url = prompt('Enter Google Maps URL');
-      if (url) {
-        const { lat, lon, zoom } = parseGoogleMapsUrl(url);
-        osm.setView([lat, lon], zoom);
-
-        googlemaps.src = googleMapSrc(osm.getCenter(), osm.getZoom());
-        wikimapia.src = wikimapiaSrc(osm.getCenter(), osm.getZoom());
-        setUrlParams(osm.getCenter(), osm.getZoom(), currentLayer);
-      }
-    }
-  });
-
-  resizeObserver.observe($elements.get('osm') as HTMLDivElement);
+  new ResizeObserver(() => {
+    osm.getInstance().invalidateSize();
+  }).observe(osm.$element);
 });
