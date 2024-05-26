@@ -1,5 +1,5 @@
 # Dualmap #
-Just a side by side map browser
+Just a side by side map browser - [https://bigismall.github.io/dualmap/](https://bigismall.github.io/dualmap/)
 
 ## Keys ##
 
