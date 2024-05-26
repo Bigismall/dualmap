@@ -2,6 +2,7 @@ import L from 'leaflet';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
+import { log } from './console.ts';
 import { HIDDEN_CLASS, KEY_IMPORT_URL, LayerName } from './constants';
 import { osmLayers } from './layers.ts';
 import { MapConfig, MapOptions } from './types';
@@ -45,7 +46,7 @@ class MapObserver extends MapFrame implements Observer {
   }
 
   public update(publication: Message) {
-    console.log('Publication:', publication, 'Observer:', this.$element.title);
+    log('Publication:', publication, 'Observer:', this.$element.title);
     if (publication.state === MessageState.MoveMap) {
       this.setOptions(publication.data);
       this.render();
@@ -138,7 +139,7 @@ export class OsmFrame extends MapPublisherObserver {
   };
 
   update(publication: Message) {
-    console.log('Publication:', publication, 'Observer: OSM');
+    log('Publication:', publication, 'Observer: OSM');
 
     if (publication.state === MessageState.KeyPressed) {
       if (publication.data.key.toLowerCase() === KEY_IMPORT_URL) {

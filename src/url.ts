@@ -8,6 +8,7 @@ export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   url.searchParams.set('lng', options.lng.toString());
   url.searchParams.set('zoom', options.zoom.toString());
   url.searchParams.set('layer', layer);
+  // url.searchParams.set('off', '');
   window.history.pushState({}, '', url.toString());
 };
 
@@ -17,6 +18,7 @@ export const checkUrlParams = () => {
   const lng = urlParams.get('lng');
   const zoom = Number.parseFloat(urlParams.get('zoom') ?? DEFAULT_ZOOM.toString());
   const layer = urlParams.get('layer') as LayerName | null;
+  // const off = urlParams.get('off');
   if (lat && lng) {
     return {
       lat: Number.parseFloat(lat),
