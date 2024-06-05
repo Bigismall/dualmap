@@ -19,6 +19,7 @@ import { MapOptions } from './types.ts';
 import { checkUrlParams } from './url.ts';
 
 // TODO - Add columns visibility to URL
+// TODO - add biome lint, lint force
 
 window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
