@@ -8,7 +8,8 @@ export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   url.searchParams.set('lng', options.lng.toString());
   url.searchParams.set('zoom', options.zoom.toString());
   url.searchParams.set('layer', layer);
-  // url.searchParams.set('off', '');
+
+  url.searchParams.set('off', [1, 2, 4].join('-'));
   window.history.pushState({}, '', url.toString());
 };
 
@@ -18,13 +19,16 @@ export const checkUrlParams = () => {
   const lng = urlParams.get('lng');
   const zoom = Number.parseFloat(urlParams.get('zoom') ?? DEFAULT_ZOOM.toString());
   const layer = urlParams.get('layer') as LayerName | null;
-  // const off = urlParams.get('off');
+  const off = urlParams.get('off');
+
+  console.log(off);
   if (lat && lng) {
     return {
       lat: Number.parseFloat(lat),
       lng: Number.parseFloat(lng),
       zoom: zoom > MAX_ZOOM ? MAX_ZOOM : zoom,
       layer: layer ?? DEFAULT_LAYER,
+      off: off?.split('-') ?? null,
     };
   }
   return null;

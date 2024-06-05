@@ -50,6 +50,8 @@ window.addEventListener('load', () => {
         lng: DEFAULT_CENTER[1],
       };
 
+  console.log('OFF params ', urlParams?.off);
+
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
 
   const googleMaps = new GoogleMapsFrame($elements.get('googlemaps') as HTMLIFrameElement, mapOptions, {
