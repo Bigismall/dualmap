@@ -22,7 +22,15 @@ abstract class MapFrame {
   abstract getUrl(): string;
 
   public render(): void {
+    if (this.config.off) {
+      this.hide();
+      return;
+    }
     this.$element.src = this.getUrl();
+  }
+
+  public hide(): void {
+    this.$parent?.classList.add(HIDDEN_CLASS);
   }
   public toggle(): void {
     this.$parent?.classList.toggle(HIDDEN_CLASS);
@@ -135,6 +143,7 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
+    //TODO - off parameter
     setUrlParams(this.getMapOptions(), this.currentLayer);
   };
 
