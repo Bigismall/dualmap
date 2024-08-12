@@ -1,4 +1,4 @@
-import { LayerName } from './constants.ts';
+import { KEY_GOOGLE_MAPS, KEY_WIKIMAPIA, LayerName } from './constants.ts';
 
 export type MapOptions = {
   lat: number;
@@ -11,4 +11,7 @@ export type MapConfig = {
   apiKey?: string;
   layer?: LayerName;
   maxZoom: number;
+  off: boolean;
 };
+
+export type OffParameter = typeof KEY_GOOGLE_MAPS | typeof KEY_WIKIMAPIA;

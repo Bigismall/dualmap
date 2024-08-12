@@ -12,3 +12,5 @@ export const KEY_AXIS = 'a';
 export const KEY_IMPORT_URL = 'i';
 
 export const HIDDEN_CLASS = 'hidden';
+
+export const OFF_PARAMETER_SEPARATOR = '-';

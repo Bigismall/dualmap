@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
@@ -22,7 +23,15 @@ abstract class MapFrame {
   abstract getUrl(): string;
 
   public render(): void {
+    if (this.config.off) {
+      this.hide();
+      return;
+    }
     this.$element.src = this.getUrl();
+  }
+
+  public hide(): void {
+    this.$parent?.classList.add(HIDDEN_CLASS);
   }
   public toggle(): void {
     this.$parent?.classList.toggle(HIDDEN_CLASS);
@@ -117,8 +126,13 @@ export class OsmFrame extends MapPublisherObserver {
       layers: [osmLayers[this.currentLayer]],
       maxZoom: this.config.maxZoom,
     });
+    const provider = new OpenStreetMapProvider();
+    // @ts-ignore
+    const search: L.Control = new GeoSearchControl({ provider: provider }) as L.Control;
 
     L.control.layers(osmLayers).addTo(this.instance);
+
+    this.instance.addControl(search);
 
     this.instance.on('moveend', this.updatePosition);
     this.instance.on('baselayerchange', (event: L.LayersControlEvent) => {
@@ -135,6 +149,7 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
+    //TODO - off parameter
     setUrlParams(this.getMapOptions(), this.currentLayer);
   };
 

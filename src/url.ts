@@ -1,14 +1,14 @@
 import { log } from './console';
-import { DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM } from './constants';
-import { MapOptions } from './types.ts';
+import { DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM, OFF_PARAMETER_SEPARATOR } from './constants';
+import { MapOptions, OffParameter } from './types.ts';
 
-export const setUrlParams = (options: MapOptions, layer: LayerName) => {
+export const setUrlParams = (options: MapOptions, layer: LayerName, off: OffParameter[] = []) => {
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString());
   url.searchParams.set('lng', options.lng.toString());
   url.searchParams.set('zoom', options.zoom.toString());
   url.searchParams.set('layer', layer);
-  // url.searchParams.set('off', '');
+  url.searchParams.set('off', off.join(OFF_PARAMETER_SEPARATOR));
   window.history.pushState({}, '', url.toString());
 };
 
@@ -18,13 +18,16 @@ export const checkUrlParams = () => {
   const lng = urlParams.get('lng');
   const zoom = Number.parseFloat(urlParams.get('zoom') ?? DEFAULT_ZOOM.toString());
   const layer = urlParams.get('layer') as LayerName | null;
-  // const off = urlParams.get('off');
+  const off = urlParams.get('off');
+
+  console.log(off);
   if (lat && lng) {
     return {
       lat: Number.parseFloat(lat),
       lng: Number.parseFloat(lng),
       zoom: zoom > MAX_ZOOM ? MAX_ZOOM : zoom,
       layer: layer ?? DEFAULT_LAYER,
+      off: off?.split(OFF_PARAMETER_SEPARATOR) ?? [],
     };
   }
   return null;
