@@ -1,6 +1,8 @@
 import { $, $$ } from './dom.ts';
 
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-geosearch/dist/geosearch.css';
+
 import {
   DEFAULT_CENTER,
   DEFAULT_LAYER,

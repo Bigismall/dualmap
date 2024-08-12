@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
@@ -125,8 +126,13 @@ export class OsmFrame extends MapPublisherObserver {
       layers: [osmLayers[this.currentLayer]],
       maxZoom: this.config.maxZoom,
     });
+    const provider = new OpenStreetMapProvider();
+    // @ts-ignore
+    const search: L.Control = new GeoSearchControl({ provider: provider }) as L.Control;
 
     L.control.layers(osmLayers).addTo(this.instance);
+
+    this.instance.addControl(search);
 
     this.instance.on('moveend', this.updatePosition);
     this.instance.on('baselayerchange', (event: L.LayersControlEvent) => {
