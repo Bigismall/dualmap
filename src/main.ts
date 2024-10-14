@@ -26,7 +26,7 @@ window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
     // ['app', $('#app')],
     ['osm', $('.js-osm')],
-    ['googlemaps', $('.js-googlemaps')],
+    // ['googlemaps', $('.js-googlemaps')],
     ['wikimapia', $('.js-wikimapia')],
     ['axis', $$('.axis')],
   ]);
@@ -56,12 +56,12 @@ window.addEventListener('load', () => {
 
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
 
-  const googleMaps = new GoogleMapsFrame($elements.get('googlemaps') as HTMLIFrameElement, mapOptions, {
-    apiKey: GOOGLE_MAPS_API_KEY,
-    key: KEY_GOOGLE_MAPS,
-    maxZoom: MAX_ZOOM,
-    off: urlParams?.off.includes(KEY_GOOGLE_MAPS) ?? false,
-  });
+  // const googleMaps = new GoogleMapsFrame($elements.get('googlemaps') as HTMLIFrameElement, mapOptions, {
+  //   apiKey: GOOGLE_MAPS_API_KEY,
+  //   key: KEY_GOOGLE_MAPS,
+  //   maxZoom: MAX_ZOOM,
+  //   off: urlParams?.off.includes(KEY_GOOGLE_MAPS) ?? false,
+  // });
 
   const wikiMapia = new WikiMapiaFrame($elements.get('wikimapia') as HTMLIFrameElement, mapOptions, {
     key: KEY_WIKIMAPIA,
@@ -77,15 +77,15 @@ window.addEventListener('load', () => {
 
   const scene = new Scene();
 
-  osm.subscribe(googleMaps);
+  // osm.subscribe(googleMaps);
   osm.subscribe(wikiMapia);
 
-  scene.subscribe(googleMaps);
+  // scene.subscribe(googleMaps);
   scene.subscribe(wikiMapia);
   scene.subscribe(osm);
   scene.subscribe(axis);
 
-  googleMaps.render();
+  // googleMaps.render();
   wikiMapia.render();
 
   new ResizeObserver(() => {

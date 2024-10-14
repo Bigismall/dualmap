@@ -10,14 +10,11 @@
 </head>
 
 <body id="app">
+<header>Dual map</header>
   <div class="layout">
-    <div class="layout__left">
-      <iframe width="100%" height="100%" referrerpolicy="no-referrer-when-downgrade" src="" loading="lazy"
-        title="Google maps" class="layout__frame js-googlemaps">
-      </iframe>
+    <div class="layout__left js-osm">
     </div>
-    <div class="layout__center js-osm"></div>
-    <div class="layout__right">
+        <div class="layout__right">
       <iframe src="" width="100%" height="100%" loading="lazy" class="layout__frame js-wikimapia"
         title="Wikimapia"></iframe>
     </div>
@@ -25,10 +22,13 @@
 
   <div class="axis axis__horizontal"></div>
   <div class="axis axis__vertical axis__vertical--left"></div>
-  <div class="axis axis__vertical axis__vertical--center"></div>
+<!--  <div class="axis axis__vertical axis__vertical&#45;&#45;center"></div>-->
   <div class="axis axis__vertical axis__vertical--right"></div>
 
   <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>
+<!--<iframe width="100%" height="100%" referrerpolicy="no-referrer-when-downgrade" src="" loading="lazy"-->
+<!--        title="Google maps" class="layout__frame js-googlemaps">-->
+<!--</iframe>-->

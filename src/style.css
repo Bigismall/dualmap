@@ -1,23 +1,45 @@
 :root {
-  font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height            : 1.5;
-  font-weight            : 400;
-  font-size              : 16px;
-  color                  : #333;
-  background-color       : white;
-  font-synthesis         : none;
-  text-rendering         : optimizeLegibility;
-  -webkit-font-smoothing : antialiased;
+  --color--slate-950: #0e1118;
+  --color--slate-900: #181c25;
+  --color--slate-850: #202632;
+  --color--slate-800: #2a3140;
+  --color--slate-750: #333c4e;
+  --color--slate-700: #3d475c;
+  --color--slate-650: #48536b;
+  --color--slate-600: #525f7a;
+  --color--slate-550: #5d6b89;
+  --color--slate-500: #687899;
+  --color--slate-450: #7385a9;
+  --color--slate-400: #8191b5;
+  --color--slate-350: #909ebe;
+  --color--slate-300: #a0acc7;
+  --color--slate-250: #b0b9d0;
+  --color--slate-200: #bfc7d9;
+  --color--slate-150: #cfd5e2;
+  --color--slate-100: #dfe3eb;
+  --color--slate-50: #eff1f4;
+  --color--slate: var(--color--slate-600);
+  --color-red-450: #ee402e;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--color--slate-750, #333c4e);
+  background-color: var(--color--slate-50, #eff1f4);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  margin  : 0;
-  padding : 0;
-  width   : 100%;
-  height  : 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
   overflow: hidden;
-  display : block;
+  display: block;
   position: relative;
 }
 
@@ -25,97 +47,102 @@ body {
   display: none !important;
 }
 
+header {
+  margin: 0;
+  padding: 0;
+  height: 2rem;
+  background-color: var(--color--slate, #525f7a);
+  color: var(--color--slate-50, #eff1f4);
+}
+
 .layout {
-  margin     : 0;
-  padding    : 0;
+  margin: 0;
+  padding: 0;
   place-items: center;
-  width      : 100%;
-  height     : 100vh;
-  overflow   : hidden;
+  width: 100%;
+  height: calc(100vh - 2rem);
+  overflow: hidden;
 
-  display        : flex;
-  flex-direction : row;
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  align-items    : stretch;
-
+  align-items: stretch;
 }
 
 .layout__left,
-.layout__center,
 .layout__right {
   display: block;
-  width  : 100%;
-  height : 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .layout__frame {
   display: block;
-  margin : 0;
+  margin: 0;
   padding: 0;
-  border : none;
+  border: none;
 }
 
 .axis {
-  position        : absolute;
-  top             : 0;
-  left            : 0;
-  display         : block;
-  background-color: orangered;
-  z-index         : 2000;
-  pointer-events  : none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  background-color: var(--color-red-450, #ee402e);
+  z-index: 2000;
+  pointer-events: none;
 }
 
 .axis__horizontal {
-  top   : 50%;
-  left  : 0;
-  width : 100vw;
+  top: 50%;
+  left: 0;
+  width: 100vw;
   height: 1px;
 }
 
-
 .axis__vertical {
-  top   : 0;
-  left  : 0;
-  width : 1px;
+  top: 0;
+  left: 0;
+  width: 1px;
   height: 100vh;
 }
 
 .axis__vertical--left {
-  left: 16.66666667%;
+  left: 25%;
 }
 
-.axis__vertical--center {
-  left: 50%;
-}
+/*.axis__vertical--center {*/
+/*  left: 50%;*/
+/*}*/
 
 .axis__vertical--right {
-  left: 83.33333333%;
+  left: 75%;
 }
 
 #app:has(.layout__left.hidden) .axis__vertical--left {
   display: none;
 }
 
-#app:has(.layout__left.hidden) .axis__vertical--center {
-  left: 25%;
-}
+/*#app:has(.layout__left.hidden) .axis__vertical--center {*/
+/*  left: 25%;*/
+/*}*/
 
-#app:has(.layout__left.hidden) .axis__vertical--right {
-  left: 75%;
-}
+/*#app:has(.layout__left.hidden) .axis__vertical--right {*/
+/*  left: 75%;*/
+/*}*/
 
 #app:has(.layout__right.hidden) .axis__vertical--right {
   display: none;
 }
 
 #app:has(.layout__right.hidden) .axis__vertical--left {
-  left: 25%;
-}
-
-#app:has(.layout__right.hidden) .axis__vertical--center {
-  left: 75%;
-}
-
-#app:has(.layout__left.hidden ~ .layout__right.hidden) .axis__vertical--center {
   left: 50%;
 }
+
+/*#app:has(.layout__right.hidden) .axis__vertical--center {*/
+/*  left: 75%;*/
+/*}*/
+
+/*#app:has(.layout__left.hidden ~ .layout__right.hidden) .axis__vertical--center {*/
+/*  left: 50%;*/
+/*}*/
