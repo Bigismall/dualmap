@@ -66,8 +66,8 @@ window.addEventListener('load', () => {
   // osm.subscribe(googleMaps);
   osm.subscribe(wiki);
 
-  // scene.subscribe(googleMaps);
-  // scene.subscribe(wiki);   Nothing to do with scene
+  // scene.subscribe(googleMaps); // Nothing to do with scene
+  // scene.subscribe(wiki);  // Nothing to do with scene
   scene.subscribe(osm);
   scene.subscribe(axis);
 

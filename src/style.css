@@ -41,6 +41,7 @@ body {
   overflow: hidden;
   display: block;
   position: relative;
+  accent-color: var(--color-red-450, #ee402e);
 }
 
 .hidden {
@@ -49,10 +50,14 @@ body {
 
 header {
   margin: 0;
-  padding: 0;
+  padding: 0 1rem 0 1rem;
   height: 2rem;
   background-color: var(--color--slate, #525f7a);
   color: var(--color--slate-50, #eff1f4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 }
 
 .layout {
@@ -111,10 +116,6 @@ header {
   left: 25%;
 }
 
-/*.axis__vertical--center {*/
-/*  left: 50%;*/
-/*}*/
-
 .axis__vertical--right {
   left: 75%;
 }
@@ -122,14 +123,6 @@ header {
 #app:has(.layout__left.hidden) .axis__vertical--left {
   display: none;
 }
-
-/*#app:has(.layout__left.hidden) .axis__vertical--center {*/
-/*  left: 25%;*/
-/*}*/
-
-/*#app:has(.layout__left.hidden) .axis__vertical--right {*/
-/*  left: 75%;*/
-/*}*/
 
 #app:has(.layout__right.hidden) .axis__vertical--right {
   display: none;
@@ -139,10 +132,6 @@ header {
   left: 50%;
 }
 
-/*#app:has(.layout__right.hidden) .axis__vertical--center {*/
-/*  left: 75%;*/
-/*}*/
-
-/*#app:has(.layout__left.hidden ~ .layout__right.hidden) .axis__vertical--center {*/
-/*  left: 50%;*/
-/*}*/
+.map-choice input:checked + label {
+  background-color: var(--color-red-450, #ee402e);
+}

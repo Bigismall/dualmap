@@ -10,7 +10,16 @@
 </head>
 
 <body id="app">
-<header>Dual map</header>
+<header>Dual map
+    <div class="map-choice">
+        <input type="radio" id="wikimapia" name="map-type" value="wikimapia" checked>
+        <label for="wikimapia">Wikimapia</label>
+        <input type="radio" id="google-maps" name="map-type" value="google-maps">
+        <label for="google-maps">Google maps</label>
+        <input type="radio" id="open-railway" name="map-type" value="open-railway">
+        <label for="open-railway">Open railway</label>
+    </div>
+</header>
 <div class="layout">
     <div class="layout__left js-osm">
     </div>

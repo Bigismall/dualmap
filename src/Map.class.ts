@@ -18,8 +18,8 @@ abstract class MapFrame {
     public config: MapConfig,
   ) {
     this.$parent = $element.parentElement;
-    //remove all children
-    this.$element.innerText = '';
+    this.destroy();
+
     if (config.frame) {
       this.$element.appendChild(this.generateIFrameElement());
     }
