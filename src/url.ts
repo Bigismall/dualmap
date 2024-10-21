@@ -1,14 +1,14 @@
 import { log } from './console';
 import { DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM, OFF_PARAMETER_SEPARATOR } from './constants';
-import { MapOptions, OffParameter } from './types.ts';
+import { MapOptions } from './types.ts';
 
-export const setUrlParams = (options: MapOptions, layer: LayerName, off: OffParameter[] = []) => {
+export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString());
   url.searchParams.set('lng', options.lng.toString());
   url.searchParams.set('zoom', options.zoom.toString());
   url.searchParams.set('layer', layer);
-  url.searchParams.set('off', off.join(OFF_PARAMETER_SEPARATOR));
+  // url.searchParams.set('off', off.join(OFF_PARAMETER_SEPARATOR));
   window.history.pushState({}, '', url.toString());
 };
 
