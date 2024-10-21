@@ -1,5 +1,5 @@
 import { log } from './console';
-import { DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM, OFF_PARAMETER_SEPARATOR } from './constants';
+import { DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM } from './constants';
 import { MapOptions } from './types.ts';
 
 export const setUrlParams = (options: MapOptions, layer: LayerName) => {
@@ -18,16 +18,13 @@ export const checkUrlParams = () => {
   const lng = urlParams.get('lng');
   const zoom = Number.parseFloat(urlParams.get('zoom') ?? DEFAULT_ZOOM.toString());
   const layer = urlParams.get('layer') as LayerName | null;
-  const off = urlParams.get('off');
 
-  console.log(off);
   if (lat && lng) {
     return {
       lat: Number.parseFloat(lat),
       lng: Number.parseFloat(lng),
       zoom: zoom > MAX_ZOOM ? MAX_ZOOM : zoom,
       layer: layer ?? DEFAULT_LAYER,
-      off: off?.split(OFF_PARAMETER_SEPARATOR) ?? [],
     };
   }
   return null;
