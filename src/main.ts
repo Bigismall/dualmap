@@ -9,9 +9,8 @@ import { Axis } from './Axis.class.ts';
 import { GoogleMapsFrame, MapObserver, OpenRailwayMapFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
 import { Scene } from './Scene.class.ts';
 import { log } from './console.ts';
-import { MapType } from './mapType.ts';
-import { MapOptions } from './types.ts';
-import { checkUrlParams } from './url.ts';
+import { MapOptions, MapType } from './types.ts';
+import { getUrlParams } from './url.ts';
 
 window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
@@ -35,6 +34,7 @@ window.addEventListener('load', () => {
   const getActivateMap = (type: MapType) => {
     let currentMap: MapObserver;
 
+    //FIXME: USe factory pattern
     switch (type) {
       case 'google':
         currentMap = new GoogleMapsFrame($elements.get('map') as HTMLDivElement, mapOptions, {
@@ -60,7 +60,7 @@ window.addEventListener('load', () => {
     return currentMap;
   };
 
-  const urlParams = checkUrlParams();
+  const urlParams = getUrlParams();
   const mapOptions: MapOptions = urlParams
     ? {
         zoom: urlParams.zoom,

@@ -56,7 +56,7 @@ header {
   color: var(--color--slate-50, #eff1f4);
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   flex-direction: row;
 }
 
@@ -132,6 +132,27 @@ header {
   left: 50%;
 }
 
+.map-choice {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+}
+
+.map-choice input[type="radio"] {
+  display: none;
+}
 .map-choice input:checked + label {
   background-color: var(--color-red-450, #ee402e);
+}
+
+.map-choice label {
+  display: block;
+  margin: 0;
+  padding: 0 1rem;
+  height: auto;
+  line-height: 2rem;
+  cursor: pointer;
 }

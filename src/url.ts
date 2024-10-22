@@ -12,7 +12,7 @@ export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   window.history.pushState({}, '', url.toString());
 };
 
-export const checkUrlParams = () => {
+export const getUrlParams = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const lat = urlParams.get('lat');
   const lng = urlParams.get('lng');

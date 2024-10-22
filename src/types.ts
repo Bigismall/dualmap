@@ -12,3 +12,5 @@ export type MapConfig = {
   maxZoom: number;
   frame: boolean;
 };
+
+export type MapType = 'wiki' | 'google' | 'rail';
