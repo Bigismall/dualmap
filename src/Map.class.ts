@@ -32,14 +32,12 @@ abstract class MapFrame {
     $frame.loading = 'lazy';
     $frame.classList.add('layout__frame');
     $frame.title = 'Map';
-    $frame.referrerPolicy = 'no-referrer-when-downgrade';
     return $frame;
   }
 
   abstract getUrl(): string;
 
   public render(): void {
-    console.log(this.$element.firstChild, this.getUrl());
     (this.$element.firstChild as HTMLIFrameElement).src = this.getUrl();
   }
 
@@ -58,7 +56,7 @@ abstract class MapFrame {
   }
 }
 
-class MapObserver extends MapFrame implements Observer {
+export class MapObserver extends MapFrame implements Observer {
   // constructor(
   //   public $element: HTMLElement,
   //   public mapOptions: MapOptions,
@@ -109,6 +107,10 @@ class MapPublisherObserver extends MapFrame implements Publisher, Observer {
     this.subscribers.push(callback);
   }
 
+  unsubscribe(subscriber: Observer) {
+    this.subscribers = this.subscribers.filter((s) => s !== subscriber);
+  }
+
   publish(publication: Message) {
     this.subscribers.map((s) => {
       s.update(publication);
@@ -126,6 +128,13 @@ export class GoogleMapsFrame extends MapObserver {
 export class WikiMapiaFrame extends MapObserver {
   getUrl() {
     return `https://wikimapia.org/#lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&z=${this.mapOptions.zoom}&l=&ifr=1&m=w`;
+  }
+}
+
+//Open Railway Map
+export class OpenRailwayMapFrame extends MapObserver {
+  getUrl() {
+    return `https://www.openrailwaymap.org/?style=standard&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}`;
   }
 }
 
