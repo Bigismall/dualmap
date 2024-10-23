@@ -14,3 +14,10 @@ export type MapConfig = {
 };
 
 export type MapType = 'wiki' | 'google' | 'rail';
+
+export type UrlParams = {
+  lat: number;
+  lng: number;
+  zoom: number;
+  layer: LayerName;
+};

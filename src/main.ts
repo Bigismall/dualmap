@@ -3,18 +3,17 @@ import { $, $$ } from './dom.ts';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
 
-import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
+import { DEFAULT_LAYER, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
 import './style.css';
 import { Axis } from './Axis.class.ts';
 import { GoogleMapsFrame, MapObserver, OpenRailwayMapFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
 import { Scene } from './Scene.class.ts';
 import { log } from './console.ts';
-import { MapOptions, MapType } from './types.ts';
-import { getUrlParams } from './url.ts';
+import { MapType } from './types.ts';
+import { getMapOptions, getUrlParams } from './url.ts';
 
 window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
-    // ['app', $('#app')],
     ['osm', $('.js-osm')],
     ['map', $('.js-map')],
     ['axis', $$('.axis')],
@@ -31,10 +30,11 @@ window.addEventListener('load', () => {
     return;
   }
 
+  //FIXME: Use factory pattern - in issue #6
   const getActivateMap = (type: MapType) => {
     let currentMap: MapObserver;
+    const mapOptions = getMapOptions(getUrlParams());
 
-    //FIXME: USe factory pattern
     switch (type) {
       case 'google':
         currentMap = new GoogleMapsFrame($elements.get('map') as HTMLDivElement, mapOptions, {
@@ -61,18 +61,9 @@ window.addEventListener('load', () => {
   };
 
   const urlParams = getUrlParams();
-  const mapOptions: MapOptions = urlParams
-    ? {
-        zoom: urlParams.zoom,
-        lat: urlParams.lat,
-        lng: urlParams.lng,
-      }
-    : {
-        zoom: DEFAULT_ZOOM,
-        lat: DEFAULT_CENTER[0],
-        lng: DEFAULT_CENTER[1],
-      };
+  const mapOptions = getMapOptions(urlParams);
 
+  const scene = new Scene();
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
   let activeMap = getActivateMap('wiki');
 
@@ -82,7 +73,9 @@ window.addEventListener('load', () => {
     frame: false,
   });
 
-  const scene = new Scene();
+  new ResizeObserver(() => {
+    osm.getInstance().invalidateSize();
+  }).observe(osm.$element);
 
   ($elements.get('mapType') as NodeListOf<HTMLInputElement>)?.forEach(($element) => {
     $element.addEventListener('change', (event) => {
@@ -102,8 +95,4 @@ window.addEventListener('load', () => {
   scene.subscribe(axis);
 
   activeMap.render();
-
-  new ResizeObserver(() => {
-    osm.getInstance().invalidateSize();
-  }).observe(osm.$element);
 });

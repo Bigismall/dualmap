@@ -1,6 +1,6 @@
 import { log } from './console';
-import { DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM } from './constants';
-import { MapOptions } from './types.ts';
+import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM } from './constants';
+import { MapOptions, UrlParams } from './types.ts';
 
 export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   const url = new URL(window.location.href);
@@ -12,7 +12,7 @@ export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   window.history.pushState({}, '', url.toString());
 };
 
-export const getUrlParams = () => {
+export const getUrlParams = (): UrlParams | null => {
   const urlParams = new URLSearchParams(window.location.search);
   const lat = urlParams.get('lat');
   const lng = urlParams.get('lng');
@@ -29,6 +29,19 @@ export const getUrlParams = () => {
   }
   return null;
 };
+
+export const getMapOptions = (urlParams: UrlParams | null): MapOptions =>
+  urlParams
+    ? {
+        zoom: urlParams.zoom,
+        lat: urlParams.lat,
+        lng: urlParams.lng,
+      }
+    : {
+        zoom: DEFAULT_ZOOM,
+        lat: DEFAULT_CENTER[0],
+        lng: DEFAULT_CENTER[1],
+      };
 
 // https://www.google.com/maps/@54.3854942,18.3370827,15.95z?entry=ttu
 export const parseGoogleMapsUrl = (url: string): MapOptions => {
