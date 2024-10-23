@@ -57,14 +57,6 @@ abstract class MapFrame {
 }
 
 export class MapObserver extends MapFrame implements Observer {
-  // constructor(
-  //   public $element: HTMLElement,
-  //   public mapOptions: MapOptions,
-  //   public config: MapConfig,
-  // ) {
-  //   super($element, mapOptions, config);
-  // }
-
   getUrl(): string {
     throw new Error('Method not implemented.');
   }
@@ -85,14 +77,6 @@ export class MapObserver extends MapFrame implements Observer {
 }
 
 class MapPublisherObserver extends MapFrame implements Publisher, Observer {
-  // constructor(
-  //   public $element: HTMLElement,
-  //   public mapOptions: MapOptions,
-  //   public config: MapConfig,
-  // ) {
-  //   super($element, mapOptions, config);
-  // }
-
   public subscribers: Observer[] = [];
 
   getUrl(): string {
@@ -175,7 +159,6 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
-    //TODO - off parameter
     setUrlParams(this.getMapOptions(), this.currentLayer);
   };
 
