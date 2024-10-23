@@ -12,22 +12,33 @@ import { parseGoogleMapsUrl, setUrlParams } from './url.ts';
 abstract class MapFrame {
   public $parent: HTMLElement | null = null;
 
-  protected constructor(
-    public $element: HTMLIFrameElement,
+  public constructor(
+    public $element: HTMLElement,
     public mapOptions: MapOptions,
     public config: MapConfig,
   ) {
     this.$parent = $element.parentElement;
+    this.destroy();
+
+    if (config.frame) {
+      this.$element.appendChild(this.generateIFrameElement());
+    }
+  }
+  private generateIFrameElement(): HTMLIFrameElement {
+    const $frame = document.createElement('iframe');
+    $frame.src = '';
+    $frame.width = '100%';
+    $frame.height = '100%';
+    $frame.loading = 'lazy';
+    $frame.classList.add('layout__frame');
+    $frame.title = 'Map';
+    return $frame;
   }
 
   abstract getUrl(): string;
 
   public render(): void {
-    if (this.config.off) {
-      this.hide();
-      return;
-    }
-    this.$element.src = this.getUrl();
+    (this.$element.firstChild as HTMLIFrameElement).src = this.getUrl();
   }
 
   public hide(): void {
@@ -39,17 +50,13 @@ abstract class MapFrame {
   public setOptions(options: MapOptions): void {
     this.mapOptions = { ...options };
   }
+
+  public destroy(): void {
+    this.$element.innerText = '';
+  }
 }
 
-class MapObserver extends MapFrame implements Observer {
-  constructor(
-    public $element: HTMLIFrameElement,
-    public mapOptions: MapOptions,
-    public config: MapConfig,
-  ) {
-    super($element, mapOptions, config);
-  }
-
+export class MapObserver extends MapFrame implements Observer {
   getUrl(): string {
     throw new Error('Method not implemented.');
   }
@@ -61,23 +68,15 @@ class MapObserver extends MapFrame implements Observer {
       this.render();
     }
 
-    if (publication.state === MessageState.KeyPressed) {
-      if (publication.data.key.toLowerCase() === this.config.key) {
-        this.toggle();
-      }
-    }
+    // if (publication.state === MessageState.KeyPressed) {
+    //   if (publication.data.key.toLowerCase() === this.config.key) {
+    //     this.toggle();
+    //   }
+    // }
   }
 }
 
 class MapPublisherObserver extends MapFrame implements Publisher, Observer {
-  constructor(
-    public $element: HTMLIFrameElement,
-    public mapOptions: MapOptions,
-    public config: MapConfig,
-  ) {
-    super($element, mapOptions, config);
-  }
-
   public subscribers: Observer[] = [];
 
   getUrl(): string {
@@ -90,6 +89,10 @@ class MapPublisherObserver extends MapFrame implements Publisher, Observer {
 
   subscribe(callback: Observer) {
     this.subscribers.push(callback);
+  }
+
+  unsubscribe(subscriber: Observer) {
+    this.subscribers = this.subscribers.filter((s) => s !== subscriber);
   }
 
   publish(publication: Message) {
@@ -109,6 +112,13 @@ export class GoogleMapsFrame extends MapObserver {
 export class WikiMapiaFrame extends MapObserver {
   getUrl() {
     return `https://wikimapia.org/#lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&z=${this.mapOptions.zoom}&l=&ifr=1&m=w`;
+  }
+}
+
+//Open Railway Map
+export class OpenRailwayMapFrame extends MapObserver {
+  getUrl() {
+    return `https://www.openrailwaymap.org/?style=standard&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}`;
   }
 }
 
@@ -149,7 +159,6 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
-    //TODO - off parameter
     setUrlParams(this.getMapOptions(), this.currentLayer);
   };
 

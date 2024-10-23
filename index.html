@@ -1,34 +1,32 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dual Map</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dual Map</title>
+    <script type="module" src="/src/main.ts"></script>
+    <link rel="icon" type="image/svg+xml"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
 </head>
-
 <body id="app">
-  <div class="layout">
-    <div class="layout__left">
-      <iframe width="100%" height="100%" referrerpolicy="no-referrer-when-downgrade" src="" loading="lazy"
-        title="Google maps" class="layout__frame js-googlemaps">
-      </iframe>
+<header>Dual map
+    <div class="map-choice">
+        <input type="radio" id="wikimapia" name="map-type" value="wiki" checked>
+        <label for="wikimapia">Wikimapia</label>
+        <input type="radio" id="google-maps" name="map-type" value="google">
+        <label for="google-maps">Google maps</label>
+        <input type="radio" id="open-railway" name="map-type" value="rail">
+        <label for="open-railway">Open railway</label>
     </div>
-    <div class="layout__center js-osm"></div>
-    <div class="layout__right">
-      <iframe src="" width="100%" height="100%" loading="lazy" class="layout__frame js-wikimapia"
-        title="Wikimapia"></iframe>
+</header>
+<div class="layout">
+    <div class="layout__left js-osm">
     </div>
-  </div>
-
-  <div class="axis axis__horizontal"></div>
-  <div class="axis axis__vertical axis__vertical--left"></div>
-  <div class="axis axis__vertical axis__vertical--center"></div>
-  <div class="axis axis__vertical axis__vertical--right"></div>
-
-  <script type="module" src="/src/main.ts"></script>
+    <div class="layout__right js-map">
+    </div>
+</div>
+<div class="axis axis__horizontal"></div>
+<div class="axis axis__vertical axis__vertical--left"></div>
+<div class="axis axis__vertical axis__vertical--right"></div>
 </body>
-
 </html>

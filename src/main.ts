@@ -3,33 +3,25 @@ import { $, $$ } from './dom.ts';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
 
-import {
-  DEFAULT_CENTER,
-  DEFAULT_LAYER,
-  DEFAULT_ZOOM,
-  GOOGLE_MAPS_API_KEY,
-  KEY_GOOGLE_MAPS,
-  KEY_WIKIMAPIA,
-  MAX_ZOOM,
-} from './constants.ts';
+import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
 import './style.css';
 import { Axis } from './Axis.class.ts';
-import { GoogleMapsFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
+import { GoogleMapsFrame, MapObserver, OpenRailwayMapFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
 import { Scene } from './Scene.class.ts';
 import { log } from './console.ts';
-import { MapOptions } from './types.ts';
-import { checkUrlParams } from './url.ts';
-
-// TODO - add biome lint, lint force
+import { MapOptions, MapType } from './types.ts';
+import { getUrlParams } from './url.ts';
 
 window.addEventListener('load', () => {
   const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
     // ['app', $('#app')],
     ['osm', $('.js-osm')],
-    ['googlemaps', $('.js-googlemaps')],
-    ['wikimapia', $('.js-wikimapia')],
+    ['map', $('.js-map')],
     ['axis', $$('.axis')],
+    ['mapType', $$('input[name="map-type"]')],
   ]);
+
+  //TODO OPENRAILWAYMAP has padding that needs to be removed
 
   const $missingElements = Array.from($elements.values()).filter(($element) => $element === null);
 
@@ -39,7 +31,36 @@ window.addEventListener('load', () => {
     return;
   }
 
-  const urlParams = checkUrlParams();
+  const getActivateMap = (type: MapType) => {
+    let currentMap: MapObserver;
+
+    //FIXME: USe factory pattern
+    switch (type) {
+      case 'google':
+        currentMap = new GoogleMapsFrame($elements.get('map') as HTMLDivElement, mapOptions, {
+          apiKey: GOOGLE_MAPS_API_KEY,
+          maxZoom: MAX_ZOOM,
+          frame: true,
+        });
+
+        break;
+      case 'wiki':
+        currentMap = new WikiMapiaFrame($elements.get('map') as HTMLDivElement, mapOptions, {
+          maxZoom: MAX_ZOOM,
+          frame: true,
+        });
+        break;
+      case 'rail':
+        currentMap = new OpenRailwayMapFrame($elements.get('map') as HTMLDivElement, mapOptions, {
+          maxZoom: MAX_ZOOM,
+          frame: true,
+        });
+        break;
+    }
+    return currentMap;
+  };
+
+  const urlParams = getUrlParams();
   const mapOptions: MapOptions = urlParams
     ? {
         zoom: urlParams.zoom,
@@ -52,41 +73,35 @@ window.addEventListener('load', () => {
         lng: DEFAULT_CENTER[1],
       };
 
-  console.log('OFF params ', urlParams?.off);
-
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
-
-  const googleMaps = new GoogleMapsFrame($elements.get('googlemaps') as HTMLIFrameElement, mapOptions, {
-    apiKey: GOOGLE_MAPS_API_KEY,
-    key: KEY_GOOGLE_MAPS,
-    maxZoom: MAX_ZOOM,
-    off: urlParams?.off.includes(KEY_GOOGLE_MAPS) ?? false,
-  });
-
-  const wikiMapia = new WikiMapiaFrame($elements.get('wikimapia') as HTMLIFrameElement, mapOptions, {
-    key: KEY_WIKIMAPIA,
-    maxZoom: MAX_ZOOM,
-    off: urlParams?.off.includes(KEY_WIKIMAPIA) ?? false,
-  });
+  let activeMap = getActivateMap('wiki');
 
   const osm = new OsmFrame($elements.get('osm') as HTMLIFrameElement, mapOptions, {
     layer: urlParams?.layer ?? DEFAULT_LAYER,
     maxZoom: MAX_ZOOM,
-    off: false,
+    frame: false,
   });
 
   const scene = new Scene();
 
-  osm.subscribe(googleMaps);
-  osm.subscribe(wikiMapia);
+  ($elements.get('mapType') as NodeListOf<HTMLInputElement>)?.forEach(($element) => {
+    $element.addEventListener('change', (event) => {
+      const target = event.target as HTMLInputElement;
+      const layer = target.value as string;
+      osm.unsubscribe(activeMap);
+      activeMap.destroy();
+      activeMap = getActivateMap(layer as MapType);
+      osm.subscribe(activeMap);
+      activeMap.render();
+    });
+  });
 
-  scene.subscribe(googleMaps);
-  scene.subscribe(wikiMapia);
+  osm.subscribe(activeMap);
+
   scene.subscribe(osm);
   scene.subscribe(axis);
 
-  googleMaps.render();
-  wikiMapia.render();
+  activeMap.render();
 
   new ResizeObserver(() => {
     osm.getInstance().invalidateSize();
