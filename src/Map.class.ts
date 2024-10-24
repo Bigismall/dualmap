@@ -3,11 +3,11 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
-import { log } from './console.ts';
 import { HIDDEN_CLASS, KEY_IMPORT_URL, LayerName } from './constants';
 import { osmLayers } from './layers.ts';
 import { MapConfig, MapOptions } from './types';
 import { parseGoogleMapsUrl, setUrlParams } from './url.ts';
+import { log } from './utils/console.ts';
 
 abstract class MapFrame {
   public $parent: HTMLElement | null = null;
@@ -32,6 +32,13 @@ abstract class MapFrame {
     $frame.loading = 'lazy';
     $frame.classList.add('layout__frame');
     $frame.title = 'Map';
+
+    if (this.config.type === 'rail') {
+      // Very custom solution for OpenRailwayMap
+      $frame.style.marginLeft = '-300px';
+      $frame.style.width = `calc(100% + 300px)`;
+    }
+
     return $frame;
   }
 

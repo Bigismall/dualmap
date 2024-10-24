@@ -1,6 +1,6 @@
-import { log } from './console';
 import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, type LayerName, MAX_ZOOM } from './constants';
 import { MapOptions, UrlParams } from './types.ts';
+import { log } from './utils/console.ts';
 
 export const setUrlParams = (options: MapOptions, layer: LayerName) => {
   const url = new URL(window.location.href);

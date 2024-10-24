@@ -11,9 +11,10 @@ export type MapConfig = {
   layer?: LayerName;
   maxZoom: number;
   frame: boolean;
+  type: MapType;
 };
 
-export type MapType = 'wiki' | 'google' | 'rail';
+export type MapType = 'wiki' | 'google' | 'rail' | 'osm';
 
 export type UrlParams = {
   lat: number;
@@ -21,3 +22,6 @@ export type UrlParams = {
   zoom: number;
   layer: LayerName;
 };
+
+export type DOMElement = Element | NodeListOf<HTMLElement> | null;
+export type DOMElements = Map<string, DOMElement>;

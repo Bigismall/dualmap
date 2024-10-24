@@ -106,10 +106,10 @@ header {
 }
 
 .axis__vertical {
-  top: 0;
+  top: 2rem;
   left: 0;
   width: 1px;
-  height: 100vh;
+  height: calc(100vh - 2rem);
 }
 
 .axis__vertical--left {
@@ -145,6 +145,7 @@ header {
   display: none;
 }
 .map-choice input:checked + label {
+  color: var(--color--slate-50, #eff1f4);
   background-color: var(--color-red-450, #ee402e);
 }
 
