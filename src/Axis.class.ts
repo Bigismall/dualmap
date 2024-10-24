@@ -1,7 +1,7 @@
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
-import { log } from './console.ts';
 import { HIDDEN_CLASS, KEY_AXIS } from './constants.ts';
+import { log } from './utils/console.ts';
 
 export class Axis implements Observer {
   constructor(private axis: NodeListOf<HTMLElement>) {}

@@ -1,62 +1,59 @@
-import { $, $$ } from './dom.ts';
+import { $, $$, hasMissingElements } from './utils/dom.ts';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
 
 import { DEFAULT_LAYER, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
-import './style.css';
+import './styles/style.css';
 import { Axis } from './Axis.class.ts';
 import { GoogleMapsFrame, MapObserver, OpenRailwayMapFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
 import { Scene } from './Scene.class.ts';
-import { log } from './console.ts';
-import { MapType } from './types.ts';
+import { DOMElement, DOMElements, MapType } from './types.ts';
 import { getMapOptions, getUrlParams } from './url.ts';
 
 window.addEventListener('load', () => {
-  const $elements = new Map<string, Element | NodeListOf<HTMLElement> | null>([
+  const $elements: DOMElements = new Map<string, DOMElement>([
     ['osm', $('.js-osm')],
     ['map', $('.js-map')],
     ['axis', $$('.axis')],
     ['mapType', $$('input[name="map-type"]')],
   ]);
 
-  //TODO OPENRAILWAYMAP has padding that needs to be removed
-
-  const $missingElements = Array.from($elements.values()).filter(($element) => $element === null);
-
-  if ($missingElements.length > 0) {
+  if (hasMissingElements($elements)) {
     window.alert('Some elements are missing');
-    $missingElements.map(log);
     return;
   }
 
-  //FIXME: Use factory pattern - in issue #6
   const getActivateMap = (type: MapType) => {
     let currentMap: MapObserver;
     const mapOptions = getMapOptions(getUrlParams());
+    const $mapElement = $elements.get('map') as HTMLDivElement;
 
     switch (type) {
       case 'google':
-        currentMap = new GoogleMapsFrame($elements.get('map') as HTMLDivElement, mapOptions, {
+        currentMap = new GoogleMapsFrame($mapElement, mapOptions, {
           apiKey: GOOGLE_MAPS_API_KEY,
           maxZoom: MAX_ZOOM,
           frame: true,
+          type: 'google',
         });
-
         break;
       case 'wiki':
-        currentMap = new WikiMapiaFrame($elements.get('map') as HTMLDivElement, mapOptions, {
+        currentMap = new WikiMapiaFrame($mapElement, mapOptions, {
           maxZoom: MAX_ZOOM,
           frame: true,
+          type: 'wiki',
         });
         break;
       case 'rail':
-        currentMap = new OpenRailwayMapFrame($elements.get('map') as HTMLDivElement, mapOptions, {
+        currentMap = new OpenRailwayMapFrame($mapElement, mapOptions, {
           maxZoom: MAX_ZOOM,
           frame: true,
+          type: 'rail',
         });
         break;
     }
+    // @ts-ignore
     return currentMap;
   };
 
@@ -71,6 +68,7 @@ window.addEventListener('load', () => {
     layer: urlParams?.layer ?? DEFAULT_LAYER,
     maxZoom: MAX_ZOOM,
     frame: false,
+    type: 'osm',
   });
 
   new ResizeObserver(() => {
