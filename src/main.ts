@@ -76,7 +76,9 @@ window.addEventListener('load', () => {
     osm.getInstance().invalidateSize();
   }).observe(osm.$element);
 
-  ($elements.get('mapType') as NodeListOf<HTMLInputElement>)?.forEach(($element) => {
+  Array.from($elements.get('mapType') as NodeListOf<HTMLInputElement>).map(($element) => {
+    $element.checked = $element.value === mapType;
+
     $element.addEventListener('change', (event) => {
       const target = event.target as HTMLInputElement;
       const layer = target.value as string;
