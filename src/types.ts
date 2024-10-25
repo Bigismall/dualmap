@@ -21,6 +21,7 @@ export type UrlParams = {
   lng: number;
   zoom: number;
   layer: LayerName;
+  type: MapType;
 };
 
 export type DOMElement = Element | NodeListOf<HTMLElement> | null;
