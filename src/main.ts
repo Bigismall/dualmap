@@ -3,13 +3,13 @@ import { $, $$, hasMissingElements } from './utils/dom.ts';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
 
-import { DEFAULT_LAYER, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
+import { DEFAULT_LAYER, DEFAULT_MAP_TYPE, GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
 import './styles/style.css';
 import { Axis } from './Axis.class.ts';
 import { GoogleMapsFrame, MapObserver, OpenRailwayMapFrame, OsmFrame, WikiMapiaFrame } from './Map.class.ts';
 import { Scene } from './Scene.class.ts';
 import { DOMElement, DOMElements, MapType } from './types.ts';
-import { getMapOptions, getUrlParams } from './url.ts';
+import { getMapOptions, getUrlParams, setUrlParams } from './url.ts';
 
 window.addEventListener('load', () => {
   const $elements: DOMElements = new Map<string, DOMElement>([
@@ -35,21 +35,21 @@ window.addEventListener('load', () => {
           apiKey: GOOGLE_MAPS_API_KEY,
           maxZoom: MAX_ZOOM,
           frame: true,
-          type: 'google',
+          type,
         });
         break;
       case 'wiki':
         currentMap = new WikiMapiaFrame($mapElement, mapOptions, {
           maxZoom: MAX_ZOOM,
           frame: true,
-          type: 'wiki',
+          type,
         });
         break;
       case 'rail':
         currentMap = new OpenRailwayMapFrame($mapElement, mapOptions, {
           maxZoom: MAX_ZOOM,
           frame: true,
-          type: 'rail',
+          type,
         });
         break;
     }
@@ -58,11 +58,12 @@ window.addEventListener('load', () => {
   };
 
   const urlParams = getUrlParams();
+  const mapType = urlParams?.type ?? DEFAULT_MAP_TYPE;
   const mapOptions = getMapOptions(urlParams);
 
   const scene = new Scene();
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
-  let activeMap = getActivateMap('wiki');
+  let activeMap = getActivateMap(mapType);
 
   const osm = new OsmFrame($elements.get('osm') as HTMLIFrameElement, mapOptions, {
     layer: urlParams?.layer ?? DEFAULT_LAYER,
@@ -79,11 +80,14 @@ window.addEventListener('load', () => {
     $element.addEventListener('change', (event) => {
       const target = event.target as HTMLInputElement;
       const layer = target.value as string;
+
       osm.unsubscribe(activeMap);
       activeMap.destroy();
       activeMap = getActivateMap(layer as MapType);
       osm.subscribe(activeMap);
       activeMap.render();
+
+      setUrlParams(activeMap.mapOptions, osm.getLayer(), layer as MapType);
     });
   });
 

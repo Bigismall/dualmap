@@ -3,10 +3,10 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
-import { HIDDEN_CLASS, KEY_IMPORT_URL, LayerName } from './constants';
+import { DEFAULT_MAP_TYPE, KEY_IMPORT_URL, LayerName } from './constants';
 import { osmLayers } from './layers.ts';
 import { MapConfig, MapOptions } from './types';
-import { parseGoogleMapsUrl, setUrlParams } from './url.ts';
+import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 import { log } from './utils/console.ts';
 
 abstract class MapFrame {
@@ -48,12 +48,6 @@ abstract class MapFrame {
     (this.$element.firstChild as HTMLIFrameElement).src = this.getUrl();
   }
 
-  public hide(): void {
-    this.$parent?.classList.add(HIDDEN_CLASS);
-  }
-  public toggle(): void {
-    this.$parent?.classList.toggle(HIDDEN_CLASS);
-  }
   public setOptions(options: MapOptions): void {
     this.mapOptions = { ...options };
   }
@@ -154,7 +148,9 @@ export class OsmFrame extends MapPublisherObserver {
     this.instance.on('moveend', this.updatePosition);
     this.instance.on('baselayerchange', (event: L.LayersControlEvent) => {
       this.currentLayer = event.name as LayerName;
-      setUrlParams(this.getMapOptions(), this.currentLayer);
+      const params = getUrlParams();
+      const type = params?.type ?? DEFAULT_MAP_TYPE;
+      setUrlParams(this.getMapOptions(), this.currentLayer, type);
     });
   }
 
@@ -166,7 +162,10 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
-    setUrlParams(this.getMapOptions(), this.currentLayer);
+    const params = getUrlParams();
+    const type = params?.type ?? DEFAULT_MAP_TYPE;
+
+    setUrlParams(this.getMapOptions(), this.currentLayer, type);
   };
 
   update(publication: Message) {
@@ -186,6 +185,10 @@ export class OsmFrame extends MapPublisherObserver {
   getInstance() {
     return this.instance;
   }
+  getLayer() {
+    return this.currentLayer;
+  }
+
   getMapOptions = (): MapOptions => ({
     lat: this.instance.getCenter().lat,
     lng: this.instance.getCenter().lng,
