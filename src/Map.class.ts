@@ -3,10 +3,10 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
-import { DEFAULT_MAP_TYPE, KEY_IMPORT_URL } from './constants';
+import { DEFAULT_MAP_TYPE, GOOGLE_MAPS_API_KEY, KEY_IMPORT_URL, MAX_ZOOM } from './constants';
 import { osmLayers } from './layers.ts';
-import { LayerName, MapConfig, MapOptions } from './types';
-import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
+import { LayerName, MapConfig, MapOptions, MapType } from './types';
+import { getMapOptions, getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 import { log } from './utils/console.ts';
 
 abstract class MapFrame {
@@ -198,5 +198,27 @@ export class OsmFrame extends MapPublisherObserver {
   setMapOptions = (options: MapOptions) => {
     this.instance.setView([options.lat, options.lng], options.zoom);
     this.updatePosition();
+  };
+}
+
+export class MapFactory {
+  public static create = (type: MapType, $mapElement: HTMLDivElement): MapObserver => {
+    const mapOptions = getMapOptions(getUrlParams());
+    const mapConfig = {
+      frame: true,
+      maxZoom: MAX_ZOOM,
+      type,
+    };
+
+    switch (type) {
+      case 'google':
+        return new GoogleMapsFrame($mapElement, mapOptions, { ...mapConfig, apiKey: GOOGLE_MAPS_API_KEY });
+      case 'wiki':
+        return new WikiMapiaFrame($mapElement, mapOptions, mapConfig);
+      case 'rail':
+        return new OpenRailwayMapFrame($mapElement, mapOptions, mapConfig);
+    }
+    // @ts-ignore
+    return null;
   };
 }

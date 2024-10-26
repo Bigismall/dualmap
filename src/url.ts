@@ -13,38 +13,28 @@ export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapTyp
   window.history.pushState({}, '', url.toString());
 };
 
-export const getUrlParams = (): UrlParams | null => {
+export const getUrlParams = (): UrlParams => {
   const urlParams = new URLSearchParams(window.location.search);
-  const lat = urlParams.get('lat');
-  const lng = urlParams.get('lng');
-  const zoom = Number.parseFloat(urlParams.get('z') ?? DEFAULT_ZOOM.toString());
+  const lat = Number.parseFloat(urlParams.get('lat') ?? DEFAULT_CENTER[0].toString());
+  const lng = Number.parseFloat(urlParams.get('lng') ?? DEFAULT_CENTER[1].toString());
+  const zoom = Math.min(Number.parseFloat(urlParams.get('z') ?? DEFAULT_ZOOM.toString()), MAX_ZOOM);
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
 
-  if (lat && lng) {
-    return {
-      lat: Number.parseFloat(lat),
-      lng: Number.parseFloat(lng),
-      zoom: zoom > MAX_ZOOM ? MAX_ZOOM : zoom,
-      layer: layer,
-      type: type,
-    };
-  }
-  return null;
+  return {
+    lat,
+    lng,
+    zoom,
+    layer,
+    type,
+  };
 };
 
-export const getMapOptions = (urlParams: UrlParams | null): MapOptions =>
-  urlParams
-    ? {
-        zoom: urlParams.zoom,
-        lat: urlParams.lat,
-        lng: urlParams.lng,
-      }
-    : {
-        zoom: DEFAULT_ZOOM,
-        lat: DEFAULT_CENTER[0],
-        lng: DEFAULT_CENTER[1],
-      };
+export const getMapOptions = (urlParams: UrlParams): MapOptions => ({
+  zoom: urlParams.zoom,
+  lat: urlParams.lat,
+  lng: urlParams.lng,
+});
 
 // https://www.google.com/maps/@54.3854942,18.3370827,15.95z?entry=ttu
 export const parseGoogleMapsUrl = (url: string): MapOptions => {
