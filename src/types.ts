@@ -1,5 +1,5 @@
 export type MapType = 'wiki' | 'google' | 'rail' | 'osm';
-export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite';
+export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail';
 
 export type MapOptions = {
   lat: number;
@@ -27,6 +27,6 @@ export type DOMElement = Element | NodeListOf<HTMLElement> | null;
 export type DOMElements = Map<string, DOMElement>;
 
 export const isLayerName = (value: string): value is LayerName =>
-  ['OSM', 'OSM DE', 'Humanitarian', 'Topography', 'Cyclo', 'Satellite'].includes(value);
+  ['OSM', 'OSM DE', 'Humanitarian', 'Topography', 'Cyclo', 'Satellite', 'Rail'].includes(value);
 
 export const isMapType = (value: string): value is MapType => ['wiki', 'google', 'rail', 'osm'].includes(value);
