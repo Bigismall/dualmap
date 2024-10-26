@@ -1,11 +1,12 @@
 import L from 'leaflet';
-import type { LayerName } from './constants';
+
+import { LayerName } from './types.ts';
 
 export const osmLayers: Record<LayerName, L.TileLayer> = {
-  'Open Street Map': L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  OSM: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap',
   }),
-  'Open Street Map DE': L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+  'OSM DE': L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }),
   Humanitarian: L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
@@ -20,7 +21,7 @@ export const osmLayers: Record<LayerName, L.TileLayer> = {
     attribution:
       '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }),
-  Satelite: L.tileLayer(
+  Satellite: L.tileLayer(
     'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     {
       attribution:
