@@ -3,9 +3,9 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
-import { DEFAULT_MAP_TYPE, KEY_IMPORT_URL, LayerName } from './constants';
+import { DEFAULT_MAP_TYPE, KEY_IMPORT_URL } from './constants';
 import { osmLayers } from './layers.ts';
-import { MapConfig, MapOptions } from './types';
+import { LayerName, MapConfig, MapOptions } from './types';
 import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 import { log } from './utils/console.ts';
 

@@ -1,14 +1,14 @@
-import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, type LayerName, MAX_ZOOM } from './constants';
-import { MapOptions, MapType, UrlParams } from './types.ts';
+import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM } from './constants';
+import { LayerName, MapOptions, MapType, UrlParams, isLayerName, isMapType } from './types.ts';
 import { log } from './utils/console.ts';
 
 export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapType) => {
   const url = new URL(window.location.href);
-  url.searchParams.set('lat', options.lat.toString());
-  url.searchParams.set('lng', options.lng.toString());
-  url.searchParams.set('zoom', options.zoom.toString());
-  url.searchParams.set('layer', layer);
-  url.searchParams.set('type', type);
+  url.searchParams.set('lat', options.lat.toString().slice(0, 12));
+  url.searchParams.set('lng', options.lng.toString().slice(0, 12));
+  url.searchParams.set('z', options.zoom.toString());
+  url.searchParams.set('l', layer);
+  url.searchParams.set('t', type);
 
   window.history.pushState({}, '', url.toString());
 };
@@ -17,17 +17,17 @@ export const getUrlParams = (): UrlParams | null => {
   const urlParams = new URLSearchParams(window.location.search);
   const lat = urlParams.get('lat');
   const lng = urlParams.get('lng');
-  const zoom = Number.parseFloat(urlParams.get('zoom') ?? DEFAULT_ZOOM.toString());
-  const layer = urlParams.get('layer') as LayerName | null;
-  const type = urlParams.get('type') as MapType | null;
+  const zoom = Number.parseFloat(urlParams.get('z') ?? DEFAULT_ZOOM.toString());
+  const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
+  const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
 
   if (lat && lng) {
     return {
       lat: Number.parseFloat(lat),
       lng: Number.parseFloat(lng),
       zoom: zoom > MAX_ZOOM ? MAX_ZOOM : zoom,
-      layer: layer ?? DEFAULT_LAYER,
-      type: type ?? DEFAULT_MAP_TYPE,
+      layer: layer,
+      type: type,
     };
   }
   return null;
