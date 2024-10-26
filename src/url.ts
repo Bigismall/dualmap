@@ -6,9 +6,9 @@ export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapTyp
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString());
   url.searchParams.set('lng', options.lng.toString());
-  url.searchParams.set('zoom', options.zoom.toString());
-  url.searchParams.set('layer', layer);
-  url.searchParams.set('type', type);
+  url.searchParams.set('z', options.zoom.toString());
+  url.searchParams.set('l', layer);
+  url.searchParams.set('t', type);
 
   window.history.pushState({}, '', url.toString());
 };
@@ -17,9 +17,9 @@ export const getUrlParams = (): UrlParams | null => {
   const urlParams = new URLSearchParams(window.location.search);
   const lat = urlParams.get('lat');
   const lng = urlParams.get('lng');
-  const zoom = Number.parseFloat(urlParams.get('zoom') ?? DEFAULT_ZOOM.toString());
-  const layer = urlParams.get('layer') as LayerName | null;
-  const type = urlParams.get('type') as MapType | null;
+  const zoom = Number.parseFloat(urlParams.get('z') ?? DEFAULT_ZOOM.toString());
+  const layer = urlParams.get('l') as LayerName | null;
+  const type = urlParams.get('t') as MapType | null;
 
   if (lat && lng) {
     return {
