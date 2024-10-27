@@ -10,8 +10,24 @@
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
 </head>
 <body>
-<header>Dual map
-    <div class="map-choice">
+<header>
+    <div class="choice">
+        <input type="radio" id="osm" name="layer-type" value="osm" checked>
+        <label for="osm">OSM</label>
+        <input type="radio" id="osm-de" name="layer-type" value="osm-de">
+        <label for="osm-de">OSM DE</label>
+        <input type="radio" id="humanitarian" name="layer-type" value="humanitarian">
+        <label for="humanitarian">Humanitarian</label>
+        <input type="radio" id="topography" name="layer-type" value="topography">
+        <label for="topography">Topography</label>
+        <input type="radio" id="cyclo" name="layer-type" value="cyclo">
+        <label for="cyclo">Cyclo</label>
+        <input type="radio" id="satellite" name="layer-type" value="satellite">
+        <label for="satellite">Satellite</label>
+        <input type="radio" id="rail" name="layer-type" value="rail">
+        <label for="rail">Rail</label>
+</div>
+    <div class="choice">
         <input type="radio" id="wikimapia" name="map-type" value="wiki">
         <label for="wikimapia">Wikimapia</label>
         <input type="radio" id="google-maps" name="map-type" value="google">
