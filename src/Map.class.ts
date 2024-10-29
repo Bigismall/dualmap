@@ -141,17 +141,8 @@ export class OsmFrame extends MapPublisherObserver {
     // @ts-ignore
     const search: L.Control = new GeoSearchControl({ provider: provider }) as L.Control;
 
-    L.control.layers(osmLayers).addTo(this.instance);
-
     this.instance.addControl(search);
-
     this.instance.on('moveend', this.updatePosition);
-    this.instance.on('baselayerchange', (event: L.LayersControlEvent) => {
-      this.currentLayer = event.name as LayerName;
-      const params = getUrlParams();
-      const type = params?.type ?? DEFAULT_MAP_TYPE;
-      setUrlParams(this.getMapOptions(), this.currentLayer, type);
-    });
   }
 
   private readonly instance: L.Map;
@@ -187,6 +178,15 @@ export class OsmFrame extends MapPublisherObserver {
   }
   getLayer() {
     return this.currentLayer;
+  }
+
+  switchLayerTo(layer: LayerName) {
+    this.instance.removeLayer(osmLayers[this.currentLayer]);
+    this.instance.addLayer(osmLayers[layer]);
+    this.currentLayer = layer;
+
+    const { type } = getUrlParams();
+    setUrlParams(this.getMapOptions(), layer, type);
   }
 
   getMapOptions = (): MapOptions => ({

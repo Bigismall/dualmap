@@ -11,30 +11,30 @@
 </head>
 <body>
 <header>
-    <div class="choice">
-        <input type="radio" id="osm" name="layer-type" value="osm" checked>
+    <nav class="choice js-layer-type">
+        <input type="radio" id="osm" name="layer-type" value="OSM">
         <label for="osm">OSM</label>
-        <input type="radio" id="osm-de" name="layer-type" value="osm-de">
-        <label for="osm-de">OSM DE</label>
-        <input type="radio" id="humanitarian" name="layer-type" value="humanitarian">
+        <input type="radio" id="osmde" name="layer-type" value="OSM DE">
+        <label for="osmde">OSM DE</label>
+        <input type="radio" id="humanitarian" name="layer-type" value="Humanitarian">
         <label for="humanitarian">Humanitarian</label>
-        <input type="radio" id="topography" name="layer-type" value="topography">
+        <input type="radio" id="topography" name="layer-type" value="Topography">
         <label for="topography">Topography</label>
-        <input type="radio" id="cyclo" name="layer-type" value="cyclo">
+        <input type="radio" id="cyclo" name="layer-type" value="Cyclo">
         <label for="cyclo">Cyclo</label>
-        <input type="radio" id="satellite" name="layer-type" value="satellite">
+        <input type="radio" id="satellite" name="layer-type" value="Satellite">
         <label for="satellite">Satellite</label>
-        <input type="radio" id="rail" name="layer-type" value="rail">
+        <input type="radio" id="rail" name="layer-type" value="Rail">
         <label for="rail">Rail</label>
-</div>
-    <div class="choice">
+</nav>
+    <nav class="choice  js-map-type">
         <input type="radio" id="wikimapia" name="map-type" value="wiki">
         <label for="wikimapia">Wikimapia</label>
         <input type="radio" id="google-maps" name="map-type" value="google">
         <label for="google-maps">Google maps</label>
         <input type="radio" id="open-railway" name="map-type" value="rail">
         <label for="open-railway">Open railway</label>
-    </div>
+    </nav>
 </header>
 <div class="layout">
     <div class="layout__left js-osm">
