@@ -7,8 +7,10 @@ import { MAX_ZOOM } from './constants.ts';
 import './styles/style.css';
 import { Axis } from './Axis.class.ts';
 import { MapFactory, OsmFrame } from './Map.class.ts';
+import { RadioGroupClass } from './RadioGroup.class.ts';
 import { Scene } from './Scene.class.ts';
-import { DOMElement, DOMElements, MapType } from './types.ts';
+import { osmLayers } from './layers.ts';
+import { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
 import { getMapOptions, getUrlParams, setUrlParams } from './url.ts';
 
 window.addEventListener('load', () => {
@@ -16,7 +18,8 @@ window.addEventListener('load', () => {
     ['osm', $('.js-osm')],
     ['map', $('.js-map')],
     ['axis', $$('.axis')],
-    ['mapType', $$('input[name="map-type"]')],
+    ['mapTypeNav', $('.js-map-type')],
+    ['layerTypeNav', $('.js-layer-type')],
   ]);
 
   if (hasMissingElements($elements)) {
@@ -42,20 +45,23 @@ window.addEventListener('load', () => {
     osm.getInstance().invalidateSize();
   }).observe(osm.$element);
 
-  Array.from($elements.get('mapType') as NodeListOf<HTMLInputElement>).map(($element) => {
-    $element.checked = $element.value === mapType;
+  new RadioGroupClass($elements.get('mapTypeNav') as HTMLElement, mapType, (event) => {
+    const mapType = (event.target as HTMLInputElement).value as string;
 
-    $element.addEventListener('change', (event) => {
-      const target = event.target as HTMLInputElement;
-      const layer = target.value as string;
+    osm.unsubscribe(activeMap);
+    activeMap.destroy();
+    activeMap = MapFactory.create(mapType as MapType, $elements.get('map') as HTMLDivElement);
+    osm.subscribe(activeMap);
+    activeMap.render();
+    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType as MapType);
+  });
 
-      osm.unsubscribe(activeMap);
-      activeMap.destroy();
-      activeMap = MapFactory.create(layer as MapType, $elements.get('map') as HTMLDivElement);
-      osm.subscribe(activeMap);
-      activeMap.render();
-      setUrlParams(activeMap.mapOptions, osm.getLayer(), layer as MapType);
-    });
+  new RadioGroupClass($elements.get('layerTypeNav') as HTMLElement, urlParams.layer, (event) => {
+    const mapLayer = (event.target as HTMLInputElement).value as LayerName;
+
+    if (osm.getInstance().hasLayer(osmLayers[osm.getLayer()])) {
+      osm.switchLayerTo(mapLayer);
+    }
   });
 
   osm.subscribe(activeMap);

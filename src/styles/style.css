@@ -54,7 +54,8 @@ header {
   height: 2rem;
   background-color: var(--color--slate, #525f7a);
   color: var(--color--slate-50, #eff1f4);
-  display: flex;
+  display: grid;
+    grid-template-columns: 50% 50%;
   justify-content: space-between;
   align-items: stretch;
   flex-direction: row;
@@ -132,7 +133,7 @@ header {
   left: 50%;
 }
 
-.map-choice {
+.choice {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -141,15 +142,15 @@ header {
   gap: 0.5rem;
 }
 
-.map-choice input[type="radio"] {
+.choice input[type="radio"] {
   display: none;
 }
-.map-choice input:checked + label {
+.choice input:checked + label {
   color: var(--color--slate-50, #eff1f4);
   background-color: var(--color-red-450, #ee402e);
 }
 
-.map-choice label {
+.choice label {
   display: block;
   margin: 0;
   padding: 0 1rem;

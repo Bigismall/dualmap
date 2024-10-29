@@ -25,6 +25,7 @@ export type UrlParams = {
 
 export type DOMElement = Element | NodeListOf<HTMLElement> | null;
 export type DOMElements = Map<string, DOMElement>;
+export type RadioItemAction = (event: Event) => void;
 
 export const isLayerName = (value: string): value is LayerName =>
   ['OSM', 'OSM DE', 'Humanitarian', 'Topography', 'Cyclo', 'Satellite', 'Rail'].includes(value);
