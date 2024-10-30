@@ -1,6 +1,6 @@
-import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { HIDDEN_CLASS, KEY_AXIS } from './constants.ts';
+import { Message, MessageState } from './types.ts';
 import { log } from './utils/console.ts';
 
 export class Axis implements Observer {

@@ -7,3 +7,5 @@ export const $$: typeof document.querySelectorAll = document.querySelectorAll.bi
 
 export const hasMissingElements = ($elements: DOMElements): boolean =>
   Array.from($elements.values()).filter(($element) => $element === null).length > 0;
+
+export const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
