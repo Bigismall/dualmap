@@ -1,13 +1,14 @@
 # Dualmap #
+
 Just a side by side map browser - [https://bigismall.github.io/dualmap/](https://bigismall.github.io/dualmap/)
 
+Synchronize views of different map types side by side. Compare data from different sources.
+
+
 ## Keys ##
-
-- `l` - turn on/off the left map
-- `r` - turn on/off the right map
 - `a` - turn on/off the red axis
-- `i` - open google maps URL
+- `i` - insert Google Maps URL you want to navigate to
 
 
 
-![Dualmap screenshot](./doc/dualmap-screenshot.jpeg)
+![Dualmap screenshot](./doc/dualmap-screenshot-v2.jpg)
