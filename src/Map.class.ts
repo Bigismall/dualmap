@@ -1,13 +1,13 @@
 import L from 'leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import { Message, MessageState } from './Message.type.ts';
 import { Observer } from './Observer.interface.ts';
 import { Publisher } from './Publisher.interface.ts';
 import { DEFAULT_MAP_TYPE, GOOGLE_MAPS_API_KEY, KEY_IMPORT_URL, MAX_ZOOM } from './constants';
 import { osmLayers } from './layers.ts';
-import { LayerName, MapConfig, MapOptions, MapType } from './types';
+import { LayerName, MapConfig, MapOptions, MapType, Message, MessageState } from './types';
 import { getMapOptions, getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 import { log } from './utils/console.ts';
+import { rootFontSize } from './utils/dom.ts';
 
 abstract class MapFrame {
   public $parent: HTMLElement | null = null;
@@ -122,6 +122,15 @@ export class OpenRailwayMapFrame extends MapObserver {
     return `https://www.openrailwaymap.org/?style=standard&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}`;
   }
 }
+// Bing Maps
+
+export class BingMapsFrame extends MapObserver {
+  getUrl() {
+    const width = window.innerWidth / 2;
+    const height = window.innerHeight - 2 * rootFontSize; //-2rem
+    return `https://www.bing.com/maps/embed?h=${height}&w=${width}&cp=${this.mapOptions.lat}~${this.mapOptions.lng}&lvl=${this.mapOptions.zoom}&typ=MapType`;
+  }
+}
 
 export class OsmFrame extends MapPublisherObserver {
   constructor(
@@ -217,6 +226,8 @@ export class MapFactory {
         return new WikiMapiaFrame($mapElement, mapOptions, mapConfig);
       case 'rail':
         return new OpenRailwayMapFrame($mapElement, mapOptions, mapConfig);
+      case 'bing':
+        return new BingMapsFrame($mapElement, mapOptions, mapConfig);
     }
     // @ts-ignore
     return null;

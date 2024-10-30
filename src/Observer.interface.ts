@@ -1,4 +1,4 @@
-import { Message } from './Message.type.ts';
+import { Message } from './types';
 
 export interface Observer {
   update: (publication: Message) => void;
