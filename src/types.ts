@@ -1,5 +1,12 @@
-export type MapType = 'wiki' | 'google' | 'rail' | 'osm' | 'bing';
+export type MapType = 'wiki' | 'google' | 'rail' | 'osm' | 'bing' | 'adsb';
 export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail';
+
+// Create array based on the MapType
+const mapTypeArray: MapType[] = ['wiki', 'google', 'rail', 'osm', 'bing', 'adsb'];
+const layerNameArray: LayerName[] = ['OSM', 'OSM DE', 'Humanitarian', 'Topography', 'Cyclo', 'Satellite', 'Rail'];
+
+export const isLayerName = (value: string): value is LayerName => layerNameArray.includes(value as LayerName);
+export const isMapType = (value: string): value is MapType => mapTypeArray.includes(value as MapType);
 
 export type MapOptions = {
   lat: number;
@@ -44,7 +51,12 @@ export type DOMElement = Element | NodeListOf<HTMLElement> | null;
 export type DOMElements = Map<string, DOMElement>;
 export type RadioItemAction = (event: Event) => void;
 
-export const isLayerName = (value: string): value is LayerName =>
-  ['OSM', 'OSM DE', 'Humanitarian', 'Topography', 'Cyclo', 'Satellite', 'Rail'].includes(value);
+export interface Observer {
+  update: (publication: Message) => void;
+}
 
-export const isMapType = (value: string): value is MapType => ['wiki', 'google', 'rail', 'osm', 'bing'].includes(value);
+export interface Publisher {
+  subscribers: Observer[];
+  subscribe: (callback: Observer) => void;
+  publish: (publication: Message) => void;
+}

@@ -1,6 +1,4 @@
-import { Observer } from './Observer.interface.ts';
-import { Publisher } from './Publisher.interface.ts';
-import { Message, MessageState } from './types.ts';
+import { Message, MessageState, Observer, Publisher } from './types.ts';
 
 export class Scene implements Publisher {
   subscribers: Observer[] = [];
