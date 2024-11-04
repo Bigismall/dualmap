@@ -55,7 +55,7 @@ header {
   background-color: var(--color--slate, #525f7a);
   color: var(--color--slate-50, #eff1f4);
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 1fr 85px 1fr;
   justify-content: space-between;
   align-items: stretch;
   flex-direction: row;
@@ -140,6 +140,9 @@ header {
   align-items: stretch;
   flex-wrap: nowrap;
   gap: 0;
+}
+.choice.js-map-type {
+  justify-content: flex-end;
 }
 
 .choice input[type="radio"] {
