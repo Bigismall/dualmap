@@ -18,9 +18,11 @@ window.addEventListener('load', () => {
   const $elements: DOMElements = new Map<string, DOMElement>([
     ['osm', $('.js-osm')],
     ['map', $('.js-map')],
-    ['axis', $$('.axis')],
+    ['layout', $('.js-layout')],
     ['mapTypeNav', $('.js-map-type')],
     ['layerTypeNav', $('.js-layer-type')],
+    ['proportionNav', $('.js-proportion')],
+    ['axis', $$('.axis')],
   ]);
 
   if (hasMissingElements($elements)) {
@@ -63,6 +65,13 @@ window.addEventListener('load', () => {
     if (osm.getInstance().hasLayer(osmLayers[osm.getLayer()])) {
       osm.switchLayerTo(mapLayer);
     }
+  });
+
+  new RadioGroupClass($elements.get('proportionNav') as HTMLElement, 'w50', (event) => {
+    const proportion = (event.target as HTMLInputElement).value;
+    const $layout = $elements.get('layout') as HTMLElement;
+    $layout.classList.remove('w50', 'w66');
+    $layout.classList.add(proportion);
   });
 
   osm.subscribe(activeMap);
