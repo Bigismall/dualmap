@@ -55,7 +55,7 @@ header {
   background-color: var(--color--slate, #525f7a);
   color: var(--color--slate-50, #eff1f4);
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 1fr 85px 1fr;
   justify-content: space-between;
   align-items: stretch;
   flex-direction: row;
@@ -69,10 +69,17 @@ header {
   height: calc(100vh - 2rem);
   overflow: hidden;
 
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 50% 50%;
   justify-content: space-between;
   align-items: stretch;
+}
+
+.layout.w50 {
+  grid-template-columns: 50% 50%;
+}
+.layout.w66 {
+  grid-template-columns: 66% 34%;
 }
 
 .layout__left,
@@ -100,7 +107,7 @@ header {
 }
 
 .axis__horizontal {
-  top: 50%;
+  top: calc(50% - 1rem);
   left: 0;
   width: 100vw;
   height: 1px;
@@ -121,16 +128,11 @@ header {
   left: 75%;
 }
 
-#app:has(.layout__left.hidden) .axis__vertical--left {
-  display: none;
+body:has(.layout.w66) .axis__vertical--left {
+  left: 33%;
 }
-
-#app:has(.layout__right.hidden) .axis__vertical--right {
-  display: none;
-}
-
-#app:has(.layout__right.hidden) .axis__vertical--left {
-  left: 50%;
+body:has(.layout.w66) .axis__vertical--right {
+  left: 83%;
 }
 
 .choice {
@@ -140,6 +142,9 @@ header {
   align-items: stretch;
   flex-wrap: nowrap;
   gap: 0;
+}
+.choice.js-map-type {
+  justify-content: flex-end;
 }
 
 .choice input[type="radio"] {
