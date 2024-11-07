@@ -1,61 +1,63 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
-          content="Dual map - synchronize views of different map types side by side. Compare data from different sources."/>
+        content="Dual map - synchronize views of different map types side by side. Compare data from different sources." />
     <title>Dual Map</title>
     <script type="module" src="/src/main.ts"></script>
     <link rel="icon" type="image/svg+xml"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
 </head>
-<body>
-<header>
-    <nav class="choice js-layer-type">
-        <input type="radio" id="osm" name="layer-type" value="OSM">
-        <label for="osm">OSM</label>
-        <input type="radio" id="osmde" name="layer-type" value="OSM DE">
-        <label for="osmde">OSM DE</label>
-        <input type="radio" id="humanitarian" name="layer-type" value="Humanitarian">
-        <label for="humanitarian">Humanitarian</label>
-        <input type="radio" id="topography" name="layer-type" value="Topography">
-        <label for="topography">Topography</label>
-        <input type="radio" id="cyclo" name="layer-type" value="Cyclo">
-        <label for="cyclo">Cyclo</label>
-        <input type="radio" id="satellite" name="layer-type" value="Satellite">
-        <label for="satellite">Satellite</label>
-        <input type="radio" id="rail" name="layer-type" value="Rail">
-        <label for="rail">Rail</label>
-    </nav>
-    <nav class="choice js-proportion">
-        <input type="radio" id="w50" name="width" value="w50">
-        <label for="w50">=</label>
-        <input type="radio" id="w66" name="width" value="w66">
-        <label for="w66">≠</label>
-    </nav>
-    <nav class="choice  js-map-type">
-        <input type="radio" id="wikimapia" name="map-type" value="wiki">
-        <label for="wikimapia">Wikimapia</label>
-        <input type="radio" id="google-maps" name="map-type" value="google">
-        <label for="google-maps">Google maps</label>
-        <input type="radio" id="open-railway" name="map-type" value="rail">
-        <label for="open-railway">Open railway</label>
-        <input type="radio" id="bing" name="map-type" value="bing">
-        <label for="bing">BING</label>
-        <input type="radio" id="adsb" name="map-type" value="adsb">
-        <label for="adsb">ADSB</label>
 
-    </nav>
-</header>
-<main class="layout js-layout">
-    <aside class="layout__left js-osm">
-    </aside>
-    <aside class="layout__right js-map">
-    </aside>
-</main>
-<div class="axis axis__horizontal"></div>
-<div class="axis axis__vertical axis__vertical--left"></div>
-<div class="axis axis__vertical axis__vertical--right"></div>
+<body>
+    <header>
+        <nav class="choice js-layer-type">
+            <input type="radio" id="osm" name="layer-type" value="OSM">
+            <label for="osm">OSM</label>
+            <input type="radio" id="osmde" name="layer-type" value="OSM DE">
+            <label for="osmde">OSM DE</label>
+            <input type="radio" id="humanitarian" name="layer-type" value="Humanitarian">
+            <label for="humanitarian">Humanitarian</label>
+            <input type="radio" id="topography" name="layer-type" value="Topography">
+            <label for="topography">Topography</label>
+            <input type="radio" id="cyclo" name="layer-type" value="Cyclo">
+            <label for="cyclo">Cyclo</label>
+            <input type="radio" id="satellite" name="layer-type" value="Satellite">
+            <label for="satellite">Satellite</label>
+            <input type="radio" id="rail" name="layer-type" value="Rail">
+            <label for="rail">Rail</label>
+        </nav>
+        <nav class="choice js-proportion">
+            <input type="radio" id="w50" name="width" value="w50">
+            <label for="w50">=</label>
+            <input type="radio" id="w66" name="width" value="w66">
+            <label for="w66">≠</label>
+        </nav>
+        <nav class="choice  js-map-type">
+            <input type="radio" id="wikimapia" name="map-type" value="wiki">
+            <label for="wikimapia">Wikimapia</label>
+            <input type="radio" id="google-maps" name="map-type" value="google">
+            <label for="google-maps">Google maps</label>
+            <input type="radio" id="open-railway" name="map-type" value="rail">
+            <label for="open-railway">Open railway</label>
+            <input type="radio" id="bing" name="map-type" value="bing">
+            <label for="bing">BING</label>
+            <input type="radio" id="adsb" name="map-type" value="adsb">
+            <label for="adsb">ADSB</label>
+        </nav>
+    </header>
+    <main class="layout js-layout">
+        <aside class="layout__left js-osm">
+        </aside>
+        <aside class="layout__right js-map">
+        </aside>
+    </main>
+    <div class="axis axis__horizontal"></div>
+    <div class="axis axis__vertical axis__vertical--left"></div>
+    <div class="axis axis__vertical axis__vertical--right"></div>
 </body>
+
 </html>
