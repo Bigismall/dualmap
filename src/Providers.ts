@@ -52,7 +52,7 @@ export class OsmFrame extends MapPublisherObserver {
     this.instance = L.map($element as HTMLDivElement, {
       center: [this.mapOptions.lat, this.mapOptions.lng],
       zoom: this.mapOptions.zoom,
-      layers: [osmLayers[this.currentLayer]],
+      layers: [osmLayers[this.currentLayer][0]],
       maxZoom: this.config.maxZoom,
     });
     const provider = new OpenStreetMapProvider();
@@ -101,8 +101,16 @@ export class OsmFrame extends MapPublisherObserver {
   }
 
   switchLayerTo(layer: LayerName) {
-    this.instance.removeLayer(osmLayers[this.currentLayer]);
-    this.instance.addLayer(osmLayers[layer]);
+    // FIXME - remove all layers, and add all layers
+    // this.instance.removeLayer(osmLayers[this.currentLayer][0]);
+    this.instance.eachLayer((layer) => {
+      this.instance.removeLayer(layer);
+    });
+    // this.instance.addLayer(osmLayers[layer][0]);
+    osmLayers[layer].forEach((layer) => {
+      this.instance.addLayer(layer);
+    });
+
     this.currentLayer = layer;
 
     const { type } = getUrlParams();
