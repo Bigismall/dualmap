@@ -17,30 +17,30 @@
   --color--slate-200: #bfc7d9;
   --color--slate-150: #cfd5e2;
   --color--slate-100: #dfe3eb;
-  --color--slate-50: #eff1f4;
-  --color--slate: var(--color--slate-600);
-  --color-red-450: #ee402e;
+  --color--slate-50 : #eff1f4;
+  --color--slate    : var(--color--slate-600);
+  --color-red-450   : #ee402e;
 
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  font-size: 16px;
-  color: var(--color--slate-750, #333c4e);
-  background-color: var(--color--slate-50, #eff1f4);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height            : 1.5;
+  font-weight            : 400;
+  font-size              : clamp(10px, 1.5vw, 16px);
+  color                  : var(--color--slate-750, #333c4e);
+  background-color       : var(--color--slate-50, #eff1f4);
+  font-synthesis         : none;
+  text-rendering         : optimizeLegibility;
+  -webkit-font-smoothing : antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  display: block;
-  position: relative;
+  margin      : 0;
+  padding     : 0;
+  width       : 100%;
+  height      : 100vh;
+  overflow    : hidden;
+  display     : block;
+  position    : relative;
   accent-color: var(--color-red-450, #ee402e);
 }
 
@@ -49,35 +49,36 @@ body {
 }
 
 header {
-  margin: 0;
-  padding: 0 1rem 0 1rem;
-  height: 2rem;
-  background-color: var(--color--slate, #525f7a);
-  color: var(--color--slate-50, #eff1f4);
-  display: grid;
-  grid-template-columns: 1fr 85px 1fr;
-  justify-content: space-between;
-  align-items: stretch;
-  flex-direction: row;
+  margin               : 0;
+  padding              : 0 1rem 0 1rem;
+  height               : 2rem;
+  background-color     : var(--color--slate, #525f7a);
+  color                : var(--color--slate-50, #eff1f4);
+  display              : grid;
+  grid-template-columns: 1fr 5.3125rem 1fr;
+  justify-content      : space-between;
+  align-items          : stretch;
+  flex-direction       : row;
 }
 
 .layout {
-  margin: 0;
-  padding: 0;
+  margin     : 0;
+  padding    : 0;
   place-items: center;
-  width: 100%;
-  height: calc(100vh - 2rem);
-  overflow: hidden;
+  width      : 100%;
+  height     : calc(100vh - 2rem);
+  overflow   : hidden;
 
-  display: grid;
+  display              : grid;
   grid-template-columns: 50% 50%;
-  justify-content: space-between;
-  align-items: stretch;
+  justify-content      : space-between;
+  align-items          : stretch;
 }
 
 .layout.w50 {
   grid-template-columns: 50% 50%;
 }
+
 .layout.w66 {
   grid-template-columns: 66% 34%;
 }
@@ -85,38 +86,38 @@ header {
 .layout__left,
 .layout__right {
   display: block;
-  width: 100%;
-  height: 100%;
+  width  : 100%;
+  height : 100%;
 }
 
 .layout__frame {
   display: block;
-  margin: 0;
+  margin : 0;
   padding: 0;
-  border: none;
+  border : none;
 }
 
 .axis {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
+  position        : absolute;
+  top             : 0;
+  left            : 0;
+  display         : block;
   background-color: var(--color-red-450, #ee402e);
-  z-index: 2000;
-  pointer-events: none;
+  z-index         : 2000;
+  pointer-events  : none;
 }
 
 .axis__horizontal {
-  top: calc(50% - 1rem);
-  left: 0;
-  width: 100vw;
+  top   : calc(50% - 1rem);
+  left  : 0;
+  width : 100vw;
   height: 1px;
 }
 
 .axis__vertical {
-  top: 2rem;
-  left: 0;
-  width: 1px;
+  top   : 2rem;
+  left  : 0;
+  width : 1px;
   height: calc(100vh - 2rem);
 }
 
@@ -131,18 +132,20 @@ header {
 body:has(.layout.w66) .axis__vertical--left {
   left: 33%;
 }
+
 body:has(.layout.w66) .axis__vertical--right {
   left: 83%;
 }
 
 .choice {
-  display: flex;
-  flex-direction: row;
+  display        : flex;
+  flex-direction : row;
   justify-content: flex-start;
-  align-items: stretch;
-  flex-wrap: nowrap;
-  gap: 0;
+  align-items    : stretch;
+  flex-wrap      : nowrap;
+  gap            : 0;
 }
+
 .choice.js-map-type {
   justify-content: flex-end;
 }
@@ -150,19 +153,20 @@ body:has(.layout.w66) .axis__vertical--right {
 .choice input[type="radio"] {
   display: none;
 }
-.choice input:checked + label {
-  color: var(--color--slate-50, #eff1f4);
+
+.choice input:checked+label {
+  color           : var(--color--slate-50, #eff1f4);
   background-color: var(--color-red-450, #ee402e);
 }
 
 .choice label {
-  display: block;
-  margin: 0;
-  padding: 0 1rem;
-  height: auto;
+  display    : block;
+  margin     : 0;
+  padding    : 0 0.5rem;
+  height     : auto;
   line-height: 2rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  cursor     : pointer;
+  transition : background-color 0.2s ease-in-out;
 }
 
 .choice label:hover {
