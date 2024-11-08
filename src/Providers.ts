@@ -45,7 +45,7 @@ export class OsmFrame extends MapPublisherObserver {
     this.instance = L.map($element as HTMLDivElement, {
       center: [this.mapOptions.lat, this.mapOptions.lng],
       zoom: this.mapOptions.zoom,
-      layers: [osmLayers[this.currentLayer][0]],
+      layers: [...osmLayers[this.currentLayer]],
       maxZoom: this.config.maxZoom,
     });
     const provider = new OpenStreetMapProvider();
