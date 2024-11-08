@@ -20,13 +20,6 @@ export class WikiMapiaFrame extends MapObserver {
   }
 }
 
-//Open Railway Map
-export class OpenRailwayMapFrame extends MapObserver {
-  getUrl() {
-    return `https://www.openrailwaymap.org/?style=standard&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}`;
-  }
-}
-
 export class BingMapsFrame extends MapObserver {
   getUrl() {
     const width = window.innerWidth / 2;
