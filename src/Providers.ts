@@ -94,12 +94,10 @@ export class OsmFrame extends MapPublisherObserver {
   }
 
   switchLayerTo(layer: LayerName) {
-    // FIXME - remove all layers, and add all layers
-    // this.instance.removeLayer(osmLayers[this.currentLayer][0]);
     this.instance.eachLayer((layer) => {
       this.instance.removeLayer(layer);
     });
-    // this.instance.addLayer(osmLayers[layer][0]);
+
     osmLayers[layer].forEach((layer) => {
       this.instance.addLayer(layer);
     });
