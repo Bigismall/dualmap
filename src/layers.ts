@@ -38,13 +38,10 @@ export const osmLayers: Record<LayerName, L.TileLayer[]> = {
     }),
   ],
   Rail: [
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}', {
-      minZoom: 0,
-      maxZoom: 20,
+    L.tileLayer('https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png', {
+      maxZoom: 19,
       attribution:
-        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      // @ts-ignore
-      ext: 'png',
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>',
     }),
     L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
       attribution:
