@@ -20,13 +20,6 @@ export class WikiMapiaFrame extends MapObserver {
   }
 }
 
-//Open Railway Map
-export class OpenRailwayMapFrame extends MapObserver {
-  getUrl() {
-    return `https://www.openrailwaymap.org/?style=standard&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}`;
-  }
-}
-
 export class BingMapsFrame extends MapObserver {
   getUrl() {
     const width = window.innerWidth / 2;
@@ -52,7 +45,7 @@ export class OsmFrame extends MapPublisherObserver {
     this.instance = L.map($element as HTMLDivElement, {
       center: [this.mapOptions.lat, this.mapOptions.lng],
       zoom: this.mapOptions.zoom,
-      layers: [osmLayers[this.currentLayer]],
+      layers: [...osmLayers[this.currentLayer]],
       maxZoom: this.config.maxZoom,
     });
     const provider = new OpenStreetMapProvider();
@@ -101,8 +94,14 @@ export class OsmFrame extends MapPublisherObserver {
   }
 
   switchLayerTo(layer: LayerName) {
-    this.instance.removeLayer(osmLayers[this.currentLayer]);
-    this.instance.addLayer(osmLayers[layer]);
+    this.instance.eachLayer((layer) => {
+      this.instance.removeLayer(layer);
+    });
+
+    osmLayers[layer].forEach((layer) => {
+      this.instance.addLayer(layer);
+    });
+
     this.currentLayer = layer;
 
     const { type } = getUrlParams();

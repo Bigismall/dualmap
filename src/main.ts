@@ -1,16 +1,16 @@
 import { $, $$, hasMissingElements } from './utils/dom.ts';
 
-import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
+import 'leaflet/dist/leaflet.css';
 
-import { MAX_ZOOM } from './constants.ts';
-import './styles/style.css';
 import { Axis } from './Axis.class.ts';
 import { MapFactory } from './MapFactory.class.ts';
 import { OsmFrame } from './Providers.ts';
 import { RadioGroupClass } from './RadioGroup.class.ts';
 import { Scene } from './Scene.class.ts';
+import { MAX_ZOOM } from './constants.ts';
 import { osmLayers } from './layers.ts';
+import './styles/style.css';
 import { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
 import { getMapOptions, getUrlParams, setUrlParams } from './url.ts';
 
@@ -62,7 +62,7 @@ window.addEventListener('load', () => {
   new RadioGroupClass($elements.get('layerTypeNav') as HTMLElement, urlParams.layer, (event) => {
     const mapLayer = (event.target as HTMLInputElement).value as LayerName;
 
-    if (osm.getInstance().hasLayer(osmLayers[osm.getLayer()])) {
+    if (osm.getInstance().hasLayer(osmLayers[osm.getLayer()][0])) {
       osm.switchLayerTo(mapLayer);
     }
   });

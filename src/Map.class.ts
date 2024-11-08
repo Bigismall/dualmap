@@ -24,13 +24,6 @@ export abstract class MapFrame {
     $frame.loading = 'lazy';
     $frame.classList.add('layout__frame');
     $frame.title = 'Map';
-
-    if (this.config.type === 'rail') {
-      // Very custom solution for OpenRailwayMap
-      $frame.style.marginLeft = '-300px';
-      $frame.style.width = `calc(100% + 300px)`;
-    }
-
     return $frame;
   }
 
