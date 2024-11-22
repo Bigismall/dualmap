@@ -6,8 +6,8 @@ Synchronize views of different map types side by side. Compare data from differe
 
 
 ## Keys ##
-- `a` - turn on/off the red axis
-- `i` - insert Google Maps URL you want to navigate to
+- `1` - turn on/off the red axis
+- `2` - insert Google Maps URL you want to navigate to
 
 
 
