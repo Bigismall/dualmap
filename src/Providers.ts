@@ -14,6 +14,13 @@ export class GoogleMapsFrame extends MapObserver {
   }
 }
 
+// Google street view embed
+export class GoogleStreetViewFrame extends MapObserver {
+  public getUrl() {
+    return `https://www.google.com/maps/embed/v1/streetview?key=${this.config.apiKey}&location=${this.mapOptions.lat},${this.mapOptions.lng}&heading=0`;
+  }
+}
+
 export class WikiMapiaFrame extends MapObserver {
   getUrl() {
     return `https://wikimapia.org/#lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&z=${this.mapOptions.zoom}&l=&ifr=1&m=w`;

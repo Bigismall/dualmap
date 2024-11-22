@@ -1,5 +1,11 @@
 import { MapObserver } from './Map.class.ts';
-import { ADSBExchangeFrame, BingMapsFrame, GoogleMapsFrame, WikiMapiaFrame } from './Providers.ts';
+import {
+  ADSBExchangeFrame,
+  BingMapsFrame,
+  GoogleMapsFrame,
+  GoogleStreetViewFrame,
+  WikiMapiaFrame,
+} from './Providers.ts';
 import { GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
 import { MapType } from './types.ts';
 import { getMapOptions, getUrlParams } from './url.ts';
@@ -16,6 +22,8 @@ export class MapFactory {
     switch (type) {
       case 'google':
         return new GoogleMapsFrame($mapElement, mapOptions, { ...mapConfig, apiKey: GOOGLE_MAPS_API_KEY });
+      case 'streetview':
+        return new GoogleStreetViewFrame($mapElement, mapOptions, { ...mapConfig, apiKey: GOOGLE_MAPS_API_KEY });
       case 'wiki':
         return new WikiMapiaFrame($mapElement, mapOptions, mapConfig);
       case 'bing':
