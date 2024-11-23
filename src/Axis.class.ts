@@ -3,7 +3,17 @@ import { Message, MessageState, Observer } from './types.ts';
 import { log } from './utils/console.ts';
 
 export class Axis implements Observer {
-  constructor(private axis: NodeListOf<HTMLElement>) {}
+  constructor(private axis: NodeListOf<HTMLElement>) {
+    // On mouse move
+    window.addEventListener('mousemove', (event) => {
+      const x = event.clientX;
+      const y = event.clientY;
+      axis.forEach((el) => {
+        el.style.setProperty('--axis-horizontal', `${x}px`);
+        el.style.setProperty('--axis-vertical', `${y}px`);
+      });
+    });
+  }
 
   public update(publication: Message) {
     log('Publication:', publication, 'Observer: Axis');
