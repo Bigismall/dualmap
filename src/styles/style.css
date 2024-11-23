@@ -21,6 +21,9 @@
   --color--slate: var(--color--slate-600);
   --color-red-450: #ee402e;
 
+  --axis-horizontal: 25%;
+  --axis-vertical: 50%;
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -108,8 +111,9 @@ header {
 }
 
 .axis__horizontal {
-  top: calc(50% - 1rem);
+  top: 0;
   left: 0;
+  transform: translateY(var(--axis-vertical, 50%));
   width: 100vw;
   height: 1px;
 }
@@ -122,13 +126,14 @@ header {
 }
 
 .axis__vertical--left {
-  left: 25%;
+  transform: translateX(var(--axis-horizontal, 25%));
 }
 
 .axis__vertical--right {
-  left: 75%;
+  left: 50%;
+  transform: translateX(calc(var(--axis-horizontal, 25%)));
 }
-
+/*
 body:has(.layout.w66) .axis__vertical--left {
   left: 33%;
 }
@@ -136,7 +141,7 @@ body:has(.layout.w66) .axis__vertical--left {
 body:has(.layout.w66) .axis__vertical--right {
   left: 83%;
 }
-
+*/
 .choice {
   display: flex;
   flex-direction: row;
