@@ -4,7 +4,6 @@ import { log } from './utils/console.ts';
 
 export class Axis implements Observer {
   constructor(private axis: NodeListOf<HTMLElement>) {
-    // On mouse move
     window.addEventListener('mousemove', (event) => {
       const x = event.clientX;
       const y = event.clientY;

@@ -36,7 +36,6 @@ export const getMapOptions = (urlParams: UrlParams): MapOptions => ({
   lng: urlParams.lng,
 });
 
-// https://www.google.com/maps/@54.3854942,18.3370827,15.95z?entry=ttu
 export const parseGoogleMapsUrl = (url: string): MapOptions => {
   const googleMapsUrl = new URL(url);
   const params = googleMapsUrl.pathname.split('@')[1].split(',');
