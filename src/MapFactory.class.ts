@@ -4,6 +4,7 @@ import {
   BingMapsFrame,
   GoogleMapsFrame,
   GoogleStreetViewFrame,
+  OSMBuildingsFrame,
   WikiMapiaFrame,
 } from './Providers.ts';
 import { GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
@@ -30,6 +31,8 @@ export class MapFactory {
         return new BingMapsFrame($mapElement, mapOptions, mapConfig);
       case 'adsb':
         return new ADSBExchangeFrame($mapElement, mapOptions, mapConfig);
+      case 'osmb':
+        return new OSMBuildingsFrame($mapElement, mapOptions, mapConfig);
     }
     // @ts-ignore
     return null;
