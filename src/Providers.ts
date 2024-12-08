@@ -21,6 +21,13 @@ export class GoogleStreetViewFrame extends MapObserver {
   }
 }
 
+//OSM Buildings frame
+export class OSMBuildingsFrame extends MapObserver {
+  public getUrl() {
+    return `/dualmap/osmbuildings/?lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}&tilt=30&rotation=0`;
+  }
+}
+
 export class WikiMapiaFrame extends MapObserver {
   getUrl() {
     return `https://wikimapia.org/#lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&z=${this.mapOptions.zoom}&l=&ifr=1&m=w`;
