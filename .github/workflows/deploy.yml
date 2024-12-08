@@ -26,6 +26,13 @@ jobs:
           name: production-files
           path: ./dist
 
+      - name: Upload osmbuildings
+        uses: actions/upload-artifact@v4
+        with:
+          name: osmbuildings
+          path: ./osmbuildings
+
+
   deploy:
     name: Deploy
     needs: build
@@ -37,6 +44,12 @@ jobs:
         with:
           name: production-files
           path: ./dist
+
+      - name: Download osmbuildings
+        uses: actions/download-artifact@v4
+        with:
+          name: osmbuildings
+          path: ./osmbuildings
 
       - name: Display structure of downloaded files
         run: ls -R
