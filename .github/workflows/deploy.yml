@@ -45,11 +45,23 @@ jobs:
           name: production-files
           path: ./dist
 
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./dist
+
       - name: Download osmbuildings
         uses: actions/download-artifact@v4
         with:
           name: osmbuildings
           path: ./osmbuildings
+
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ./osmbuildings
+
+#      Move osmbuildings to dist
+      - name: Move osmbuildings to dist
+        run: mv ./osmbuildings ./dist
 
       - name: Display structure of downloaded files
         run: ls -R
