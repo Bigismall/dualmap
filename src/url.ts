@@ -2,14 +2,14 @@ import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM
 import { LayerName, MapOptions, MapType, UrlParams, isLayerName, isMapType } from './types.ts';
 import { log } from './utils/console.ts';
 
-export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapType) => {
+export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapType, width: string) => {
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString().slice(0, 12));
   url.searchParams.set('lng', options.lng.toString().slice(0, 12));
   url.searchParams.set('z', options.zoom.toString());
   url.searchParams.set('l', layer);
   url.searchParams.set('t', type);
-
+  url.searchParams.set('w', width);
   window.history.pushState({}, '', url.toString());
 };
 
@@ -20,6 +20,7 @@ export const getUrlParams = (): UrlParams => {
   const zoom = Math.min(Number.parseFloat(urlParams.get('z') ?? DEFAULT_ZOOM.toString()), MAX_ZOOM);
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
+  const width = urlParams.get('w') ?? 'w50';
 
   return {
     lat,
@@ -27,6 +28,7 @@ export const getUrlParams = (): UrlParams => {
     zoom,
     layer,
     type,
+    width,
   };
 };
 

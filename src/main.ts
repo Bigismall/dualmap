@@ -33,6 +33,7 @@ window.addEventListener('load', () => {
   const urlParams = getUrlParams();
   const mapOptions = getMapOptions(urlParams);
   const mapType = urlParams.type;
+  const mapWidth = urlParams.width;
   const scene = new Scene();
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
   let activeMap = MapFactory.create(mapType, $elements.get('map') as HTMLDivElement);
@@ -43,6 +44,9 @@ window.addEventListener('load', () => {
     frame: false,
     type: 'osm',
   });
+
+  const $layout = $elements.get('layout') as HTMLElement;
+  $layout.classList.add(mapWidth === 'w50' ? 'w50' : 'w66');
 
   new ResizeObserver(() => {
     osm.getInstance().invalidateSize();
@@ -56,7 +60,7 @@ window.addEventListener('load', () => {
     activeMap = MapFactory.create(mapType as MapType, $elements.get('map') as HTMLDivElement);
     osm.subscribe(activeMap);
     activeMap.render();
-    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType as MapType);
+    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType as MapType, mapWidth);
   });
 
   new RadioGroupClass($elements.get('layerTypeNav') as HTMLElement, urlParams.layer, (event) => {
@@ -67,11 +71,12 @@ window.addEventListener('load', () => {
     }
   });
 
-  new RadioGroupClass($elements.get('proportionNav') as HTMLElement, 'w50', (event) => {
+  new RadioGroupClass($elements.get('proportionNav') as HTMLElement, mapWidth, (event) => {
     const proportion = (event.target as HTMLInputElement).value;
     const $layout = $elements.get('layout') as HTMLElement;
     $layout.classList.remove('w50', 'w66');
     $layout.classList.add(proportion);
+    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType, proportion);
   });
 
   osm.subscribe(activeMap);
