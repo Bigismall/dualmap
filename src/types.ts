@@ -28,6 +28,7 @@ export type UrlParams = {
   zoom: number;
   layer: LayerName;
   type: MapType;
+  width: string;
 };
 
 export enum MessageState {

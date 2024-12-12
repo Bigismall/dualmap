@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { MapObserver, MapPublisherObserver } from './Map.class.ts';
-import { DEFAULT_MAP_TYPE, KEY_IMPORT_URL } from './constants.ts';
+import { KEY_IMPORT_URL } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import { LayerName, MapConfig, MapOptions, Message, MessageState } from './types.ts';
 import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
@@ -78,10 +78,9 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
-    const params = getUrlParams();
-    const type = params?.type ?? DEFAULT_MAP_TYPE;
+    const { type, width } = getUrlParams();
 
-    setUrlParams(this.getMapOptions(), this.currentLayer, type);
+    setUrlParams(this.getMapOptions(), this.currentLayer, type, width);
   };
 
   update(publication: Message) {
@@ -118,8 +117,8 @@ export class OsmFrame extends MapPublisherObserver {
 
     this.currentLayer = layer;
 
-    const { type } = getUrlParams();
-    setUrlParams(this.getMapOptions(), layer, type);
+    const { type, width } = getUrlParams();
+    setUrlParams(this.getMapOptions(), layer, type, width);
   }
 
   getMapOptions = (): MapOptions => ({
