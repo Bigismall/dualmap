@@ -2,13 +2,14 @@ import { $, $$, hasMissingElements } from './utils/dom.ts';
 
 import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
+import './plugins/linearmeasurement/LinearMeasurement.css';
 
 import { Axis } from './Axis.class.ts';
 import { MapFactory } from './MapFactory.class.ts';
 import { OsmFrame } from './Providers.ts';
 import { RadioGroupClass } from './RadioGroup.class.ts';
 import { Scene } from './Scene.class.ts';
-import { MAX_ZOOM } from './constants.ts';
+import { MAX_ZOOM, WIDTH_50, WIDTH_66 } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import './styles/style.css';
 import { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
@@ -46,7 +47,7 @@ window.addEventListener('load', () => {
   });
 
   const $layout = $elements.get('layout') as HTMLElement;
-  $layout.classList.add(mapWidth === 'w50' ? 'w50' : 'w66');
+  $layout.classList.add(mapWidth === WIDTH_50 ? WIDTH_50 : WIDTH_66);
 
   new ResizeObserver(() => {
     osm.getInstance().invalidateSize();
@@ -74,7 +75,7 @@ window.addEventListener('load', () => {
   new RadioGroupClass($elements.get('proportionNav') as HTMLElement, mapWidth, (event) => {
     const proportion = (event.target as HTMLInputElement).value;
     const $layout = $elements.get('layout') as HTMLElement;
-    $layout.classList.remove('w50', 'w66');
+    $layout.classList.remove(WIDTH_50, WIDTH_66);
     $layout.classList.add(proportion);
     setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType, proportion);
   });

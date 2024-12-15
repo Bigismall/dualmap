@@ -9,3 +9,11 @@ export const DEFAULT_MAP_TYPE: MapType = 'google';
 export const KEY_AXIS = '1';
 export const KEY_IMPORT_URL = '2';
 export const HIDDEN_CLASS = 'hidden';
+export const WIDTH_50 = 'w50';
+export const WIDTH_66 = 'w66';
+
+export const measureOptions = {
+  unitSystem: 'metric',
+  color: '#3381ff',
+  type: 'line',
+};

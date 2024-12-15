@@ -1,4 +1,4 @@
-import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM } from './constants';
+import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM, WIDTH_50 } from './constants';
 import { LayerName, MapOptions, MapType, UrlParams, isLayerName, isMapType } from './types.ts';
 import { log } from './utils/console.ts';
 
@@ -20,7 +20,7 @@ export const getUrlParams = (): UrlParams => {
   const zoom = Math.min(Number.parseFloat(urlParams.get('z') ?? DEFAULT_ZOOM.toString()), MAX_ZOOM);
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
-  const width = urlParams.get('w') ?? 'w50';
+  const width = urlParams.get('w') ?? WIDTH_50;
 
   return {
     lat,
