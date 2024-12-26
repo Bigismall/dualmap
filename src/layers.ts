@@ -1,5 +1,6 @@
 import L from 'leaflet';
-
+// @ts-ignore
+import OverPassLayer from 'leaflet-overpass-layer/src/OverpassLayer.js';
 import { LayerName } from './types.ts';
 
 export const osmLayers: Record<LayerName, L.TileLayer[]> = {
@@ -49,6 +50,17 @@ export const osmLayers: Record<LayerName, L.TileLayer[]> = {
     L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
       attribution:
         'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | Map style: &copy; <a href="https://www.OpenRailwayMap.org">OpenRailwayMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+    }),
+  ],
+  OverPass: [
+    L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }),
+
+    new OverPassLayer({
+      // query: `(way["highway"="proposed"]({{bbox}}); relation["highway"="proposed"]({{bbox}}););out body;>;out skel qt;`,
+      query: '(node({{bbox}})[organic];node({{bbox}})[shop];);out qt;',
+      debug: false,
     }),
   ],
 };

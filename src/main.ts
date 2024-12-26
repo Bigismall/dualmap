@@ -1,6 +1,7 @@
 import { $, $$, hasMissingElements } from './utils/dom.ts';
 
 import 'leaflet-geosearch/dist/geosearch.css';
+import 'leaflet-overpass-layer/dist/OverpassLayer.css';
 import 'leaflet/dist/leaflet.css';
 import './plugins/linearmeasurement/LinearMeasurement.css';
 

@@ -20,6 +20,7 @@
     "@biomejs/biome": "^1.9.4",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.0.0",
+    "leaflet-overpass-layer": "^2.9.0",
     "vite-plugin-biome": "^1.0.12"
   }
 }
