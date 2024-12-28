@@ -51,12 +51,6 @@ export class ADSBExchangeFrame extends MapObserver {
   }
 }
 
-export class AppleMapsFrame extends MapObserver {
-  getUrl() {
-    return `https://beta.maps.apple.com/?ll=${this.mapOptions.lat}%2C${this.mapOptions.lng}`;
-  }
-}
-
 export class OsmFrame extends MapPublisherObserver {
   constructor(
     public $element: HTMLIFrameElement,

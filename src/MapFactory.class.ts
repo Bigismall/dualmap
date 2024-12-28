@@ -1,7 +1,6 @@
 import { MapObserver } from './Map.class.ts';
 import {
   ADSBExchangeFrame,
-  AppleMapsFrame,
   BingMapsFrame,
   GoogleMapsFrame,
   GoogleStreetViewFrame,
@@ -34,8 +33,6 @@ export class MapFactory {
         return new ADSBExchangeFrame($mapElement, mapOptions, mapConfig);
       case 'osmb':
         return new OSMBuildingsFrame($mapElement, mapOptions, mapConfig);
-      case 'apple':
-        return new AppleMapsFrame($mapElement, mapOptions, mapConfig);
     }
     // @ts-ignore
     return null;
