@@ -24,6 +24,8 @@ window.addEventListener('load', () => {
     ['layerTypeNav', $('.js-layer-type')],
     ['proportionNav', $('.js-proportion')],
     ['axis', $$('.axis')],
+    ['about', $('#about')],
+    ['close-about', $('#close-about')],
   ]);
 
   if (hasMissingElements($elements)) {
@@ -78,6 +80,11 @@ window.addEventListener('load', () => {
     $layout.classList.remove(WIDTH_50, WIDTH_66);
     $layout.classList.add(proportion);
     setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType, proportion);
+  });
+
+  // FIXME - move to Scene
+  ($elements.get('close-about') as HTMLButtonElement).addEventListener('click', () => {
+    ($elements.get('about') as HTMLInputElement).checked = false;
   });
 
   osm.subscribe(activeMap);
