@@ -37,6 +37,11 @@
         <input type="radio" id="w66" name="width" value="w66">
         <label for="w66">≠</label>
     </nav>
+    <nav class="choice">
+        <input type="checkbox" id="about" name="about" >
+        <label for="about">About</label>
+    </nav>
+
     <nav class="choice  js-map-type">
         <input type="radio" id="wikimapia" name="map-type" value="wiki">
         <label for="wikimapia">Wikimapia</label>
@@ -51,6 +56,7 @@
         <input type="radio" id="adsb" name="map-type" value="adsb">
         <label for="adsb">ADSB</label>
     </nav>
+
 </header>
 <main class="layout js-layout">
     <aside class="layout__left js-osm">
@@ -58,7 +64,7 @@
     <aside class="layout__right js-map">
     </aside>
 </main>
-<dialog id="about" open>
+<dialog id="about-dialog">
     <h1>Dual map</h1>
     <p>Dual map is a web application that allows you to synchronize views of different map types side by side.</p>
     <p>Compare satellite views with 3D buildings layer, railroads with Bing maps, typography and air traffic map. You decide!</p>

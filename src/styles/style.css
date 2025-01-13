@@ -57,8 +57,7 @@ header {
   height: 2rem;
   background-color: var(--color--slate, #525f7a);
   color: var(--color--slate-50, #eff1f4);
-  display: grid;
-  grid-template-columns: 1fr 5.3125rem 1fr;
+  display: flex;
   justify-content: space-between;
   align-items: stretch;
   flex-direction: row;
@@ -199,7 +198,8 @@ body:has(.layout.w66) .axis__vertical--right {
   justify-content: flex-end;
 }
 
-.choice input[type="radio"] {
+.choice input[type="radio"],
+.choice input[type="checkbox"] {
   display: none;
 }
 
@@ -216,14 +216,16 @@ body:has(.layout.w66) .axis__vertical--right {
   line-height: 2rem;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  border: none;
+  outline: none;
 }
 
 .choice label:hover {
   background-color: var(--color-red-450, #ee402e);
 }
 
-#about {
-  display: block;
+#about-dialog {
+  display: none;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -241,7 +243,16 @@ body:has(.layout.w66) .axis__vertical--right {
   border: none;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.45);
 }
-#about a {
+/*::backdrop {*/
+/*  background-color: rgb(0 0 0 / 75%);*/
+/*  backdrop-filter: blur(2px);*/
+/*}*/
+
+#about-dialog a {
   color: var(--color--slate-50, #eff1f4);
   text-decoration: underline;
+}
+
+body:has(#about:checked) #about-dialog {
+  display: block;
 }
