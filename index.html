@@ -38,7 +38,7 @@
         <label for="w66">≠</label>
     </nav>
     <nav class="choice">
-        <input type="checkbox" id="about" name="about" >
+        <input type="checkbox" id="about" name="about">
         <label for="about">About</label>
     </nav>
 
@@ -46,28 +46,24 @@
         <input type="radio" id="wikimapia" name="map-type" value="wiki">
         <label for="wikimapia">Wikimapia</label>
         <input type="radio" id="google-maps" name="map-type" value="google">
-        <label for="google-maps">Google maps</label>
+        <label for="google-maps">Google Maps</label>
         <input type="radio" id="streetview" name="map-type" value="streetview">
         <label for="streetview">Street view</label>
         <input type="radio" id="osmb" name="map-type" value="osmb">
         <label for="osmb">3D</label>
         <input type="radio" id="bing" name="map-type" value="bing">
-        <label for="bing">BING</label>
+        <label for="bing">Bing Maps</label>
         <input type="radio" id="adsb" name="map-type" value="adsb">
-        <label for="adsb">ADSB</label>
+        <label for="adsb">Air traffic</label>
     </nav>
 
 </header>
-<main class="layout js-layout">
-    <aside class="layout__left js-osm">
-    </aside>
-    <aside class="layout__right js-map">
-    </aside>
-</main>
 <dialog id="about-dialog">
+    <button id="close-about" title="Close">Close</button>
     <h1>Dual map</h1>
     <p>Dual map is a web application that allows you to synchronize views of different map types side by side.</p>
-    <p>Compare satellite views with 3D buildings layer, railroads with Bing maps, typography and air traffic map. You decide!</p>
+    <p>Compare satellite views with 3D buildings layer, railroads with Bing maps, typography and air traffic map. You
+        decide!</p>
     <h2>Keyboard shortcuts</h2>
     <ul>
         <li><kbd>1</kbd> - Toggle axis displaying</li>
@@ -75,18 +71,27 @@
     </ul>
     <h2>Built with:</h2>
     <ul>
-        <li>The best library for dealing with Open Street Maps <a href="https://leafletjs.com/">Leaflet</a>.</li>
-        <li>leaflet-geosearch</li>
-        <li>LinearMeasurement</li>
-        <li>OSM Buildings</li>
-        <li>Wikimapia</li>
-        <li>Google Maps</li>
-        <li>Street view</li>
-        <li>BING</li>
-        <li>ADSB Exchange</li>
-        <li>Vite</li>
+        <li>The best library for dealing with <a href="https://www.openstreetmap.org/">Open Street Maps</a> -
+            <a href="https://leafletjs.com/">Leaflet</a>.
+        </li>
+        <li><a href="https://github.com/smeijer/leaflet-geosearch" title="Leaflet.GeoSearch">Leaflet.GeoSearch</a></li>
+        <li><a href="https://github.com/NLTGit/Leaflet.LinearMeasurement" title="Leaflet Linear Measurement Plugin">Leaflet
+            Linear Measurement Plugin</a></li>
+        <li><a href="https://osmbuildings.org/">OSM Buildings</a></li>
+        <li><a href="https://wikimapia.org/">Wikimapia</a></li>
+        <li><a href="https://www.google.com/maps">Google Maps</a></li>
+        <li><a href="https://www.bing.com/maps">Bing maps</a></li>
+        <li><a href="https://www.adsbexchange.com/">ADSB Exchange</a></li>
+        <li><a href="https://vite.dev/" title="The Build Tool for the Web">Vite</a></li>
     </ul>
 </dialog>
+<main class="layout js-layout">
+    <aside class="layout__left js-osm">
+    </aside>
+    <aside class="layout__right js-map">
+    </aside>
+</main>
+
 <div class="axis axis__horizontal"></div>
 <div class="axis axis__vertical axis__vertical--left"></div>
 <div class="axis axis__vertical axis__vertical--right"></div>

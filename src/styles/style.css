@@ -243,10 +243,6 @@ body:has(.layout.w66) .axis__vertical--right {
   border: none;
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.45);
 }
-/*::backdrop {*/
-/*  background-color: rgb(0 0 0 / 75%);*/
-/*  backdrop-filter: blur(2px);*/
-/*}*/
 
 #about-dialog a {
   color: var(--color--slate-50, #eff1f4);
@@ -255,4 +251,21 @@ body:has(.layout.w66) .axis__vertical--right {
 
 body:has(#about:checked) #about-dialog {
   display: block;
+}
+
+#close-about {
+  display: block;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  margin: 0;
+  padding: 0 0.5rem;
+  height: auto;
+  line-height: 2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  border: none;
+  outline: none;
+  color: var(--color--slate-50, #eff1f4);
+  background-color: var(--color-red-450, #ee402e);
 }
