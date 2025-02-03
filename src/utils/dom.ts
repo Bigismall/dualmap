@@ -6,4 +6,10 @@ export const $$: typeof document.querySelectorAll = document.querySelectorAll.bi
 export const hasMissingElements = ($elements: DOMElements): boolean =>
   Array.from($elements.values()).filter(($element) => $element === null).length > 0;
 
+// mhetod that will display the missing elements IDs
+export const getMissingElements = ($elements: DOMElements): string[] =>
+  Array.from($elements.entries())
+    .filter(([, $element]) => $element === null)
+    .map(([key]) => key);
+
 export const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);

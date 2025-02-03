@@ -1,4 +1,4 @@
-import { $, $$, hasMissingElements } from './utils/dom.ts';
+import { $, $$, getMissingElements, hasMissingElements } from './utils/dom.ts';
 
 import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
@@ -29,7 +29,7 @@ window.addEventListener('load', () => {
   ]);
 
   if (hasMissingElements($elements)) {
-    window.alert('Some elements are missing');
+    window.alert('Some elements are missing:' + getMissingElements($elements));
     return;
   }
 
