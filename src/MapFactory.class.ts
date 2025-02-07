@@ -34,7 +34,6 @@ export class MapFactory {
       case 'osmb':
         return new OSMBuildingsFrame($mapElement, mapOptions, mapConfig);
     }
-    // @ts-ignore
-    return null;
+    throw new Error(`Unsupported map type: ${type}`);
   };
 }
