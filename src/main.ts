@@ -9,7 +9,7 @@ import { MapFactory } from './MapFactory.class.ts';
 import { OsmFrame } from './Providers.ts';
 import { RadioGroupClass } from './RadioGroup.class.ts';
 import { Scene } from './Scene.class.ts';
-import { MAX_ZOOM, WIDTH_50, WIDTH_66 } from './constants.ts';
+import { MAX_ZOOM, WIDTH_100, WIDTH_50, WIDTH_66 } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import './styles/style.css';
 import { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
@@ -49,7 +49,11 @@ window.addEventListener('load', () => {
   });
 
   const $layout = $elements.get('layout') as HTMLElement;
-  $layout.classList.add(mapWidth === WIDTH_50 ? WIDTH_50 : WIDTH_66);
+  if (mapWidth === WIDTH_50 || mapWidth === WIDTH_66 || mapWidth === WIDTH_100) {
+    $layout.classList.add(mapWidth);
+  } else {
+    $layout.classList.add(WIDTH_50);
+  }
 
   new ResizeObserver(() => {
     osm.getInstance().invalidateSize();
@@ -77,9 +81,21 @@ window.addEventListener('load', () => {
   new RadioGroupClass($elements.get('proportionNav') as HTMLElement, mapWidth, (event) => {
     const proportion = (event.target as HTMLInputElement).value;
     const $layout = $elements.get('layout') as HTMLElement;
-    $layout.classList.remove(WIDTH_50, WIDTH_66);
+    const currentMapType = activeMap.config.type;
+
+    $layout.classList.remove(WIDTH_50, WIDTH_66, WIDTH_100);
     $layout.classList.add(proportion);
-    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType, proportion);
+
+    osm.unsubscribe(activeMap);
+    activeMap.destroy();
+
+    if (proportion !== WIDTH_100) {
+      activeMap = MapFactory.create(currentMapType as MapType, $elements.get('map') as HTMLDivElement);
+      osm.subscribe(activeMap);
+      activeMap.render();
+    }
+
+    setUrlParams(activeMap.mapOptions, osm.getLayer(), currentMapType, proportion);
   });
 
   // FIXME - move to Scene
