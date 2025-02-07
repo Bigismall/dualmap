@@ -54,7 +54,6 @@ window.addEventListener('load', () => {
   } else {
     $layout.classList.add(WIDTH_50);
   }
-  setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType, WIDTH_50);
 
   new ResizeObserver(() => {
     osm.getInstance().invalidateSize();
@@ -80,29 +79,23 @@ window.addEventListener('load', () => {
   });
 
   new RadioGroupClass($elements.get('proportionNav') as HTMLElement, mapWidth, (event) => {
-    const oldProportion = mapWidth;
     const proportion = (event.target as HTMLInputElement).value;
     const $layout = $elements.get('layout') as HTMLElement;
+    const currentMapType = activeMap.config.type;
 
-    // Remove existing width classes and add new one if not using w100 option
     $layout.classList.remove(WIDTH_50, WIDTH_66, WIDTH_100);
     $layout.classList.add(proportion);
 
-    //FIXME - fix maptype when changing the proportion
+    osm.unsubscribe(activeMap);
+    activeMap.destroy();
 
-    // Handle right map display and left map sizing
-    if (proportion === WIDTH_100) {
-      osm.unsubscribe(activeMap);
-      activeMap.destroy();
-    } else {
-      osm.unsubscribe(activeMap);
-      activeMap.destroy();
-      activeMap = MapFactory.create(mapType as MapType, $elements.get('map') as HTMLDivElement);
+    if (proportion !== WIDTH_100) {
+      activeMap = MapFactory.create(currentMapType as MapType, $elements.get('map') as HTMLDivElement);
       osm.subscribe(activeMap);
       activeMap.render();
     }
 
-    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType, proportion);
+    setUrlParams(activeMap.mapOptions, osm.getLayer(), currentMapType, proportion);
   });
 
   // FIXME - move to Scene
