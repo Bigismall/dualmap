@@ -11,6 +11,7 @@ export const KEY_IMPORT_URL = '2';
 export const HIDDEN_CLASS = 'hidden';
 export const WIDTH_50 = 'w50';
 export const WIDTH_66 = 'w66';
+export const WIDTH_100 = 'w100';
 
 export const measureOptions = {
   unitSystem: 'metric',
