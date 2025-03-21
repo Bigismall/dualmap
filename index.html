@@ -57,6 +57,10 @@
         </ul>
     </dialog>
     <header>
+        <nav class="choice css-toggle-navigation" aria-label="Toggle navigation">
+            <input type="checkbox" id="toggle" name="toggle">
+            <label for="toggle">☰</label>
+        </nav>
         <nav class="choice js-layer-type" aria-label="Left map layer selection">
             <input type="radio" id="osm" name="layer-type" value="OSM">
             <label for="osm">OSM</label>
@@ -100,10 +104,7 @@
             <input type="radio" id="adsb" name="map-type" value="adsb">
             <label for="adsb">ADSB</label>
         </nav>
-        <nav class="choice" aria-label="Toggle navigation">
-            <input type="checkbox" id="toggle" name="toggle">
-            <label for="toggle">☰</label>
-        </nav>
+
     </header>
     <main class="layout js-layout">
         <aside class="layout__left js-osm">

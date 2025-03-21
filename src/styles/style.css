@@ -27,7 +27,7 @@
   font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height            : 1.5;
   font-weight            : 400;
-  font-size              : clamp(12px, 1.5vw, 16px);
+  font-size              : clamp(14px, 1.5vw, 16px);
   color                  : var(--color--slate-750, #333c4e);
   background-color       : var(--color--slate-50, #eff1f4);
   font-synthesis         : none;
@@ -139,7 +139,6 @@ kbd {
   grid-template-columns: 100% 0%;
 }
 
-
 .layout__left,
 .layout__right {
   display: block;
@@ -188,8 +187,6 @@ kbd {
   transform: translateX(calc(var(--axis-horizontal, 25%)));
 }
 
-
-
 /*
 body:has(.layout.w66) .axis__vertical--left {
   left: 33%;
@@ -207,8 +204,6 @@ body:has(.layout.w66) .axis__vertical--right {
   flex-wrap      : nowrap;
   gap            : 0;
 }
-
-
 
 .choice.js-map-type {
   justify-content: flex-end;
@@ -241,32 +236,33 @@ body:has(.layout.w66) .axis__vertical--right {
   background-color: var(--color-red-450, #ee402e);
 }
 
-.js-toggle-nav {
+.css-toggle-navigation {
   display: none;
 }
 
 /* Add dropdown functionality for mobile */
 
 @media screen and (max-width: 768px) {
-
   header {
     padding              : 0;
+    margin               : 0;
     height               : 2rem;
     min-height           : 2rem;
+    overflow             : hidden !important;
     display              : grid;
-    grid-template-columns: 2fr 1fr 2fr 3rem;
-    overflow             : hidden;
-
-    position: absolute;
-    width   : 100%;
-    z-index : 1100;
-    top     : 0;
+    grid-template-columns: 100% 0 0 0;
+    position             : absolute;
+    width                : 100%;
+    z-index              : 1100;
+    top                  : 0;
+    left                 : 0;
+    right                : 0;
   }
 
   body:has(#toggle:checked) header {
-    height: auto;
+    grid-template-columns: 3rem 2fr 1fr 1fr;
+    height               : auto;
   }
-
 
   .choice {
     flex-direction: column;
@@ -283,6 +279,14 @@ body:has(.layout.w66) .axis__vertical--right {
 
   .axis {
     display: none;
+  }
+
+  .layout {
+    padding-top: 2rem;
+  }
+
+  .css-toggle-navigation {
+    display: block;
   }
 }
 
