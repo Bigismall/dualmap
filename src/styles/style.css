@@ -27,7 +27,7 @@
   font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height            : 1.5;
   font-weight            : 400;
-  font-size              : clamp(10px, 1.5vw, 16px);
+  font-size              : clamp(12px, 1.5vw, 16px);
   color                  : var(--color--slate-750, #333c4e);
   background-color       : var(--color--slate-50, #eff1f4);
   font-synthesis         : none;
@@ -188,6 +188,8 @@ kbd {
   transform: translateX(calc(var(--axis-horizontal, 25%)));
 }
 
+
+
 /*
 body:has(.layout.w66) .axis__vertical--left {
   left: 33%;
@@ -205,6 +207,8 @@ body:has(.layout.w66) .axis__vertical--right {
   flex-wrap      : nowrap;
   gap            : 0;
 }
+
+
 
 .choice.js-map-type {
   justify-content: flex-end;
@@ -230,10 +234,56 @@ body:has(.layout.w66) .axis__vertical--right {
   transition : background-color 0.2s ease-in-out;
   border     : none;
   outline    : none;
+  text-align : center;
 }
 
 .choice label:hover {
   background-color: var(--color-red-450, #ee402e);
+}
+
+.js-toggle-nav {
+  display: none;
+}
+
+/* Add dropdown functionality for mobile */
+
+@media screen and (max-width: 768px) {
+
+  header {
+    padding              : 0;
+    height               : 2rem;
+    min-height           : 2rem;
+    display              : grid;
+    grid-template-columns: 2fr 1fr 2fr 3rem;
+    overflow             : hidden;
+
+    position: absolute;
+    width   : 100%;
+    z-index : 1100;
+    top     : 0;
+  }
+
+  body:has(#toggle:checked) header {
+    height: auto;
+  }
+
+
+  .choice {
+    flex-direction: column;
+    gap           : 0.5rem;
+  }
+
+  .choice.js-map-type {
+    justify-content: flex-start;
+  }
+
+  .choice.css-about {
+    display: none;
+  }
+
+  .axis {
+    display: none;
+  }
 }
 
 #about-dialog {
@@ -265,11 +315,8 @@ body:has(#about:checked) #about-dialog {
   display: block;
 }
 
-#close-about {
+.button {
   display         : block;
-  position        : absolute;
-  right           : 1rem;
-  top             : 1rem;
   margin          : 0;
   padding         : 0 0.5rem;
   height          : auto;
@@ -280,4 +327,10 @@ body:has(#about:checked) #about-dialog {
   outline         : none;
   color           : var(--color--slate-50, #eff1f4);
   background-color: var(--color-red-450, #ee402e);
+}
+
+#close-about {
+  position: absolute;
+  right   : 1rem;
+  top     : 1rem;
 }

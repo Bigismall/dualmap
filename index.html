@@ -27,7 +27,7 @@
 
 <body>
     <dialog id="about-dialog">
-        <button id="close-about" title="Close">Close</button>
+        <button id="close-about" class="button" title="Close">Close</button>
         <h1>Dual map</h1>
         <p>Dual map is a web application that allows you to synchronize views of different map types side by side.</p>
         <p>Compare satellite views with 3D buildings layer, railroads with Bing maps, typography and air traffic map.
@@ -57,7 +57,7 @@
         </ul>
     </dialog>
     <header>
-        <nav class="choice js-layer-type">
+        <nav class="choice js-layer-type" aria-label="Left map layer selection">
             <input type="radio" id="osm" name="layer-type" value="OSM">
             <label for="osm">OSM</label>
             <input type="radio" id="osmde" name="layer-type" value="OSM DE">
@@ -73,7 +73,7 @@
             <input type="radio" id="rail" name="layer-type" value="Rail">
             <label for="rail">Rail</label>
         </nav>
-        <nav class="choice js-proportion">
+        <nav class="choice js-proportion" aria-label="Map proportion">
             <input type="radio" id="w50" name="width" value="w50">
             <label for="w50">50</label>
             <input type="radio" id="w66" name="width" value="w66">
@@ -82,11 +82,11 @@
             <input type="radio" id="w100" name="width" value="w100">
             <label for="w100">100</label>
         </nav>
-        <nav class="choice">
+        <nav class="choice css-about" aria-label="About">
             <input type="checkbox" id="about" name="about">
             <label for="about">About</label>
         </nav>
-        <nav class="choice  js-map-type">
+        <nav class="choice js-map-type" aria-label="Right map type selection">
             <input type="radio" id="wikimapia" name="map-type" value="wiki">
             <label for="wikimapia">Wikimapia</label>
             <input type="radio" id="google-maps" name="map-type" value="google">
@@ -99,6 +99,10 @@
             <label for="bing">BING</label>
             <input type="radio" id="adsb" name="map-type" value="adsb">
             <label for="adsb">ADSB</label>
+        </nav>
+        <nav class="choice" aria-label="Toggle navigation">
+            <input type="checkbox" id="toggle" name="toggle">
+            <label for="toggle">☰</label>
         </nav>
     </header>
     <main class="layout js-layout">
