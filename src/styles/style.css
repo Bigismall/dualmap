@@ -27,7 +27,7 @@
   font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height            : 1.5;
   font-weight            : 400;
-  font-size              : clamp(10px, 1.5vw, 16px);
+  font-size              : clamp(14px, 1.5vw, 16px);
   color                  : var(--color--slate-750, #333c4e);
   background-color       : var(--color--slate-50, #eff1f4);
   font-synthesis         : none;
@@ -139,7 +139,6 @@ kbd {
   grid-template-columns: 100% 0%;
 }
 
-
 .layout__left,
 .layout__right {
   display: block;
@@ -230,10 +229,65 @@ body:has(.layout.w66) .axis__vertical--right {
   transition : background-color 0.2s ease-in-out;
   border     : none;
   outline    : none;
+  text-align : center;
 }
 
 .choice label:hover {
   background-color: var(--color-red-450, #ee402e);
+}
+
+.css-toggle-navigation {
+  display: none;
+}
+
+/* Add dropdown functionality for mobile */
+
+@media screen and (max-width: 768px) {
+  header {
+    padding              : 0;
+    margin               : 0;
+    height               : 2rem;
+    min-height           : 2rem;
+    overflow             : hidden !important;
+    display              : grid;
+    grid-template-columns: 100% 0 0 0;
+    position             : absolute;
+    width                : 100%;
+    z-index              : 1100;
+    top                  : 0;
+    left                 : 0;
+    right                : 0;
+  }
+
+  body:has(#toggle:checked) header {
+    grid-template-columns: 3rem 2fr 1fr 1fr;
+    height               : auto;
+  }
+
+  .choice {
+    flex-direction: column;
+    gap           : 0.5rem;
+  }
+
+  .choice.js-map-type {
+    justify-content: flex-start;
+  }
+
+  .choice.css-about {
+    display: none;
+  }
+
+  .axis {
+    display: none;
+  }
+
+  .layout {
+    padding-top: 2rem;
+  }
+
+  .css-toggle-navigation {
+    display: block;
+  }
 }
 
 #about-dialog {
@@ -265,11 +319,8 @@ body:has(#about:checked) #about-dialog {
   display: block;
 }
 
-#close-about {
+.button {
   display         : block;
-  position        : absolute;
-  right           : 1rem;
-  top             : 1rem;
   margin          : 0;
   padding         : 0 0.5rem;
   height          : auto;
@@ -280,4 +331,10 @@ body:has(#about:checked) #about-dialog {
   outline         : none;
   color           : var(--color--slate-50, #eff1f4);
   background-color: var(--color-red-450, #ee402e);
+}
+
+#close-about {
+  position: absolute;
+  right   : 1rem;
+  top     : 1rem;
 }
