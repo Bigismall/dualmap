@@ -260,7 +260,7 @@ body:has(.layout.w66) .axis__vertical--right {
   }
 
   body:has(#toggle:checked) header {
-    grid-template-columns: 3rem 2fr 1fr 1fr;
+    grid-template-columns: 3rem 2fr 3rem 2fr;
     height               : auto;
   }
 
