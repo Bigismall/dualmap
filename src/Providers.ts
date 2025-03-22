@@ -27,7 +27,7 @@ export class GoogleStreetViewFrame extends MapObserver {
 //OSM Buildings frame
 export class OSMBuildingsFrame extends MapObserver {
   public getUrl() {
-    return `/dualmap/osmbuildings/?lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}&tilt=30&rotation=0`;
+    return `https://dualmaps.eu/osmbuildings/?lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}&tilt=30&rotation=0`;
   }
 }
 
@@ -47,7 +47,7 @@ export class BingMapsFrame extends MapObserver {
 
 export class ADSBExchangeFrame extends MapObserver {
   getUrl() {
-    return `https://globe.adsbexchange.com/?lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}&hideSidebar&enableLabels&extendedLabels=2`;
+    return `https://globe.airplanes.live/?hideSidebar&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&zoom=${this.mapOptions.zoom}&hideSidebar&enableLabels&extendedLabels=2`;
   }
 }
 
