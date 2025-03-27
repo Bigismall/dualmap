@@ -24,6 +24,7 @@ export abstract class MapFrame {
     $frame.loading = 'lazy';
     $frame.classList.add('layout__frame');
     $frame.title = 'Map';
+    $frame.sandbox = 'allow-scripts allow-same-origin';
     return $frame;
   }
 
