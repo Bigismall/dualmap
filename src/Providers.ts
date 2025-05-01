@@ -37,6 +37,12 @@ export class WikiMapiaFrame extends MapObserver {
   }
 }
 
+export class WazeFrame extends MapObserver {
+  getUrl() {
+    return `https://embed.waze.com/en/iframe?zoom=${this.mapOptions.zoom}&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}`;
+  }
+}
+
 export class BingMapsFrame extends MapObserver {
   getUrl() {
     const width = window.innerWidth / 2;
