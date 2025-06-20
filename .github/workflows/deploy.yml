@@ -17,6 +17,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set up environment variables
+        run: echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> $GITHUB_ENV
+
       - name: Build project
         run: npm run build
 
@@ -66,9 +69,6 @@ jobs:
 #      - name: Display structure of downloaded files
 #        run: ls -R
 #        working-directory: ./dist
-
-      - name: Set up environment variables
-        run: echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> $GITHUB_ENV
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
