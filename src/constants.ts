@@ -1,8 +1,12 @@
 import { LayerName, MapType } from './types.ts';
+
 export const DEFAULT_CENTER: [number, number] = [52.464377026, 18.929443359];
 export const DEFAULT_ZOOM: number = 7;
 export const MAX_ZOOM: number = 18;
-export const GOOGLE_MAPS_API_KEY = 'AIzaSyD5tEvgJ-K0mjJ-4Nb18EKAEF3pGhVn27g';
+if (!import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
+  throw new Error('Missing environment variable: VITE_GOOGLE_MAPS_API_KEY. Please set it in your environment.');
+}
+export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export const DEFAULT_LAYER: LayerName = 'OSM DE';
 export const DEFAULT_MAP_TYPE: MapType = 'google';
 export const KEY_AXIS = '1';
