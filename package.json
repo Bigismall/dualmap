@@ -17,7 +17,7 @@
     "vite": "^7.1.2"
   },
   "dependencies": {
-    "@biomejs/biome": "^2.2.0",
+    "@biomejs/biome": "^2.2.2",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.2.0",
     "vite-plugin-biome": "^1.0.12"
