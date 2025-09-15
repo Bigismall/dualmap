@@ -14,7 +14,7 @@
   "devDependencies": {
     "@types/leaflet": "^1.9.20",
     "typescript": "^5.9.2",
-    "vite": "^7.1.4"
+    "vite": "^7.1.5"
   },
   "dependencies": {
     "@biomejs/biome": "^2.2.4",
