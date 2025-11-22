@@ -43,7 +43,7 @@ export const parseGoogleMapsUrl = (url: string): MapOptions => {
   const params = googleMapsUrl.pathname.split('@')[1].split(',');
   const lat = Number.parseFloat(params[0]);
   const lng = Number.parseFloat(params[1]);
-  const zoom = Number.parseInt(params[2].replace(/[^0-9.]*/, ''));
+  const zoom = Number.parseInt(params[2].replace(/[^0-9.]*/, ''), 10);
 
   log({ lat, lng, zoom });
   return {

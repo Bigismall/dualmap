@@ -29,7 +29,7 @@ window.addEventListener('load', () => {
   ]);
 
   if (hasMissingElements($elements)) {
-    window.alert('Some elements are missing:' + getMissingElements($elements));
+    window.alert(`Some elements are missing: ${getMissingElements($elements)}`);
     return;
   }
 

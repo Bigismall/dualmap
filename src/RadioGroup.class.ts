@@ -7,7 +7,7 @@ export class RadioGroupClass {
     this.$element = $element;
     const $radios = Array.from($element.querySelectorAll('input[type="radio"]')) as HTMLInputElement[];
 
-    $radios.map(($radio) => {
+    $radios.forEach(($radio) => {
       $radio.checked = $radio.value === defaultValue;
       $radio.addEventListener('change', $action);
     });
