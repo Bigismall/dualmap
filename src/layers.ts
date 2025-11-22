@@ -1,6 +1,6 @@
 import L from 'leaflet';
 
-import { LayerName } from './types.ts';
+import type { LayerName } from './types.ts';
 
 export const osmLayers: Record<LayerName, L.TileLayer[]> = {
   OSM: [

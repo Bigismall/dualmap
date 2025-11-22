@@ -1,4 +1,4 @@
-import { LayerName, MapType } from './types.ts';
+import type { LayerName, MapType } from './types.ts';
 
 export const DEFAULT_CENTER: [number, number] = [52.464377026, 18.929443359];
 export const DEFAULT_ZOOM: number = 7;

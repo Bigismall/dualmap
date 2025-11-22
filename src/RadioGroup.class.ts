@@ -1,4 +1,4 @@
-import { RadioItemAction } from './types.ts';
+import type { RadioItemAction } from './types.ts';
 
 export class RadioGroupClass {
   protected $element: HTMLElement;

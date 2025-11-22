@@ -1,12 +1,12 @@
 import L from 'leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import { MapObserver, MapPublisherObserver } from './Map.class.ts';
 import { KEY_IMPORT_URL, measureOptions } from './constants.ts';
 import { osmLayers } from './layers.ts';
+import { MapObserver, MapPublisherObserver } from './Map.class.ts';
 
-// @ts-ignore
+// @ts-expect-error
 import { LinearMeasurement } from './plugins/linearmeasurement/LinearMeasurement.js';
-import { LayerName, MapConfig, MapOptions, Message, MessageState } from './types.ts';
+import { type LayerName, type MapConfig, type MapOptions, type Message, MessageState } from './types.ts';
 import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 import { log } from './utils/console.ts';
 import { rootFontSize } from './utils/dom.ts';
@@ -72,7 +72,7 @@ export class OsmFrame extends MapPublisherObserver {
       maxZoom: this.config.maxZoom,
     });
     const provider = new OpenStreetMapProvider();
-    // @ts-ignore
+    // @ts-expect-error
     const search: L.Control = new GeoSearchControl({ provider: provider }) as L.Control;
     const measurement: L.Control = new LinearMeasurement(measureOptions) as L.Control;
 

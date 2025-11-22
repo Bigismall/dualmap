@@ -1,4 +1,4 @@
-import { MapConfig, MapOptions, Message, MessageState, Observer, Publisher } from './types';
+import { type MapConfig, type MapOptions, type Message, MessageState, type Observer, type Publisher } from './types';
 import { log } from './utils/console.ts';
 
 export abstract class MapFrame {

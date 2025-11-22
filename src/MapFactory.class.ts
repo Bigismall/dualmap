@@ -1,4 +1,5 @@
-import { MapObserver } from './Map.class.ts';
+import { GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
+import type { MapObserver } from './Map.class.ts';
 import {
   ADSBExchangeFrame,
   BingMapsFrame,
@@ -8,10 +9,10 @@ import {
   WazeFrame,
   WikiMapiaFrame,
 } from './Providers.ts';
-import { GOOGLE_MAPS_API_KEY, MAX_ZOOM } from './constants.ts';
-import { MapType } from './types.ts';
+import type { MapType } from './types.ts';
 import { getMapOptions, getUrlParams } from './url.ts';
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <It has to be static>
 export class MapFactory {
   public static create = (type: MapType, $mapElement: HTMLDivElement): MapObserver => {
     const mapOptions = getMapOptions(getUrlParams());

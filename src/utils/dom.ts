@@ -1,4 +1,4 @@
-import { DOMElements } from '../types.ts';
+import type { DOMElements } from '../types.ts';
 
 export const $: typeof document.querySelector = document.querySelector.bind(document);
 export const $$: typeof document.querySelectorAll = document.querySelectorAll.bind(document);

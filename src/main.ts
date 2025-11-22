@@ -1,19 +1,17 @@
-import { $, $$, getMissingElements, hasMissingElements } from './utils/dom.ts';
-
 import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
-import './plugins/linearmeasurement/LinearMeasurement.css';
-
 import { Axis } from './Axis.class.ts';
+import { MAX_ZOOM, WIDTH_100, WIDTH_50, WIDTH_66 } from './constants.ts';
+import { osmLayers } from './layers.ts';
 import { MapFactory } from './MapFactory.class.ts';
+import './plugins/linearmeasurement/LinearMeasurement.css';
 import { OsmFrame } from './Providers.ts';
 import { RadioGroupClass } from './RadioGroup.class.ts';
 import { Scene } from './Scene.class.ts';
-import { MAX_ZOOM, WIDTH_100, WIDTH_50, WIDTH_66 } from './constants.ts';
-import { osmLayers } from './layers.ts';
 import './styles/style.css';
-import { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
+import type { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
 import { getMapOptions, getUrlParams, setUrlParams } from './url.ts';
+import { $, $$, getMissingElements, hasMissingElements } from './utils/dom.ts';
 
 window.addEventListener('load', () => {
   const $elements: DOMElements = new Map<string, DOMElement>([

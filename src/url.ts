@@ -1,5 +1,5 @@
 import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM, WIDTH_50 } from './constants';
-import { LayerName, MapOptions, MapType, UrlParams, isLayerName, isMapType } from './types.ts';
+import { isLayerName, isMapType, type LayerName, type MapOptions, type MapType, type UrlParams } from './types.ts';
 import { log } from './utils/console.ts';
 
 export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapType, width: string) => {

@@ -3,7 +3,14 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [
-    // Wyłączony plugin Biome na czas build - może blokować build z powodu warnings
-    // biomePlugin()
+    
+     biomePlugin({
+      errorOnWarnings: false,
+      mode: 'check',
+      paths: ['./src/**/*.{ts,tsx}'],
+      failOnError: false,
+      verbose: true,
+
+     })
   ],
 });
