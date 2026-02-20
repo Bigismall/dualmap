@@ -1,7 +1,7 @@
 import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
 import { Axis } from './Axis.class.ts';
-import { MAX_ZOOM, WIDTH_100, WIDTH_50, WIDTH_66 } from './constants.ts';
+import { MAX_ZOOM, WIDTH_50, WIDTH_66, WIDTH_100 } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import { MapFactory } from './MapFactory.class.ts';
 import './plugins/linearmeasurement/LinearMeasurement.css';
@@ -9,6 +9,7 @@ import { OsmFrame } from './Providers.ts';
 import { RadioGroupClass } from './RadioGroup.class.ts';
 import { Scene } from './Scene.class.ts';
 import './styles/style.css';
+
 import type { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
 import { getMapOptions, getUrlParams, setUrlParams } from './url.ts';
 import { $, $$, getMissingElements, hasMissingElements } from './utils/dom.ts';
