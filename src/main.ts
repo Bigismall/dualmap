@@ -66,7 +66,7 @@ window.addEventListener('load', () => {
     activeMap = MapFactory.create(mapType as MapType, $elements.get('map') as HTMLDivElement);
     osm.subscribe(activeMap);
     activeMap.render();
-    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType as MapType, mapWidth);
+    setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType as MapType, mapWidth, urlParams.sq);
   });
 
   new RadioGroupClass($elements.get('layerTypeNav') as HTMLElement, urlParams.layer, (event) => {
@@ -94,7 +94,7 @@ window.addEventListener('load', () => {
       activeMap.render();
     }
 
-    setUrlParams(activeMap.mapOptions, osm.getLayer(), currentMapType, proportion);
+    setUrlParams(activeMap.mapOptions, osm.getLayer(), currentMapType, proportion, urlParams.sq);
   });
 
   // FIXME - move to Scene

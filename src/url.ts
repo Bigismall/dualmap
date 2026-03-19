@@ -1,8 +1,51 @@
 import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM, WIDTH_50 } from './constants';
-import { isLayerName, isMapType, type LayerName, type MapOptions, type MapType, type UrlParams } from './types.ts';
+import {
+  isLayerName,
+  isMapType,
+  type LayerName,
+  type MapOptions,
+  type MapType,
+  type SquareBounds,
+  type UrlParams,
+} from './types.ts';
 import { log } from './utils/console.ts';
 
-export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapType, width: string) => {
+const COORDINATE_SEPARATOR_REGEX = /[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?/g;
+
+const isValidCoordinatePair = (lat: number, lng: number): boolean =>
+  Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+
+export const parseSquareBounds = (value: string | null): SquareBounds | undefined => {
+  if (!value) {
+    return undefined;
+  }
+
+  const matches = value.match(COORDINATE_SEPARATOR_REGEX);
+  if (!matches || matches.length !== 4) {
+    return undefined;
+  }
+
+  const [lat1, lng1, lat2, lng2] = matches.map((match) => Number.parseFloat(match));
+  if (!isValidCoordinatePair(lat1, lng1) || !isValidCoordinatePair(lat2, lng2)) {
+    return undefined;
+  }
+
+  return [
+    [lat1, lng1],
+    [lat2, lng2],
+  ];
+};
+
+const toSquareBoundsParam = (bounds: SquareBounds): string =>
+  `${bounds[0][0]},${bounds[0][1]};${bounds[1][0]},${bounds[1][1]}`;
+
+export const setUrlParams = (
+  options: MapOptions,
+  layer: LayerName,
+  type: MapType,
+  width: string,
+  sq?: SquareBounds,
+) => {
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString().slice(0, 12));
   url.searchParams.set('lng', options.lng.toString().slice(0, 12));
@@ -10,6 +53,11 @@ export const setUrlParams = (options: MapOptions, layer: LayerName, type: MapTyp
   url.searchParams.set('l', layer);
   url.searchParams.set('t', type);
   url.searchParams.set('w', width);
+  if (sq) {
+    url.searchParams.set('sq', toSquareBoundsParam(sq));
+  } else {
+    url.searchParams.delete('sq');
+  }
   window.history.pushState({}, '', url.toString());
 };
 
@@ -21,6 +69,7 @@ export const getUrlParams = (): UrlParams => {
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
   const width = urlParams.get('w') ?? WIDTH_50;
+  const sq = parseSquareBounds(urlParams.get('sq'));
 
   return {
     lat,
@@ -29,6 +78,7 @@ export const getUrlParams = (): UrlParams => {
     layer,
     type,
     width,
+    sq,
   };
 };
 

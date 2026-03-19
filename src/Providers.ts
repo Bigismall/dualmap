@@ -6,7 +6,14 @@ import { MapObserver, MapPublisherObserver } from './Map.class.ts';
 
 // @ts-expect-error
 import { LinearMeasurement } from './plugins/linearmeasurement/LinearMeasurement.js';
-import { type LayerName, type MapConfig, type MapOptions, type Message, MessageState } from './types.ts';
+import {
+  type LayerName,
+  type MapConfig,
+  type MapOptions,
+  type Message,
+  MessageState,
+  type SquareBounds,
+} from './types.ts';
 import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 import { log } from './utils/console.ts';
 import { rootFontSize } from './utils/dom.ts';
@@ -58,6 +65,9 @@ export class ADSBExchangeFrame extends MapObserver {
 }
 
 export class OsmFrame extends MapPublisherObserver {
+  private readonly squareBounds?: SquareBounds;
+  private squareRectangle: L.Rectangle | null = null;
+
   constructor(
     public $element: HTMLIFrameElement,
     public mapOptions: MapOptions,
@@ -79,6 +89,10 @@ export class OsmFrame extends MapPublisherObserver {
     this.instance.addControl(search);
     this.instance.addControl(measurement);
     this.instance.on('moveend', this.updatePosition);
+
+    const { sq } = getUrlParams();
+    this.squareBounds = sq;
+    this.renderSquareOverlay();
   }
 
   private readonly instance: L.Map;
@@ -89,9 +103,26 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
-    const { type, width } = getUrlParams();
+    const { type, width, sq } = getUrlParams();
 
-    setUrlParams(this.getMapOptions(), this.currentLayer, type, width);
+    setUrlParams(this.getMapOptions(), this.currentLayer, type, width, sq);
+  };
+
+  private renderSquareOverlay = () => {
+    if (!this.squareBounds) {
+      return;
+    }
+
+    if (this.squareRectangle && this.instance.hasLayer(this.squareRectangle)) {
+      this.instance.removeLayer(this.squareRectangle);
+    }
+
+    this.squareRectangle = L.rectangle(this.squareBounds, {
+      color: '#f97316',
+      weight: 2,
+      fillOpacity: 0.5,
+      interactive: false,
+    }).addTo(this.instance);
   };
 
   update(publication: Message) {
@@ -128,8 +159,10 @@ export class OsmFrame extends MapPublisherObserver {
 
     this.currentLayer = layer;
 
-    const { type, width } = getUrlParams();
-    setUrlParams(this.getMapOptions(), layer, type, width);
+    this.renderSquareOverlay();
+
+    const { type, width, sq } = getUrlParams();
+    setUrlParams(this.getMapOptions(), layer, type, width, sq);
   }
 
   getMapOptions = (): MapOptions => ({

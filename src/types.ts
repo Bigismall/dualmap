@@ -14,6 +14,8 @@ export type MapOptions = {
   zoom: number;
 };
 
+export type SquareBounds = [[number, number], [number, number]];
+
 export type MapConfig = {
   apiKey?: string;
   layer?: LayerName;
@@ -29,6 +31,7 @@ export type UrlParams = {
   layer: LayerName;
   type: MapType;
   width: string;
+  sq?: SquareBounds;
 };
 
 export enum MessageState {
