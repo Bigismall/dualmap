@@ -10,22 +10,15 @@ import {
 } from './types.ts';
 import { log } from './utils/console.ts';
 
-const COORDINATE_SEPARATOR_REGEX = /[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?/g;
-
 const isValidCoordinatePair = (lat: number, lng: number): boolean =>
   Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
 
-export const parseSquareBounds = (value: string | null): SquareBounds | undefined => {
-  if (!value) {
+const parseSquareBoundsFromFlatValues = (flatValues: number[]): SquareBounds | undefined => {
+  if (flatValues.length !== 4) {
     return undefined;
   }
 
-  const matches = value.match(COORDINATE_SEPARATOR_REGEX);
-  if (!matches || matches.length !== 4) {
-    return undefined;
-  }
-
-  const [lat1, lng1, lat2, lng2] = matches.map((match) => Number.parseFloat(match));
+  const [lat1, lng1, lat2, lng2] = flatValues;
   if (!isValidCoordinatePair(lat1, lng1) || !isValidCoordinatePair(lat2, lng2)) {
     return undefined;
   }
@@ -36,8 +29,18 @@ export const parseSquareBounds = (value: string | null): SquareBounds | undefine
   ];
 };
 
-const toSquareBoundsParam = (bounds: SquareBounds): string =>
-  `${bounds[0][0]},${bounds[0][1]};${bounds[1][0]},${bounds[1][1]}`;
+export const parseSquareBounds = (values: string[]): SquareBounds | undefined => {
+  if (values.length !== 4) {
+    return undefined;
+  }
+
+  const flatValues = values.map((value) => Number.parseFloat(value));
+  if (flatValues.some((value) => !Number.isFinite(value))) {
+    return undefined;
+  }
+
+  return parseSquareBoundsFromFlatValues(flatValues);
+};
 
 export const setUrlParams = (
   options: MapOptions,
@@ -53,10 +56,14 @@ export const setUrlParams = (
   url.searchParams.set('l', layer);
   url.searchParams.set('t', type);
   url.searchParams.set('w', width);
+
+  url.searchParams.delete('sq');
+  url.searchParams.delete('sq[]');
   if (sq) {
-    url.searchParams.set('sq', toSquareBoundsParam(sq));
-  } else {
-    url.searchParams.delete('sq');
+    const flatValues = [sq[0][0], sq[0][1], sq[1][0], sq[1][1]];
+    flatValues.forEach((value) => {
+      url.searchParams.append('sq[]', value.toString());
+    });
   }
   window.history.pushState({}, '', url.toString());
 };
@@ -69,7 +76,7 @@ export const getUrlParams = (): UrlParams => {
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
   const width = urlParams.get('w') ?? WIDTH_50;
-  const sq = parseSquareBounds(urlParams.get('sq'));
+  const sq = parseSquareBounds(urlParams.getAll('sq[]'));
 
   return {
     lat,
