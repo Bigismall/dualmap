@@ -59,10 +59,6 @@ export const setUrlParams = (
 
   url.searchParams.delete('sq');
   url.searchParams.delete('sq[]');
-  url.searchParams.delete('sq[lat1]');
-  url.searchParams.delete('sq[lng1]');
-  url.searchParams.delete('sq[lat2]');
-  url.searchParams.delete('sq[lng2]');
   if (sq) {
     const flatValues = [sq[0][0], sq[0][1], sq[1][0], sq[1][1]];
     flatValues.forEach((value) => {
