@@ -10,17 +10,27 @@ import {
 } from './types.ts';
 import { log } from './utils/console.ts';
 
-const COORDINATE_SEPARATOR_REGEX = /[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?/g;
-
 const isValidCoordinatePair = (lat: number, lng: number): boolean =>
   Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
 
-const parseSquareBoundsFromFlatValues = (flatValues: number[]): SquareBounds | undefined => {
-  if (flatValues.length !== 4) {
+type SquareParamKey = 'lat1' | 'lng1' | 'lat2' | 'lng2';
+
+const SQUARE_PARAM_KEYS: SquareParamKey[] = ['lat1', 'lng1', 'lat2', 'lng2'];
+
+const isSquareParamKey = (value: string): value is SquareParamKey =>
+  SQUARE_PARAM_KEYS.includes(value as SquareParamKey);
+
+const parseSquareBoundsFromNamedValues = (
+  namedValues: Partial<Record<SquareParamKey, number>>,
+): SquareBounds | undefined => {
+  const lat1 = namedValues.lat1;
+  const lng1 = namedValues.lng1;
+  const lat2 = namedValues.lat2;
+  const lng2 = namedValues.lng2;
+  if (lat1 === undefined || lng1 === undefined || lat2 === undefined || lng2 === undefined) {
     return undefined;
   }
 
-  const [lat1, lng1, lat2, lng2] = flatValues;
   if (!isValidCoordinatePair(lat1, lng1) || !isValidCoordinatePair(lat2, lng2)) {
     return undefined;
   }
@@ -31,32 +41,27 @@ const parseSquareBoundsFromFlatValues = (flatValues: number[]): SquareBounds | u
   ];
 };
 
-const parseLegacySquareBounds = (value: string): SquareBounds | undefined => {
-  const matches = value.match(COORDINATE_SEPARATOR_REGEX);
-  if (!matches || matches.length !== 4) {
-    return undefined;
-  }
-
-  const flatValues = matches.map((match) => Number.parseFloat(match));
-  return parseSquareBoundsFromFlatValues(flatValues);
-};
-
 export const parseSquareBounds = (values: string[]): SquareBounds | undefined => {
-  if (values.length === 0) {
+  if (values.length !== 4) {
     return undefined;
   }
 
-  // Backward compatibility with old `sq=lat,lng;lat,lng` format.
-  if (values.length === 1) {
-    return parseLegacySquareBounds(values[0]);
+  const namedValues: Partial<Record<SquareParamKey, number>> = {};
+  for (const value of values) {
+    const [rawKey, rawCoordinate] = value.split(/[:=]/, 2).map((item) => item.trim());
+    if (!rawKey || !rawCoordinate || !isSquareParamKey(rawKey)) {
+      return undefined;
+    }
+
+    const coordinate = Number.parseFloat(rawCoordinate);
+    if (!Number.isFinite(coordinate) || namedValues[rawKey] !== undefined) {
+      return undefined;
+    }
+
+    namedValues[rawKey] = coordinate;
   }
 
-  const flatValues = values.map((value) => Number.parseFloat(value));
-  if (flatValues.some((value) => !Number.isFinite(value))) {
-    return undefined;
-  }
-
-  return parseSquareBoundsFromFlatValues(flatValues);
+  return parseSquareBoundsFromNamedValues(namedValues);
 };
 
 export const setUrlParams = (
@@ -77,9 +82,14 @@ export const setUrlParams = (
   url.searchParams.delete('sq');
   url.searchParams.delete('sq[]');
   if (sq) {
-    const flatValues = [sq[0][0], sq[0][1], sq[1][0], sq[1][1]];
-    flatValues.forEach((value) => {
-      url.searchParams.append('sq', value.toString());
+    const namedValues: Record<SquareParamKey, number> = {
+      lat1: sq[0][0],
+      lng1: sq[0][1],
+      lat2: sq[1][0],
+      lng2: sq[1][1],
+    };
+    SQUARE_PARAM_KEYS.forEach((key) => {
+      url.searchParams.append('sq[]', `${key}=${namedValues[key]}`);
     });
   }
   window.history.pushState({}, '', url.toString());
@@ -93,7 +103,7 @@ export const getUrlParams = (): UrlParams => {
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
   const width = urlParams.get('w') ?? WIDTH_50;
-  const sq = parseSquareBounds(urlParams.getAll('sq')) ?? parseSquareBounds(urlParams.getAll('sq[]'));
+  const sq = parseSquareBounds(urlParams.getAll('sq[]'));
 
   return {
     lat,
