@@ -13,23 +13,12 @@ import { log } from './utils/console.ts';
 const isValidCoordinatePair = (lat: number, lng: number): boolean =>
   Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
 
-type SquareParamKey = 'lat1' | 'lng1' | 'lat2' | 'lng2';
-
-const SQUARE_PARAM_KEYS: SquareParamKey[] = ['lat1', 'lng1', 'lat2', 'lng2'];
-
-const getSquareQueryParamKey = (key: SquareParamKey): string => `sq[${key}]`;
-
-const parseSquareBoundsFromNamedValues = (
-  namedValues: Partial<Record<SquareParamKey, number>>,
-): SquareBounds | undefined => {
-  const lat1 = namedValues.lat1;
-  const lng1 = namedValues.lng1;
-  const lat2 = namedValues.lat2;
-  const lng2 = namedValues.lng2;
-  if (lat1 === undefined || lng1 === undefined || lat2 === undefined || lng2 === undefined) {
+const parseSquareBoundsFromFlatValues = (flatValues: number[]): SquareBounds | undefined => {
+  if (flatValues.length !== 4) {
     return undefined;
   }
 
+  const [lat1, lng1, lat2, lng2] = flatValues;
   if (!isValidCoordinatePair(lat1, lng1) || !isValidCoordinatePair(lat2, lng2)) {
     return undefined;
   }
@@ -40,24 +29,17 @@ const parseSquareBoundsFromNamedValues = (
   ];
 };
 
-export const parseSquareBounds = (urlParams: URLSearchParams): SquareBounds | undefined => {
-  const namedValues: Partial<Record<SquareParamKey, number>> = {};
-  for (const key of SQUARE_PARAM_KEYS) {
-    const queryKey = getSquareQueryParamKey(key);
-    const values = urlParams.getAll(queryKey);
-    if (values.length !== 1) {
-      return undefined;
-    }
-
-    const coordinate = Number.parseFloat(values[0]);
-    if (!Number.isFinite(coordinate)) {
-      return undefined;
-    }
-
-    namedValues[key] = coordinate;
+export const parseSquareBounds = (values: string[]): SquareBounds | undefined => {
+  if (values.length !== 4) {
+    return undefined;
   }
 
-  return parseSquareBoundsFromNamedValues(namedValues);
+  const flatValues = values.map((value) => Number.parseFloat(value));
+  if (flatValues.some((value) => !Number.isFinite(value))) {
+    return undefined;
+  }
+
+  return parseSquareBoundsFromFlatValues(flatValues);
 };
 
 export const setUrlParams = (
@@ -77,22 +59,17 @@ export const setUrlParams = (
 
   url.searchParams.delete('sq');
   url.searchParams.delete('sq[]');
-  SQUARE_PARAM_KEYS.forEach((key) => {
-    url.searchParams.delete(getSquareQueryParamKey(key));
-  });
+  url.searchParams.delete('sq[lat1]');
+  url.searchParams.delete('sq[lng1]');
+  url.searchParams.delete('sq[lat2]');
+  url.searchParams.delete('sq[lng2]');
   if (sq) {
-    const namedValues: Record<SquareParamKey, number> = {
-      lat1: sq[0][0],
-      lng1: sq[0][1],
-      lat2: sq[1][0],
-      lng2: sq[1][1],
-    };
-    SQUARE_PARAM_KEYS.forEach((key) => {
-      url.searchParams.set(getSquareQueryParamKey(key), namedValues[key].toString());
+    const flatValues = [sq[0][0], sq[0][1], sq[1][0], sq[1][1]];
+    flatValues.forEach((value) => {
+      url.searchParams.append('sq[]', value.toString());
     });
   }
-  const readableUrl = url.toString().replace(/%5B/g, '[').replace(/%5D/g, ']');
-  window.history.pushState({}, '', readableUrl);
+  window.history.pushState({}, '', url.toString());
 };
 
 export const getUrlParams = (): UrlParams => {
@@ -103,7 +80,7 @@ export const getUrlParams = (): UrlParams => {
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
   const width = urlParams.get('w') ?? WIDTH_50;
-  const sq = parseSquareBounds(urlParams);
+  const sq = parseSquareBounds(urlParams.getAll('sq[]'));
 
   return {
     lat,
