@@ -17,8 +17,7 @@ type SquareParamKey = 'lat1' | 'lng1' | 'lat2' | 'lng2';
 
 const SQUARE_PARAM_KEYS: SquareParamKey[] = ['lat1', 'lng1', 'lat2', 'lng2'];
 
-const isSquareParamKey = (value: string): value is SquareParamKey =>
-  SQUARE_PARAM_KEYS.includes(value as SquareParamKey);
+const getSquareQueryParamKey = (key: SquareParamKey): string => `sq[${key}]`;
 
 const parseSquareBoundsFromNamedValues = (
   namedValues: Partial<Record<SquareParamKey, number>>,
@@ -41,24 +40,21 @@ const parseSquareBoundsFromNamedValues = (
   ];
 };
 
-export const parseSquareBounds = (values: string[]): SquareBounds | undefined => {
-  if (values.length !== 4) {
-    return undefined;
-  }
-
+export const parseSquareBounds = (urlParams: URLSearchParams): SquareBounds | undefined => {
   const namedValues: Partial<Record<SquareParamKey, number>> = {};
-  for (const value of values) {
-    const [rawKey, rawCoordinate] = value.split(/[:=]/, 2).map((item) => item.trim());
-    if (!rawKey || !rawCoordinate || !isSquareParamKey(rawKey)) {
+  for (const key of SQUARE_PARAM_KEYS) {
+    const queryKey = getSquareQueryParamKey(key);
+    const values = urlParams.getAll(queryKey);
+    if (values.length !== 1) {
       return undefined;
     }
 
-    const coordinate = Number.parseFloat(rawCoordinate);
-    if (!Number.isFinite(coordinate) || namedValues[rawKey] !== undefined) {
+    const coordinate = Number.parseFloat(values[0]);
+    if (!Number.isFinite(coordinate)) {
       return undefined;
     }
 
-    namedValues[rawKey] = coordinate;
+    namedValues[key] = coordinate;
   }
 
   return parseSquareBoundsFromNamedValues(namedValues);
@@ -81,6 +77,9 @@ export const setUrlParams = (
 
   url.searchParams.delete('sq');
   url.searchParams.delete('sq[]');
+  SQUARE_PARAM_KEYS.forEach((key) => {
+    url.searchParams.delete(getSquareQueryParamKey(key));
+  });
   if (sq) {
     const namedValues: Record<SquareParamKey, number> = {
       lat1: sq[0][0],
@@ -89,10 +88,11 @@ export const setUrlParams = (
       lng2: sq[1][1],
     };
     SQUARE_PARAM_KEYS.forEach((key) => {
-      url.searchParams.append('sq[]', `${key}=${namedValues[key]}`);
+      url.searchParams.set(getSquareQueryParamKey(key), namedValues[key].toString());
     });
   }
-  window.history.pushState({}, '', url.toString());
+  const readableUrl = url.toString().replace(/%5B/g, '[').replace(/%5D/g, ']');
+  window.history.pushState({}, '', readableUrl);
 };
 
 export const getUrlParams = (): UrlParams => {
@@ -103,7 +103,7 @@ export const getUrlParams = (): UrlParams => {
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const type = isMapType(urlParams.get('t') ?? '') ? (urlParams.get('t') as MapType) : DEFAULT_MAP_TYPE;
   const width = urlParams.get('w') ?? WIDTH_50;
-  const sq = parseSquareBounds(urlParams.getAll('sq[]'));
+  const sq = parseSquareBounds(urlParams);
 
   return {
     lat,
