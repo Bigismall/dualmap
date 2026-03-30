@@ -12,3 +12,6 @@ updates:
     labels:
       - "dependencies"
       - "github-actions"
+      - "dependabot"
+      - "npm"
+
