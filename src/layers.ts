@@ -64,7 +64,7 @@ export const osmLayers: Record<LayerName, L.TileLayer[] | L.TileLayer.WMS[]> = {
       transparent: false,
       maxZoom: 18,
       version: '1.1.1',
-      attribution: 'Dane z <a href="https://geoportal.gov.pl" target="_blank">Geoportal.gov.pl</a>',
+      attribution: 'Dane z <a href="https://geoportal.gov.pl">Geoportal.gov.pl</a>',
     }),
   ],
 };
