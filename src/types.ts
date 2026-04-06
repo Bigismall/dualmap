@@ -1,9 +1,18 @@
 export type MapType = 'wiki' | 'google' | 'streetview' | 'osm' | 'bing' | 'adsb' | 'osmb' | 'waze';
-export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail';
+export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail' | 'Lidar';
 
 // Create array based on the MapType
 const mapTypeArray: MapType[] = ['wiki', 'google', 'streetview', 'osm', 'bing', 'adsb', 'osmb', 'waze'];
-const layerNameArray: LayerName[] = ['OSM', 'OSM DE', 'Humanitarian', 'Topography', 'Cyclo', 'Satellite', 'Rail'];
+const layerNameArray: LayerName[] = [
+  'OSM',
+  'OSM DE',
+  'Humanitarian',
+  'Topography',
+  'Cyclo',
+  'Satellite',
+  'Rail',
+  'Lidar',
+];
 
 export const isLayerName = (value: string): value is LayerName => layerNameArray.includes(value as LayerName);
 export const isMapType = (value: string): value is MapType => mapTypeArray.includes(value as MapType);
