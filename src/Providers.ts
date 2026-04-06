@@ -1,6 +1,6 @@
 import L from 'leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import { KEY_IMPORT_URL, measureOptions } from './constants.ts';
+import { KEY_IMPORT_URL, MAX_ZOOM, measureOptions } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import { MapObserver, MapPublisherObserver } from './Map.class.ts';
 
@@ -153,9 +153,18 @@ export class OsmFrame extends MapPublisherObserver {
       this.instance.removeLayer(layer);
     });
 
-    osmLayers[layer].forEach((layer) => {
+    const newLayers = osmLayers[layer];
+
+    newLayers.forEach((layer) => {
       this.instance.addLayer(layer);
     });
+
+    const maxZoom = Math.min(...newLayers.map((l) => l.options.maxZoom ?? MAX_ZOOM));
+    this.instance.setMaxZoom(maxZoom);
+
+    if (this.instance.getZoom() > maxZoom) {
+      this.instance.setZoom(maxZoom);
+    }
 
     this.currentLayer = layer;
 
