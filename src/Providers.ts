@@ -38,12 +38,6 @@ export class OSMBuildingsFrame extends MapObserver {
   }
 }
 
-export class WikiMapiaFrame extends MapObserver {
-  getUrl() {
-    return `https://wikimapia.org/#lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&z=${this.mapOptions.zoom}&l=&ifr=1&m=w`;
-  }
-}
-
 export class WazeFrame extends MapObserver {
   getUrl() {
     return `https://embed.waze.com/en/iframe?zoom=${this.mapOptions.zoom}&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}`;

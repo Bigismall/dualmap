@@ -1,8 +1,8 @@
-export type MapType = 'wiki' | 'google' | 'streetview' | 'osm' | 'bing' | 'adsb' | 'osmb' | 'waze';
+export type MapType = 'google' | 'streetview' | 'osm' | 'bing' | 'adsb' | 'osmb' | 'waze';
 export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail' | 'Lidar';
 
 // Create array based on the MapType
-const mapTypeArray: MapType[] = ['wiki', 'google', 'streetview', 'osm', 'bing', 'adsb', 'osmb', 'waze'];
+const mapTypeArray: MapType[] = ['google', 'streetview', 'osm', 'bing', 'adsb', 'osmb', 'waze'];
 const layerNameArray: LayerName[] = [
   'OSM',
   'OSM DE',
