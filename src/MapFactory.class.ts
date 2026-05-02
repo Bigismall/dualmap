@@ -7,7 +7,6 @@ import {
   GoogleStreetViewFrame,
   OSMBuildingsFrame,
   WazeFrame,
-  WikiMapiaFrame,
 } from './Providers.ts';
 import type { MapType } from './types.ts';
 import { getMapOptions, getUrlParams } from './url.ts';
@@ -27,8 +26,6 @@ export class MapFactory {
         return new GoogleMapsFrame($mapElement, mapOptions, { ...mapConfig, apiKey: GOOGLE_MAPS_API_KEY });
       case 'streetview':
         return new GoogleStreetViewFrame($mapElement, mapOptions, { ...mapConfig, apiKey: GOOGLE_MAPS_API_KEY });
-      case 'wiki':
-        return new WikiMapiaFrame($mapElement, mapOptions, mapConfig);
       case 'bing':
         return new BingMapsFrame($mapElement, mapOptions, mapConfig);
       case 'adsb':
