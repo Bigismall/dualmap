@@ -1,75 +1,56 @@
 # Copilot Instructions for dualmap
 
-## Project Overview
+## Purpose
 
-Dualmap ([dualmaps.eu](https://dualmaps.eu)) is a side-by-side map browser that renders a Leaflet/OSM map (left) and an embeddable map (right — Google Maps, Street View, Bing, Wikimapia, Waze, ADS-B Exchange, OSM Buildings) with synchronized viewports. State (lat/lng/zoom/layer/map type/split proportion) is persisted in the URL query string.
+Dualmap is a side-by-side map browser. The left side is Leaflet/OSM, the right side is an embeddable provider map, and both views are synchronized.
+Application state is URL-driven (lat/lng/zoom/layer/type/layout and optional square bounds).
+
+Start with [README.md](../README.md) for product context.
 
 ## Commands
 
 ```bash
-npm run dev          # Vite dev server
-npm run build        # tsc + vite build (type-check then bundle)
-npm run lint         # biome lint --fix --verbose ./src
-npm run format       # biome format --write --verbose ./src
-npm run type-check   # tsc --noEmit
+npm run dev         # Vite dev server
+npm run build       # Type-check + production build
+npm run lint        # Biome lint (auto-fix)
+npm run format      # Biome check + write
+npm run type-check  # TypeScript only
 ```
 
-There are no tests.
+There are currently no tests.
 
-## Architecture
+## Key Files
 
-The app uses a hand-rolled Observer/Publisher pattern with **no UI framework** — plain DOM manipulation only.
+- [src/main.ts](../src/main.ts): composition root; wires Scene, OSM map, right map factory, and radio groups.
+- [src/Map.class.ts](../src/Map.class.ts): base map classes (`MapFrame`, `MapObserver`, `MapPublisherObserver`).
+- [src/Providers.ts](../src/Providers.ts): iframe provider implementations and `OsmFrame` (Leaflet publisher).
+- [src/MapFactory.class.ts](../src/MapFactory.class.ts): maps `MapType` values to provider classes.
+- [src/types.ts](../src/types.ts): core domain types, guards, and publisher/observer interfaces.
+- [src/url.ts](../src/url.ts): URL parsing/writing, including `sq[]` bounds format.
+- [src/constants.ts](../src/constants.ts): defaults, key bindings, and required env var check.
 
-```
-main.ts                         ← Composition root; wires everything together
-  ├── Scene (Publisher)         ← Global keydown publisher
-  │     ├── → OsmFrame          ← "2" key: import Google Maps URL
-  │     └── → Axis              ← "1" key: toggle crosshair overlay
-  ├── OsmFrame (Publisher+Observer)  ← Leaflet map (left panel)
-  │     └── → ActiveMap         ← Receives MoveMap; updates iframe src
-  ├── MapFactory                ← Creates right-panel map by MapType string
-  └── RadioGroup (×3)           ← Map type / OSM layer / layout proportion
-```
+## Architecture Notes
 
-**Data flow:** Leaflet map moves → `OsmFrame` publishes `MoveMap{lat,lng,zoom}` → `ActiveMap.update()` → sets iframe `src` to new provider URL + updates query string.
+- No UI framework; direct DOM + class-based modules.
+- Observer/publisher pattern is central:
+  - `Scene` publishes keyboard events.
+  - `OsmFrame` publishes map movement updates.
+  - Right-panel provider frames observe updates and re-render iframe URLs.
+- On map type/layout changes, the active right frame is destroyed and recreated.
 
-**Inheritance chain for providers:**
-```
-MapFrame (abstract)
-  └── MapObserver               ← iframe-based right-panel maps
-        └── GoogleMapsFrame, BingMapsFrame, WazeFrame, etc.
-  └── MapPublisherObserver      ← Publisher + Observer
-        └── OsmFrame            ← Leaflet left-panel map
-```
+## Conventions
 
-All shared types/interfaces (`MapType`, `LayerName`, `MapOptions`, `Observer`, `Publisher`, `Message`) live in `src/types.ts`. All providers (iframe URL builders) live in `src/Providers.ts`.
+- Naming:
+  - Class files use `PascalCase.class.ts`.
+  - Utility modules use `camelCase.ts`.
+- Prefer explicit `.ts` import extensions to match the codebase style.
+- Prefix DOM handles with `$` and use helpers from [src/utils/dom.ts](../src/utils/dom.ts).
+- Use logging helpers from [src/utils/console.ts](../src/utils/console.ts) instead of direct `console.*`.
+- Narrow URL/user input with guards (`isMapType`, `isLayerName`) from [src/types.ts](../src/types.ts).
 
-## Key Conventions
+## Common Pitfalls
 
-**File naming:**
-- Classes: `PascalCase.class.ts` (e.g., `MapFactory.class.ts`, `Scene.class.ts`)
-- Utilities/modules: `camelCase.ts` (e.g., `url.ts`, `layers.ts`, `constants.ts`)
-
-**Imports:** Use explicit `.ts` extensions (e.g., `import { X } from './Foo.ts'`).
-
-**DOM handles:** Prefix element variables with `$` (e.g., `$element`, `$layout`). Use `$`/`$$` aliases from `src/utils/dom.ts` instead of `querySelector`/`querySelectorAll`.
-
-**Logging:** Use `log`/`warn`/`fault` from `src/utils/console.ts` — they no-op in production (`import.meta.env.PROD`). Do not use `console.log` directly.
-
-**Type guards:** Use the `isLayerName()` / `isMapType()` guard pattern from `src/types.ts` when narrowing string inputs to domain types.
-
-**Environment variables:** `VITE_GOOGLE_MAPS_API_KEY` must be set at build time; it's read in `src/constants.ts` and throws at module load if missing.
-
-## Code Style (Biome)
-
-- **Spaces** for indentation, **120-character** line width, **single quotes** for strings
-- All Biome recommended rules enabled except `noExplicitAny` (disabled — explicit `any` is allowed)
-- TypeScript: `strict: true`, `noUnusedLocals`, `noUnusedParameters`, `noFallthroughCasesInSwitch`
-
-## Adding a New Map Provider
-
-1. Add a new value to the `MapType` union in `src/types.ts`
-2. Update the `isMapType()` guard in `src/types.ts`
-3. Implement a new class extending `MapObserver` in `src/Providers.ts` with a `render(options)` method that returns an iframe URL string
-4. Register it in `MapFactory.class.ts`
-5. Add a radio option in `index.html`
+- `VITE_GOOGLE_MAPS_API_KEY` is required at module load time (see [src/constants.ts](../src/constants.ts)); missing it throws immediately.
+- URL contract matters: preserve query keys (`lat`, `lng`, `z`, `l`, `t`, `w`, `sq[]`) when changing state handling.
+- For provider additions/changes, keep [src/types.ts](../src/types.ts), [src/Providers.ts](../src/Providers.ts),
+  [src/MapFactory.class.ts](../src/MapFactory.class.ts), and radio options in [index.html](../index.html) aligned.
