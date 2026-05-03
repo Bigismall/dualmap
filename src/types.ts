@@ -3,6 +3,7 @@ export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cycl
 
 // Create array based on the MapType
 const mapTypeArray: MapType[] = ['google', 'streetview', 'osm', 'bing', 'adsb', 'osmb', 'waze', 'ump'];
+
 const layerNameArray: LayerName[] = [
   'OSM',
   'OSM DE',
