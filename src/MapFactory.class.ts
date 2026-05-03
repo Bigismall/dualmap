@@ -6,6 +6,7 @@ import {
   GoogleMapsFrame,
   GoogleStreetViewFrame,
   OSMBuildingsFrame,
+  UMPFrame,
   WazeFrame,
 } from './Providers.ts';
 import type { MapType } from './types.ts';
@@ -34,6 +35,8 @@ export class MapFactory {
         return new OSMBuildingsFrame($mapElement, mapOptions, mapConfig);
       case 'waze':
         return new WazeFrame($mapElement, mapOptions, mapConfig);
+      case 'ump':
+        return new UMPFrame($mapElement, mapOptions, mapConfig);
     }
     throw new Error(`Unsupported map type: ${type}`);
   };

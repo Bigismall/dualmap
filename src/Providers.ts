@@ -44,6 +44,12 @@ export class WazeFrame extends MapObserver {
   }
 }
 
+export class UMPFrame extends MapObserver {
+  getUrl() {
+    return `https://mapa.ump.waw.pl/ump-www/?zoom=${this.mapOptions.zoom}&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&layers=B0FFFFFFF`;
+  }
+}
+
 export class BingMapsFrame extends MapObserver {
   getUrl() {
     const width = window.innerWidth / 2;
