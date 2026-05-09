@@ -15,7 +15,7 @@
     "@pbr1111/vite-plugin-biome": "^1.1.3",
     "@types/leaflet": "^1.9.21",
     "typescript": "^6.0.3",
-    "vite": "^8.0.10"
+    "vite": "^8.0.11"
   },
   "dependencies": {
     "@biomejs/biome": "^2.4.14",
