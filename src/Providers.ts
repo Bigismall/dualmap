@@ -67,14 +67,17 @@ export class ADSBExchangeFrame extends MapObserver {
 export class OsmFrame extends MapPublisherObserver {
   private readonly squareBounds?: SquareBounds;
   private squareRectangle: L.Rectangle | null = null;
+  private readonly instance: L.Map;
+  private currentLayer: LayerName;
 
   constructor(
     public $element: HTMLIFrameElement,
     public mapOptions: MapOptions,
     public config: MapConfig,
   ) {
-    super($element, mapOptions, config);
 
+    super($element, mapOptions, config);
+    this.currentLayer = this.config.layer as LayerName;
     this.instance = L.map($element as HTMLDivElement, {
       center: [this.mapOptions.lat, this.mapOptions.lng],
       zoom: this.mapOptions.zoom,
@@ -95,8 +98,7 @@ export class OsmFrame extends MapPublisherObserver {
     this.renderSquareOverlay();
   }
 
-  private readonly instance: L.Map;
-  private currentLayer: LayerName = this.config.layer as LayerName;
+
 
   private updatePosition = () => {
     this.publish({
