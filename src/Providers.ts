@@ -75,7 +75,6 @@ export class OsmFrame extends MapPublisherObserver {
     public mapOptions: MapOptions,
     public config: MapConfig,
   ) {
-
     super($element, mapOptions, config);
     this.currentLayer = this.config.layer as LayerName;
     this.instance = L.map($element as HTMLDivElement, {
@@ -97,8 +96,6 @@ export class OsmFrame extends MapPublisherObserver {
     this.squareBounds = sq;
     this.renderSquareOverlay();
   }
-
-
 
   private updatePosition = () => {
     this.publish({
