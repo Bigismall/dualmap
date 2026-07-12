@@ -131,7 +131,10 @@ export class OsmFrame extends MapPublisherObserver {
       if (publication.data.key.toLowerCase() === KEY_IMPORT_URL) {
         const url = prompt('Enter Google Maps URL');
         if (url) {
-          this.setMapOptions(parseGoogleMapsUrl(url));
+          const mapOptions = parseGoogleMapsUrl(url);
+          if (mapOptions) {
+            this.setMapOptions(mapOptions);
+          }
         }
       }
     }
@@ -181,6 +184,5 @@ export class OsmFrame extends MapPublisherObserver {
 
   setMapOptions = (options: MapOptions) => {
     this.instance.setView([options.lat, options.lng], options.zoom);
-    this.updatePosition();
   };
 }
