@@ -15,7 +15,7 @@ import {
   type SquareBounds,
 } from './types.ts';
 import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
-import { log } from './utils/console.ts';
+import { fault, log } from './utils/console.ts';
 import { rootFontSize } from './utils/dom.ts';
 
 export class GoogleMapsFrame extends MapObserver {
@@ -131,9 +131,11 @@ export class OsmFrame extends MapPublisherObserver {
       if (publication.data.key.toLowerCase() === KEY_IMPORT_URL) {
         const url = prompt('Enter Google Maps URL');
         if (url) {
-          const mapOptions = parseGoogleMapsUrl(url);
-          if (mapOptions) {
-            this.setMapOptions(mapOptions);
+          try {
+            this.setMapOptions(parseGoogleMapsUrl(url));
+          } catch (error) {
+            fault('Failed to parse Google Maps URL', error);
+            window.alert('Invalid Google Maps URL. Use a URL containing @lat,lng,zoomz.');
           }
         }
       }

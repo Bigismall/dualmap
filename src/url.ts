@@ -10,8 +10,22 @@ import {
 } from './types.ts';
 import { log } from './utils/console.ts';
 
+const MIN_ZOOM = 0;
+
 const isValidCoordinatePair = (lat: number, lng: number): boolean =>
   Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
+
+const isValidLatitude = (value: number): boolean => Number.isFinite(value) && value >= -90 && value <= 90;
+
+const isValidLongitude = (value: number): boolean => Number.isFinite(value) && value >= -180 && value <= 180;
+
+const normalizeZoom = (value: number, fallback: number): number => {
+  if (!Number.isFinite(value)) {
+    return fallback;
+  }
+
+  return Math.min(Math.max(value, MIN_ZOOM), MAX_ZOOM);
+};
 
 const parseSquareBoundsFromFlatValues = (flatValues: number[]): SquareBounds | undefined => {
   if (flatValues.length !== 4) {
@@ -70,9 +84,12 @@ export const setUrlParams = (
 
 export const getUrlParams = (): UrlParams => {
   const urlParams = new URLSearchParams(window.location.search);
-  const lat = Number.parseFloat(urlParams.get('lat') ?? DEFAULT_CENTER[0].toString());
-  const lng = Number.parseFloat(urlParams.get('lng') ?? DEFAULT_CENTER[1].toString());
-  const zoom = Math.min(Number.parseFloat(urlParams.get('z') ?? DEFAULT_ZOOM.toString()), MAX_ZOOM);
+  const parsedLat = Number.parseFloat(urlParams.get('lat') ?? '');
+  const parsedLng = Number.parseFloat(urlParams.get('lng') ?? '');
+  const parsedZoom = Number.parseFloat(urlParams.get('z') ?? '');
+  const lat = isValidLatitude(parsedLat) ? parsedLat : DEFAULT_CENTER[0];
+  const lng = isValidLongitude(parsedLng) ? parsedLng : DEFAULT_CENTER[1];
+  const zoom = normalizeZoom(parsedZoom, DEFAULT_ZOOM);
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const rawType = urlParams.get('t') ?? '';
   const type: MapType = isMapType(rawType) && rawType !== 'osm' ? (rawType as MapType) : DEFAULT_MAP_TYPE;
@@ -96,21 +113,30 @@ export const getMapOptions = (urlParams: UrlParams): MapOptions => ({
   lng: urlParams.lng,
 });
 
-export const parseGoogleMapsUrl = (url: string): MapOptions | null => {
-  try {
-    const googleMapsUrl = new URL(url);
-    const atSegment = googleMapsUrl.pathname.split('@')[1];
-    if (!atSegment) return null;
-    const params = atSegment.split(',');
-    if (params.length < 3) return null;
-    const lat = Number.parseFloat(params[0]);
-    const lng = Number.parseFloat(params[1]);
-    const zoom = Number.parseInt(params[2].replace(/[^0-9.]*/, ''), 10);
-    if (!Number.isFinite(lat) || !Number.isFinite(lng) || !Number.isFinite(zoom)) return null;
+export const parseGoogleMapsUrl = (url: string): MapOptions => {
+  const googleMapsUrl = new URL(url);
+  const coordinates = `${googleMapsUrl.pathname}${googleMapsUrl.search}${googleMapsUrl.hash}`.match(
+    /@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?),(\d+(?:\.\d+)?)z/i,
+  );
 
-    log({ lat, lng, zoom });
-    return { lat, lng, zoom };
-  } catch {
-    return null;
+  if (!coordinates) {
+    throw new Error('The provided URL is missing "@lat,lng,zoomz" coordinates.');
   }
+
+  const lat = Number.parseFloat(coordinates[1]);
+  const lng = Number.parseFloat(coordinates[2]);
+  const parsedZoom = Number.parseFloat(coordinates[3]);
+
+  if (!isValidCoordinatePair(lat, lng)) {
+    throw new Error('The provided URL contains invalid latitude or longitude values.');
+  }
+
+  const zoom = normalizeZoom(parsedZoom, DEFAULT_ZOOM);
+
+  log({ lat, lng, zoom });
+  return {
+    lat,
+    lng,
+    zoom,
+  };
 };
