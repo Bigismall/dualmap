@@ -135,7 +135,7 @@ export class OsmFrame extends MapPublisherObserver {
             this.setMapOptions(parseGoogleMapsUrl(url));
           } catch (error) {
             fault('Failed to parse Google Maps URL', error);
-            window.alert('Invalid Google Maps URL. Use a URL containing @lat,lng,zoomz.');
+            window.alert('Invalid Google Maps URL. Use a URL containing @lat,lng,zoomz or @lat,lng,altitudem.');
           }
         }
       }
