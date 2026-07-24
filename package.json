@@ -15,10 +15,10 @@
     "@pbr1111/vite-plugin-biome": "^1.1.3",
     "@types/leaflet": "^1.9.21",
     "typescript": "^7.0.2",
-    "vite": "^8.1.4"
+    "vite": "^8.1.5"
   },
   "dependencies": {
-    "@biomejs/biome": "^2.5.3",
+    "@biomejs/biome": "^2.5.4",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.4.0"
   }
