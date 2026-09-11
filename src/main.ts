@@ -86,8 +86,8 @@ window.addEventListener('load', () => {
       options: activeMap.mapOptions,
       layer: osm.getLayer(),
       type: mapType as MapType,
-      width: mapWidth,
-      overlay: urlParams.overlay,
+      width: getUrlParams().width,
+      overlay: getUrlParams().overlay,
     });
   });
 
