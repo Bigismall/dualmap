@@ -6,7 +6,7 @@ import { osmLayers } from './layers.ts';
 import { MapFactory } from './MapFactory.class.ts';
 import './plugins/linearmeasurement/LinearMeasurement.css';
 import { OsmFrame } from './Providers.ts';
-import { RadioGroupClass } from './RadioGroup.class.ts';
+import { SelectGroupClass } from './RadioGroup.class.ts';
 import { Scene } from './Scene.class.ts';
 import './styles/style.css';
 
@@ -23,8 +23,6 @@ window.addEventListener('load', () => {
     ['layerTypeNav', $('.js-layer-type')],
     ['proportionNav', $('.js-proportion')],
     ['axis', $$('.axis')],
-    ['about', $('#about')],
-    ['close-about', $('#close-about')],
   ]);
 
   if (hasMissingElements($elements)) {
@@ -58,8 +56,8 @@ window.addEventListener('load', () => {
     osm.getInstance().invalidateSize();
   }).observe(osm.$element);
 
-  new RadioGroupClass($elements.get('mapTypeNav') as HTMLElement, mapType, (event) => {
-    const mapType = (event.target as HTMLInputElement).value as string;
+  new SelectGroupClass($elements.get('mapTypeNav') as HTMLElement, mapType, (event) => {
+    const mapType = (event.target as HTMLSelectElement).value;
 
     osm.unsubscribe(activeMap);
     activeMap.destroy();
@@ -69,16 +67,16 @@ window.addEventListener('load', () => {
     setUrlParams(activeMap.mapOptions, osm.getLayer(), mapType as MapType, mapWidth, urlParams.sq);
   });
 
-  new RadioGroupClass($elements.get('layerTypeNav') as HTMLElement, urlParams.layer, (event) => {
-    const mapLayer = (event.target as HTMLInputElement).value as LayerName;
+  new SelectGroupClass($elements.get('layerTypeNav') as HTMLElement, urlParams.layer, (event) => {
+    const mapLayer = (event.target as HTMLSelectElement).value as LayerName;
 
     if (osm.getInstance().hasLayer(osmLayers[osm.getLayer()][0])) {
       osm.switchLayerTo(mapLayer);
     }
   });
 
-  new RadioGroupClass($elements.get('proportionNav') as HTMLElement, mapWidth, (event) => {
-    const proportion = (event.target as HTMLInputElement).value;
+  new SelectGroupClass($elements.get('proportionNav') as HTMLElement, mapWidth, (event) => {
+    const proportion = (event.target as HTMLSelectElement).value;
     const $layout = $elements.get('layout') as HTMLElement;
     const currentMapType = activeMap.config.type;
 
@@ -95,11 +93,6 @@ window.addEventListener('load', () => {
     }
 
     setUrlParams(activeMap.mapOptions, osm.getLayer(), currentMapType, proportion, urlParams.sq);
-  });
-
-  // FIXME - move to Scene
-  ($elements.get('close-about') as HTMLButtonElement).addEventListener('click', () => {
-    ($elements.get('about') as HTMLInputElement).checked = false;
   });
 
   osm.subscribe(activeMap);

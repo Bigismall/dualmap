@@ -220,98 +220,70 @@ body:has(.layout.w66) .axis__vertical--right {
   display        : flex;
   flex-direction : row;
   justify-content: flex-start;
-  align-items    : stretch;
+  align-items    : center;
   flex-wrap      : nowrap;
-  gap            : 0;
+  gap            : 0.5rem;
 }
 
 .choice.js-map-type {
   justify-content: flex-end;
 }
 
-.choice input[type="radio"],
-.choice input[type="checkbox"] {
-  display: none;
+
+.choice__label {
+  display:none;
 }
 
-.choice input:checked+label {
-  color           : var(--color--slate-50, #eff1f4);
-  background-color: var(--color-red-450, #ee402e);
+@media screen and (min-width: 768px) {
+  .choice__label {
+    display: block;
+  }
 }
-
-.choice label {
-  display    : block;
-  margin     : 0;
-  padding    : 0 0.5rem;
-  height     : auto;
+.choice__label {
+   margin     : 0;
+  padding    : 0 0.25rem 0 0.5rem;
   line-height: 2rem;
-  cursor     : pointer;
-  transition : background-color 0.2s ease-in-out;
-  border     : none;
-  outline    : none;
-  text-align : center;
+  white-space: nowrap;
 }
 
-.choice label:hover {
-  background-color: var(--color-red-450, #ee402e);
+.choice__select {
+  margin            : 0;
+  min-width         : 7rem;
+  max-width         : 12rem;
+  height            : 1.625rem;
+  padding           : 0 2rem 0 0.5rem;
+  border            : 1px solid var(--color--slate-700, #3d475c);
+  border-radius     : 0.25rem;
+  background-color  : var(--color--slate-50, #eff1f4);
+  color             : var(--color--slate-900, #181c25);
+  font              : inherit;
+  line-height       : 1.2;
 }
+
 
 .css-toggle-navigation {
   display: none;
 }
 
-/* Add dropdown functionality for mobile */
+.button {
+  display         : block;
+  margin          : 0;
+  padding         : 0 0.5rem;
+  height          : auto;
+  line-height     : 2rem;
+  cursor          : pointer;
+  border          : none;
+  border-radius     : 0.25rem;
+  outline         : none;
+  color           : var(--color--slate-50, #eff1f4);
+  background-color: var(--color-red-450, #ee402e);
+  font-size: 1rem;
 
-@media screen and (max-width: 1279px) {
-  header {
-    padding              : 0;
-    margin               : 0;
-    height               : 2rem;
-    min-height           : 2rem;
-    overflow             : hidden !important;
-    display              : grid;
-    grid-template-columns: 100% 0 0 0;
-    position             : absolute;
-    width                : 100%;
-    z-index              : 1100;
-    top                  : 0;
-    left                 : 0;
-    right                : 0;
-  }
-
-  body:has(#toggle:checked) header {
-    grid-template-columns: 3rem 2fr 3rem 2fr;
-    height               : auto;
-  }
-
-  .choice {
-    flex-direction: column;
-    gap           : 0.5rem;
-  }
-
-  .choice.js-map-type {
-    justify-content: flex-start;
-  }
-
-  .choice.css-about {
-    display: none;
-  }
-
-  .axis {
-    display: none;
-  }
-
-  .layout {
-    padding-top: 2rem;
-  }
-
-  .css-toggle-navigation {
-    display: block;
-  }
 }
 
+
 #about-dialog {
-  display         : none;
+  /*display         : none;*/
   position        : absolute;
   top             : 50%;
   left            : 50%;
@@ -333,24 +305,6 @@ body:has(.layout.w66) .axis__vertical--right {
 #about-dialog a {
   color          : var(--color--slate-50, #eff1f4);
   text-decoration: underline;
-}
-
-body:has(#about:checked) #about-dialog {
-  display: block;
-}
-
-.button {
-  display         : block;
-  margin          : 0;
-  padding         : 0 0.5rem;
-  height          : auto;
-  line-height     : 2rem;
-  cursor          : pointer;
-  transition      : background-color 0.2s ease-in-out;
-  border          : none;
-  outline         : none;
-  color           : var(--color--slate-50, #eff1f4);
-  background-color: var(--color-red-450, #ee402e);
 }
 
 #close-about {

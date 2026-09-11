@@ -1,15 +1,17 @@
 import type { RadioItemAction } from './types.ts';
 
-export class RadioGroupClass {
+export class SelectGroupClass {
   protected $element: HTMLElement;
 
   constructor($element: HTMLElement, defaultValue: string, $action: RadioItemAction) {
     this.$element = $element;
-    const $radios = Array.from($element.querySelectorAll('input[type="radio"]')) as HTMLInputElement[];
+    const $select = $element.querySelector('select');
 
-    $radios.forEach(($radio) => {
-      $radio.checked = $radio.value === defaultValue;
-      $radio.addEventListener('change', $action);
-    });
+    if (!$select) {
+      throw new Error('Missing select element in select group.');
+    }
+
+    $select.value = defaultValue;
+    $select.addEventListener('change', $action);
   }
 }

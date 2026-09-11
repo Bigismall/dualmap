@@ -2,191 +2,181 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-site-verification" content="XP21CygoGJX_F3yFRdWwU5O40_0u1wDXQp0o1vRVm-s" />
-    <meta name="google-site-verification" content="nA-nEuajnyMLhnXSspd776PsxEann358NY0Orw8jhnQ" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="google-site-verification" content="XP21CygoGJX_F3yFRdWwU5O40_0u1wDXQp0o1vRVm-s"/>
+    <meta name="google-site-verification" content="nA-nEuajnyMLhnXSspd776PsxEann358NY0Orw8jhnQ"/>
     <meta name="description" content="Dual Maps - compare different map types side by side. Compare satellite views with 3D buildings layer,
-        railroads with Bing maps, topography, LIDAR and air traffic map." />
-    <meta property="og:title" content="Dual Maps - Compare Map Views" />
+        railroads with Bing maps, topography, LIDAR and air traffic map."/>
+    <meta property="og:title" content="Dual Maps - Compare Map Views"/>
     <meta property="og:description" content="Compare satellite views with 3D buildings layer,
-        railroads with Bing maps, topography and air traffic map." />
-    <meta property="og:image" content="https://dualmaps.eu/dualmaps-cover.webp" />
-    <meta property="og:url" content="https://dualmaps.eu" />
-    <meta property="og:type" content="website" />
+        railroads with Bing maps, topography and air traffic map."/>
+    <meta property="og:image" content="https://dualmaps.eu/dualmaps-cover.webp"/>
+    <meta property="og:url" content="https://dualmaps.eu"/>
+    <meta property="og:type" content="website"/>
     <meta property="twitter:domain" content="dualmaps.eu">
     <meta property="twitter:url" content="https://dualmaps.eu/">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Dual Maps – Compare Map Views Side by Side" />
-    <meta name="twitter:image" content="https://dualmaps.eu/dualmaps-cover.webp" />
+    <meta name="twitter:title" content="Dual Maps – Compare Map Views Side by Side"/>
+    <meta name="twitter:image" content="https://dualmaps.eu/dualmaps-cover.webp"/>
     <meta name="twitter:description" content="Compare satellite views with 3D buildings layer,
-        railroads with Bing maps, topography, LIDAR and air traffic map." />
-    <meta name="theme-color" content="#333c4e" />
-    <meta name="author" content="Bigismall" />
+        railroads with Bing maps, topography, LIDAR and air traffic map."/>
+    <meta name="theme-color" content="#333c4e"/>
+    <meta name="author" content="Bigismall"/>
 
-    <link rel="canonical" href="https://dualmaps.eu/" />
+    <link rel="canonical" href="https://dualmaps.eu/"/>
 
     <title>Dual Maps – Compare Map Views Side by Side | dualmaps.eu</title>
 
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Dual Maps",
-        "url": "https://dualmaps.eu",
-        "description": "Compare different map types side by side. Synchronize satellite views, 3D buildings, railroads, Bing maps, topography, LIDAR and air traffic maps.",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "All",
-        "author": {
-            "@type": "Person",
-            "name": "Bigismall"
-        },
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Dual Maps",
+            "url": "https://dualmaps.eu",
+            "description": "Compare different map types side by side. Synchronize satellite views, 3D buildings, railroads, Bing maps, topography, LIDAR and air traffic maps.",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "All",
+            "author": {
+                "@type": "Person",
+                "name": "Bigismall"
+            },
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            }
         }
-    }
     </script>
 
     <script type="module" src="/src/main.ts"></script>
-    <link rel="preconnect" href="https://scripts.simpleanalyticscdn.com" />
+    <link rel="preconnect" href="https://scripts.simpleanalyticscdn.com"/>
     <link rel="icon" type="image/svg+xml"
-        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>">
 </head>
 
 <body>
-    <dialog id="about-dialog">
-        <button id="close-about" class="button" title="Close">Close</button>
-        <h1>Dual maps</h1>
-        <p>Dual maps allows you to synchronize views of different map types side by side.</p>
-        <p>Compare satellite views with 3D buildings layer, railroads with Bing maps, topography, LIDAR and air traffic
-            map.
-            You decide!</p>
-        <h2>Keyboard shortcuts</h2>
-        <ul>
-            <li><kbd>1</kbd> - Toggle axis displaying</li>
-            <li><kbd>2</kbd> - Import URL from Google Maps</li>
-        </ul>
-        <h2>Built with:</h2>
-        <ul>
-            <li>The best library for dealing with <a href="https://www.openstreetmap.org/"
-                    rel="noopener noreferrer">Open Street Maps</a> -
-                <a href="https://leafletjs.com/" rel="noopener noreferrer">Leaflet</a>.
-            </li>
-            <li><a href="https://github.com/smeijer/leaflet-geosearch" title="Leaflet.GeoSearch"
-                    rel="noopener noreferrer">Leaflet.GeoSearch</a>
-            </li>
-            <li><a href="https://github.com/NLTGit/Leaflet.LinearMeasurement" title="Leaflet Linear Measurement Plugin"
-                    rel="noopener noreferrer">Leaflet
-                    Linear Measurement Plugin</a></li>
-            <li><a href="https://osmbuildings.org/" rel="noopener noreferrer">OSM Buildings</a></li>
-            <li><a href="https://www.google.com/maps" rel="noopener noreferrer">Google Maps</a></li>
-            <li><a href="https://www.bing.com/maps" rel="noopener noreferrer">Bing maps</a></li>
-            <li><a href="https://globe.airplanes.live" rel="noopener noreferrer">Airplanes radar</a></li>
-            <li><a href="https://www.geoportal.gov.pl/" rel="noopener noreferrer" title="Geoportal">Geoportal Lidar
-                    maps</a></li>
-            <li><a href="https://vite.dev/" title="The Build Tool for the Web" rel="noopener noreferrer">Vite</a></li>
-        </ul>
-        <h2>Take a look on:</h2>
-        <ul>
-            <li><a href="https://maponphoto.eu/" title="Map on Photo" rel="noopener noreferrer">Map on Photo</a></li>
-        </ul>
-    </dialog>
-    <header>
-        <nav class="choice css-toggle-navigation" aria-label="Toggle navigation">
-            <input type="checkbox" id="toggle" name="toggle">
-            <label for="toggle">☰</label>
-        </nav>
-        <nav class="choice js-layer-type" aria-label="Left map layer selection">
-            <input type="radio" id="osm" name="layer-type" value="OSM">
-            <label for="osm">OSM</label>
-            <input type="radio" id="osmde" name="layer-type" value="OSM DE">
-            <label for="osmde">OSM DE</label>
-            <input type="radio" id="humanitarian" name="layer-type" value="Humanitarian">
-            <label for="humanitarian">Humanitarian</label>
-            <input type="radio" id="topography" name="layer-type" value="Topography">
-            <label for="topography">Topography</label>
-            <input type="radio" id="cyclo" name="layer-type" value="Cyclo">
-            <label for="cyclo">Cyclo</label>
-            <input type="radio" id="satellite" name="layer-type" value="Satellite">
-            <label for="satellite">Satellite</label>
-            <input type="radio" id="rail" name="layer-type" value="Rail">
-            <label for="rail">Rail</label>
-            <input type="radio" id="lidar" name="layer-type" value="Lidar">
-            <label for="lidar">Lidar</label>
-        </nav>
-        <nav class="choice js-proportion" aria-label="Map proportion">
-            <input type="radio" id="w50" name="width" value="w50">
-            <label for="w50">50</label>
-            <input type="radio" id="w66" name="width" value="w66">
-            <label for="w66">66</label>
-            <!-- New option to disable right side map -->
-            <input type="radio" id="w100" name="width" value="w100">
-            <label for="w100">100</label>
-        </nav>
-        <nav class="choice css-about" aria-label="About">
-            <input type="checkbox" id="about" name="about">
-            <label for="about">About</label>
-        </nav>
-        <nav class="choice js-map-type" aria-label="Right map type selection">
-            <input type="radio" id="google-maps" name="map-type" value="google">
-            <label for="google-maps">Google maps</label>
-            <input type="radio" id="streetview" name="map-type" value="streetview">
-            <label for="streetview">Street view</label>
-            <input type="radio" id="osmb" name="map-type" value="osmb">
-            <label for="osmb">3D</label>
-            <input type="radio" id="bing" name="map-type" value="bing">
-            <label for="bing">Bing maps</label>
-            <input type="radio" id="waze" name="map-type" value="waze">
-            <label for="waze">Waze</label>
-            <input type="radio" id="adsb" name="map-type" value="adsb">
-            <label for="adsb">Radar</label>
-            <input type="radio" id="ump" name="map-type" value="ump">
-            <label for="ump">UMP</label>
-        </nav>
+<dialog id="about-dialog">
+    <button id="close-about" class="button" title="Close" commandfor="about-dialog" command="close">Close</button>
 
-    </header>
-    <main class="layout js-layout">
-        <h1 class="sr-only">Dual Maps – Compare Map Views Side by Side</h1>
-        <section class="sr-only" aria-label="About Dual Maps">
-            <p>Dual Maps lets you compare different map types side by side. Synchronize satellite views, 3D buildings,
-                railroads, Bing maps, topography, and air traffic, Lidar maps in real time.</p>
-            <h2>Available Map Layers</h2>
-            <ul>
-                <li>OpenStreetMap (OSM)</li>
-                <li>OpenStreetMap DE</li>
-                <li>Humanitarian Map</li>
-                <li>Topography Map</li>
-                <li>Cycling Map</li>
-                <li>Satellite View</li>
-                <li>Railway Map</li>
-                <li>Lidar Map</li>
-            </ul>
-            <h2>Available Comparison Views</h2>
-            <ul>
-                <li>Google Maps</li>
-                <li>Google Street View</li>
-                <li>3D Buildings (OSM Buildings)</li>
-                <li>Bing Maps</li>
-                <li>Waze</li>
-                <li>Airplanes Radar (ADS-B)</li>
-                <li>UMP</li>
-            </ul>
-        </section>
-        <aside class="layout__left js-osm">
-        </aside>
-        <aside class="layout__right js-map">
-        </aside>
-    </main>
+    <h1>Dual maps</h1>
+    <p>Dual maps allows you to synchronize views of different map types side by side.</p>
+    <p>Compare satellite views with 3D buildings layer, railroads with Bing maps, topography, LIDAR and air traffic
+        map.
+        You decide!</p>
+    <h2>Keyboard shortcuts</h2>
+    <ul>
+        <li><kbd>1</kbd> - Toggle axis displaying</li>
+        <li><kbd>2</kbd> - Import URL from Google Maps</li>
+    </ul>
+    <h2>Built with:</h2>
+    <ul>
+        <li>The best library for dealing with <a href="https://www.openstreetmap.org/"
+                                                 rel="noopener noreferrer">Open Street Maps</a> -
+            <a href="https://leafletjs.com/" rel="noopener noreferrer">Leaflet</a>.
+        </li>
+        <li><a href="https://github.com/smeijer/leaflet-geosearch" title="Leaflet.GeoSearch"
+               rel="noopener noreferrer">Leaflet.GeoSearch</a>
+        </li>
+        <li><a href="https://github.com/NLTGit/Leaflet.LinearMeasurement" title="Leaflet Linear Measurement Plugin"
+               rel="noopener noreferrer">Leaflet
+            Linear Measurement Plugin</a></li>
+        <li><a href="https://osmbuildings.org/" rel="noopener noreferrer">OSM Buildings</a></li>
+        <li><a href="https://www.google.com/maps" rel="noopener noreferrer">Google Maps</a></li>
+        <li><a href="https://www.bing.com/maps" rel="noopener noreferrer">Bing maps</a></li>
+        <li><a href="https://globe.airplanes.live" rel="noopener noreferrer">Airplanes radar</a></li>
+        <li><a href="https://www.geoportal.gov.pl/" rel="noopener noreferrer" title="Geoportal">Geoportal Lidar
+            maps</a></li>
+        <li><a href="https://vite.dev/" title="The Build Tool for the Web" rel="noopener noreferrer">Vite</a></li>
+    </ul>
+    <h2>Take a look on:</h2>
+    <ul>
+        <li><a href="https://maponphoto.eu/" title="Map on Photo" rel="noopener noreferrer">Map on Photo</a></li>
+    </ul>
+</dialog>
+<header>
+    <nav class="choice css-toggle-navigation" aria-label="Toggle navigation">
+        <input type="checkbox" id="toggle" name="toggle">
+        <label for="toggle">☰</label>
+    </nav>
+    <nav class="choice js-layer-type" aria-label="Left map layer selection">
+        <label for="layer-type-select" class="choice__label">Left layer</label>
+        <select id="layer-type-select" name="layer-type" class="choice__select">
+            <option value="OSM">OSM</option>
+            <option value="OSM DE">OSM DE</option>
+            <option value="Humanitarian">Humanitarian</option>
+            <option value="Topography">Topography</option>
+            <option value="Cyclo">Cyclo</option>
+            <option value="Satellite">Satellite</option>
+            <option value="Rail">Rail</option>
+            <option value="Lidar">Lidar</option>
+        </select>
+    </nav>
+    <nav class="choice js-proportion" aria-label="Map proportion">
+        <label for="proportion-select" class="choice__label">Layout</label>
+        <select id="proportion-select" name="width" class="choice__select">
+            <option value="w50">50 / 50</option>
+            <option value="w66">66 / 34</option>
+            <option value="w100">100 / 0</option>
+        </select>
+    </nav>
+    <nav class="choice css-about" aria-label="About">
+        <button type="button" class="button" command="show-modal" commandfor="about-dialog">About</button>
+    </nav>
+    <nav class="choice js-map-type" aria-label="Right map type selection">
+        <label for="map-type-select" class="choice__label">Right map</label>
+        <select id="map-type-select" name="map-type" class="choice__select">
+            <option value="google">Google maps</option>
+            <option value="streetview">Street view</option>
+            <option value="osmb">3D</option>
+            <option value="bing">Bing maps</option>
+            <option value="waze">Waze</option>
+            <option value="adsb">Radar</option>
+            <option value="ump">UMP</option>
+        </select>
+    </nav>
 
-    <div class="axis axis__horizontal"></div>
-    <div class="axis axis__vertical axis__vertical--left"></div>
-    <div class="axis axis__vertical axis__vertical--right"></div>
-    <!-- 100% privacy-first analytics -->
-    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
-            referrerpolicy="no-referrer-when-downgrade" /></noscript>
+</header>
+<main class="layout js-layout">
+    <h1 class="sr-only">Dual Maps – Compare Map Views Side by Side</h1>
+    <section class="sr-only" aria-label="About Dual Maps">
+        <p>Dual Maps lets you compare different map types side by side. Synchronize satellite views, 3D buildings,
+            railroads, Bing maps, topography, and air traffic, Lidar maps in real time.</p>
+        <h2>Available Map Layers</h2>
+        <ul>
+            <li>OpenStreetMap (OSM)</li>
+            <li>OpenStreetMap DE</li>
+            <li>Humanitarian Map</li>
+            <li>Topography Map</li>
+            <li>Cycling Map</li>
+            <li>Satellite View</li>
+            <li>Railway Map</li>
+            <li>Lidar Map</li>
+        </ul>
+        <h2>Available Comparison Views</h2>
+        <ul>
+            <li>Google Maps</li>
+            <li>Google Street View</li>
+            <li>3D Buildings (OSM Buildings)</li>
+            <li>Bing Maps</li>
+            <li>Waze</li>
+            <li>Airplanes Radar (ADS-B)</li>
+            <li>UMP</li>
+        </ul>
+    </section>
+    <aside class="layout__left js-osm">
+    </aside>
+    <aside class="layout__right js-map">
+    </aside>
+</main>
+
+<div class="axis axis__horizontal"></div>
+<div class="axis axis__vertical axis__vertical--left"></div>
+<div class="axis axis__vertical axis__vertical--right"></div>
+<!-- 100% privacy-first analytics -->
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+<noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt=""
+               referrerpolicy="no-referrer-when-downgrade"/></noscript>
 </body>
 
 </html>
