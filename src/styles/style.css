@@ -173,7 +173,7 @@ kbd {
   display: block;
 }
 
-.layout.w100 .layout__left {
+body:has(.layout.w100 .layout__overlay:not(.hidden)) .layout__left {
   opacity: var(--overlay-opacity, 0.5);
   }
 
