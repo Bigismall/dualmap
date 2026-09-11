@@ -13,7 +13,7 @@ import {
   type LayerName,
   type MapOptions,
   type MapType,
-  type SquareBounds,
+  type OverlayName,
   type UrlParams,
 } from './types.ts';
 import { log } from './utils/console.ts';
@@ -54,43 +54,15 @@ const altitudeToZoom = (altitudeMeters: number, latitude: number): number => {
   return normalizeZoom(zoom, DEFAULT_ZOOM);
 };
 
-const parseSquareBoundsFromFlatValues = (flatValues: number[]): SquareBounds | undefined => {
-  if (flatValues.length !== 4) {
-    return undefined;
-  }
-
-  const [lat1, lng1, lat2, lng2] = flatValues;
-  if (!isValidCoordinatePair(lat1, lng1) || !isValidCoordinatePair(lat2, lng2)) {
-    return undefined;
-  }
-
-  return [
-    [lat1, lng1],
-    [lat2, lng2],
-  ];
+type UrlParamsType = {
+  options: MapOptions;
+  layer: LayerName;
+  type: MapType;
+  width: string;
+  overlay: OverlayName;
 };
 
-export const parseSquareBounds = (values: string[]): SquareBounds | undefined => {
-  if (values.length !== 4) {
-    return undefined;
-  }
-
-  const flatValues = values.map((value) => Number.parseFloat(value));
-  if (flatValues.some((value) => !Number.isFinite(value))) {
-    return undefined;
-  }
-
-  return parseSquareBoundsFromFlatValues(flatValues);
-};
-
-export const setUrlParams = (
-  options: MapOptions,
-  layer: LayerName,
-  type: MapType,
-  width: string,
-  overlay: LayerName,
-  sq?: SquareBounds,
-) => {
+export const setUrlParams = ({ options, layer, type, width, overlay }: UrlParamsType) => {
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString().slice(0, 12));
   url.searchParams.set('lng', options.lng.toString().slice(0, 12));
@@ -105,14 +77,6 @@ export const setUrlParams = (
     url.searchParams.set('o', overlay);
   }
 
-  url.searchParams.delete('sq');
-  url.searchParams.delete('sq[]');
-  if (sq) {
-    const flatValues = [sq[0][0], sq[0][1], sq[1][0], sq[1][1]];
-    flatValues.forEach((value) => {
-      url.searchParams.append('sq[]', value.toString());
-    });
-  }
   window.history.replaceState({}, '', url.toString());
 };
 
@@ -129,7 +93,6 @@ export const getUrlParams = (): UrlParams => {
   const type: MapType = isMapType(rawType) ? (rawType as MapType) : DEFAULT_MAP_TYPE;
   const overlay = isLayerName(urlParams.get('o') ?? '') ? (urlParams.get('o') as LayerName) : DEFAULT_OVERLAY;
   const width = urlParams.get('w') ?? WIDTH_50;
-  const sq = parseSquareBounds(urlParams.getAll('sq[]'));
 
   return {
     lat,
@@ -139,7 +102,6 @@ export const getUrlParams = (): UrlParams => {
     type,
     overlay,
     width,
-    sq,
   };
 };
 

@@ -186,6 +186,9 @@ kbd {
     width: 100%;
 }
 
+.layout.w100 .layout__left {
+  opacity: 0.4;
+}
 
 .layout__left,
 .layout__right {
@@ -200,12 +203,9 @@ kbd {
   top             : 2rem;
   right            : auto;
     left            : 0;
-  width           : 50%;
+  width           : 100%;
   height          : calc(100% - 2rem);
-  z-index         : 1000;
-  /* Element has to be half transparent */
-  opacity: 0.7;
-
+  z-index         : -1000;
 }
 
 .layout__frame {

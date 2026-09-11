@@ -1,22 +1,15 @@
 import L from 'leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import { KEY_IMPORT_URL, MAX_ZOOM, measureOptions } from './constants.ts';
+import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_ZOOM, KEY_IMPORT_URL, MAX_ZOOM, measureOptions } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import { MapObserver, MapPublisherObserver } from './Map.class.ts';
 
 // @ts-expect-error
 import { LinearMeasurement } from './plugins/linearmeasurement/LinearMeasurement.js';
-import {
-  type LayerName,
-  type MapConfig,
-  type MapOptions,
-  type Message,
-  MessageState,
-  type SquareBounds,
-} from './types.ts';
+import { type LayerName, type MapConfig, type MapOptions, type Message, MessageState } from './types.ts';
 import { getUrlParams, parseGoogleMapsUrl, setUrlParams } from './url.ts';
 import { fault, log } from './utils/console.ts';
-import { rootFontSize } from './utils/dom.ts';
+import { isEmptyString, rootFontSize } from './utils/dom.ts';
 
 export class GoogleMapsFrame extends MapObserver {
   public getUrl() {
@@ -65,10 +58,8 @@ export class ADSBExchangeFrame extends MapObserver {
 }
 
 export class OsmFrame extends MapPublisherObserver {
-  private readonly squareBounds?: SquareBounds;
-  private squareRectangle: L.Rectangle | null = null;
-  private readonly instance: L.Map;
-  private currentLayer: LayerName;
+  protected instance: L.Map;
+  protected currentLayer: LayerName;
 
   constructor(
     public $element: HTMLIFrameElement,
@@ -91,37 +82,22 @@ export class OsmFrame extends MapPublisherObserver {
     this.instance.addControl(search);
     this.instance.addControl(measurement);
     this.instance.on('moveend', this.updatePosition);
-
-    const { sq } = getUrlParams();
-    this.squareBounds = sq;
-    this.renderSquareOverlay();
   }
 
-  private updatePosition = () => {
+  protected updatePosition = () => {
     this.publish({
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
-    const { type, width, sq, overlay } = getUrlParams();
+    const { type, width, overlay } = getUrlParams();
 
-    setUrlParams(this.getMapOptions(), this.currentLayer, type, width, overlay, sq);
-  };
-
-  private renderSquareOverlay = () => {
-    if (!this.squareBounds) {
-      return;
-    }
-
-    if (this.squareRectangle && this.instance.hasLayer(this.squareRectangle)) {
-      this.instance.removeLayer(this.squareRectangle);
-    }
-
-    this.squareRectangle = L.rectangle(this.squareBounds, {
-      color: '#f97316',
-      weight: 2,
-      fillOpacity: 0.5,
-      interactive: false,
-    }).addTo(this.instance);
+    setUrlParams({
+      options: this.getMapOptions(),
+      layer: this.currentLayer,
+      type: type,
+      width: width,
+      overlay: overlay,
+    });
   };
 
   update(publication: Message) {
@@ -138,6 +114,13 @@ export class OsmFrame extends MapPublisherObserver {
             window.alert('Invalid Google Maps URL. Use a URL containing @lat,lng,zoomz or @lat,lng,altitudem.');
           }
         }
+      }
+    }
+
+    if (publication.state === MessageState.MoveMap) {
+      //Only move overlay map if the main map is moved, not if the overlay map is moved
+      if (publication.data !== this.getMapOptions()) {
+        this.setMapOptions(publication.data);
       }
     }
   }
@@ -172,10 +155,8 @@ export class OsmFrame extends MapPublisherObserver {
 
     this.currentLayer = layer;
 
-    this.renderSquareOverlay();
-
-    const { type, width, sq, overlay } = getUrlParams();
-    setUrlParams(this.getMapOptions(), layer, type, width, overlay, sq);
+    const { type, width, overlay } = getUrlParams();
+    setUrlParams({ options: this.getMapOptions(), layer: layer, type: type, width: width, overlay: overlay });
   }
 
   getMapOptions = (): MapOptions => ({
@@ -186,5 +167,135 @@ export class OsmFrame extends MapPublisherObserver {
 
   setMapOptions = (options: MapOptions) => {
     this.instance.setView([options.lat, options.lng], options.zoom);
+  };
+}
+
+export class OsmOverlay extends MapPublisherObserver {
+  /*current layer here is an overlay parameter */
+
+  protected instance: L.Map | null;
+  protected currentLayer: LayerName;
+
+  constructor(
+    public $element: HTMLIFrameElement,
+    public mapOptions: MapOptions,
+    public config: MapConfig,
+  ) {
+    super($element, mapOptions, config);
+
+    if (isEmptyString(config.layer)) {
+      this.instance = null;
+      this.currentLayer = DEFAULT_LAYER;
+      return;
+    }
+
+    this.currentLayer = this.config.layer as LayerName;
+
+    this.instance = L.map($element as HTMLDivElement, {
+      center: [this.mapOptions.lat, this.mapOptions.lng],
+      zoom: this.mapOptions.zoom,
+      layers: [...osmLayers[this.currentLayer]],
+      maxZoom: this.config.maxZoom,
+    });
+  }
+
+  public init(layer: MapConfig['layer']) {
+    if (isEmptyString(layer)) {
+      //throw error
+      return;
+    }
+
+    this.currentLayer = layer as LayerName;
+    this.instance = L.map(this.$element as HTMLDivElement, {
+      center: [this.mapOptions.lat, this.mapOptions.lng],
+      zoom: this.mapOptions.zoom,
+      layers: [...osmLayers[this.currentLayer]],
+      maxZoom: this.config.maxZoom,
+    });
+  }
+
+  protected updatePosition = () => {
+    this.publish({
+      state: MessageState.MoveMap,
+      data: this.getMapOptions(),
+    });
+    const { type, width, layer } = getUrlParams();
+
+    setUrlParams({
+      options: this.getMapOptions(),
+      layer: layer,
+      type: type,
+      width: width,
+      overlay: this.currentLayer,
+    });
+  };
+
+  update(publication: Message) {
+    log('Publication:', publication, 'Observer: OsmOverlay');
+
+    if (publication.state === MessageState.MoveMap) {
+      //Only move overlay map if the main map is moved, not if the overlay map is moved
+      if (publication.data !== this.getMapOptions()) {
+        this.setMapOptions(publication.data);
+      }
+    }
+  }
+
+  getUrl = () => '';
+
+  getInstance() {
+    return this.instance;
+  }
+
+  getLayer() {
+    return this.currentLayer;
+  }
+  switchLayerTo(layer: LayerName) {
+    if (this.instance === null) {
+      return;
+    }
+
+    this.instance?.eachLayer((layer) => {
+      this.instance?.removeLayer(layer);
+    });
+
+    const newLayers = osmLayers[layer];
+
+    newLayers.forEach((layer) => {
+      this.instance?.addLayer(layer);
+    });
+
+    const maxZoom = Math.min(...newLayers.map((l) => l.options.maxZoom ?? MAX_ZOOM));
+    this.instance.setMaxZoom(maxZoom);
+
+    if (this.instance.getZoom() > maxZoom) {
+      this.instance.setZoom(maxZoom);
+    }
+
+    this.currentLayer = layer;
+
+    const { type, width } = getUrlParams();
+    setUrlParams({ options: this.getMapOptions(), layer: layer, type: type, width: width, overlay: layer });
+  }
+
+  getMapOptions = (): MapOptions => {
+    if (this.instance === null) {
+      return {
+        lat: DEFAULT_CENTER[0],
+        lng: DEFAULT_CENTER[1],
+        zoom: DEFAULT_ZOOM,
+      };
+    }
+    return {
+      lat: this.instance.getCenter().lat,
+      lng: this.instance.getCenter().lng,
+      zoom: this.instance.getZoom(),
+    };
+  };
+
+  setMapOptions = (options: MapOptions) => {
+    this.instance?.setView([options.lat, options.lng], options.zoom, {
+      animate: false,
+    });
   };
 }

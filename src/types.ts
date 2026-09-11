@@ -1,14 +1,7 @@
 export type MapType = 'google' | 'streetview' | 'osm' | 'bing' | 'adsb' | 'osmb' | 'waze' | 'ump';
-export type LayerName =
-  | 'OSM'
-  | 'OSM DE'
-  | 'Humanitarian'
-  | 'Topography'
-  | 'Cyclo'
-  | 'Satellite'
-  | 'Rail'
-  | 'Lidar'
-  | ''; //DEFAULT_OVERLAY
+
+export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail' | 'Lidar';
+export type OverlayName = LayerName | '';
 
 // Create array based on the MapType
 const mapTypeArray: MapType[] = ['google', 'streetview', 'bing', 'adsb', 'osmb', 'waze', 'ump'];
@@ -33,11 +26,9 @@ export type MapOptions = {
   zoom: number;
 };
 
-export type SquareBounds = [[number, number], [number, number]];
-
 export type MapConfig = {
   apiKey?: string;
-  layer?: LayerName;
+  layer?: LayerName | '';
   maxZoom: number;
   frame: boolean;
   type: MapType;
@@ -49,9 +40,8 @@ export type UrlParams = {
   zoom: number;
   layer: LayerName;
   type: MapType;
-  overlay: LayerName;
+  overlay: OverlayName;
   width: string;
-  sq?: SquareBounds;
 };
 
 export enum MessageState {

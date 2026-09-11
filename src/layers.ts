@@ -3,7 +3,6 @@ import L from 'leaflet';
 import type { LayerName } from './types.ts';
 
 export const osmLayers: Record<LayerName, L.TileLayer[] | L.TileLayer.WMS[]> = {
-  '': [],
   OSM: [
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap',
