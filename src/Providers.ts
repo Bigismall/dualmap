@@ -82,6 +82,12 @@ export class OsmFrame extends MapPublisherObserver {
     this.instance.addControl(search);
     this.instance.addControl(measurement);
     this.instance.on('moveend', this.updatePosition);
+
+    this.instance.on('movestart', () => {
+      this.publish({
+        state: MessageState.HideOverlay,
+      });
+    });
   }
 
   protected updatePosition = () => {
@@ -97,6 +103,9 @@ export class OsmFrame extends MapPublisherObserver {
       type: type,
       width: width,
       overlay: overlay,
+    });
+    this.publish({
+      state: MessageState.ShowOverlay,
     });
   };
 
@@ -136,14 +145,14 @@ export class OsmFrame extends MapPublisherObserver {
   }
 
   switchLayerTo(layer: LayerName) {
-    this.instance.eachLayer((layer) => {
-      this.instance.removeLayer(layer);
+    this.instance.eachLayer((l) => {
+      this.instance.removeLayer(l);
     });
 
     const newLayers = osmLayers[layer];
 
-    newLayers.forEach((layer) => {
-      this.instance.addLayer(layer);
+    newLayers.forEach((l) => {
+      this.instance.addLayer(l);
     });
 
     const maxZoom = Math.min(...newLayers.map((l) => l.options.maxZoom ?? MAX_ZOOM));
@@ -214,30 +223,16 @@ export class OsmOverlay extends MapPublisherObserver {
     });
   }
 
-  protected updatePosition = () => {
-    this.publish({
-      state: MessageState.MoveMap,
-      data: this.getMapOptions(),
-    });
-    const { type, width, layer } = getUrlParams();
-
-    setUrlParams({
-      options: this.getMapOptions(),
-      layer: layer,
-      type: type,
-      width: width,
-      overlay: this.currentLayer,
-    });
-  };
-
   update(publication: Message) {
-    log('Publication:', publication, 'Observer: OsmOverlay');
-
     if (publication.state === MessageState.MoveMap) {
-      //Only move overlay map if the main map is moved, not if the overlay map is moved
-      if (publication.data !== this.getMapOptions()) {
-        this.setMapOptions(publication.data);
-      }
+      this.setMapOptions(publication.data);
+    }
+
+    if (publication.state === MessageState.HideOverlay) {
+      this.hide();
+    }
+    if (publication.state === MessageState.ShowOverlay) {
+      this.show();
     }
   }
 
@@ -255,14 +250,14 @@ export class OsmOverlay extends MapPublisherObserver {
       return;
     }
 
-    this.instance?.eachLayer((layer) => {
-      this.instance?.removeLayer(layer);
+    this.instance?.eachLayer((l) => {
+      this.instance?.removeLayer(l);
     });
 
     const newLayers = osmLayers[layer];
 
-    newLayers.forEach((layer) => {
-      this.instance?.addLayer(layer);
+    newLayers.forEach((l) => {
+      this.instance?.addLayer(l);
     });
 
     const maxZoom = Math.min(...newLayers.map((l) => l.options.maxZoom ?? MAX_ZOOM));

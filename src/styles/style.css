@@ -80,7 +80,7 @@ header {
   color           : var(--color--slate-50, #eff1f4);
   width           : 100%;
   display         : flex;
-  justify-content : space-between;
+  justify-content : center;
   align-items     : stretch;
   flex-direction  : row;
 }
@@ -152,31 +152,17 @@ kbd {
 .layout.w25 {
   grid-template-columns: 25% 75%;
 }
-.layout.w25 .layout__overlay {
-    display: none;
-}
-
 
 .layout.w33 {
   grid-template-columns: 34% 66%;
-}
-.layout.w33 .layout__overlay {
-  display: none;
 }
 
 .layout.w50 {
   grid-template-columns: 50% 50%;
 }
-.layout.w50 .layout__overlay {
-  display: none;
-}
 
 .layout.w66 {
   grid-template-columns: 66% 34%;
-}
-
-.layout.w66 .layout__overlay {
-  display: none;
 }
 
 .layout.w100 {
@@ -185,12 +171,11 @@ kbd {
 
 .layout.w100 .layout__overlay {
   display: block;
-    width: 100%;
 }
 
 .layout.w100 .layout__left {
   opacity: var(--overlay-opacity, 0.5);
-}
+  }
 
 .layout__left,
 .layout__right {
@@ -200,11 +185,11 @@ kbd {
 }
 
 .layout__overlay {
-  display        : block;
+  display        : none;
   position        : absolute;
   top             : 2rem;
   right            : auto;
-    left            : 0;
+  left            : 0;
   width           : 100%;
   height          : calc(100% - 2rem);
   z-index         : -1000;
@@ -257,18 +242,12 @@ kbd {
 .choice {
   display        : flex;
   flex-direction : row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items    : center;
   flex-wrap      : nowrap;
   gap            : 0.5rem;
 }
 
-
-
-.choice.js-map-type,
-.js-overlay-type {
-  justify-content: flex-end;
-}
 
 body:has(.layout.w100) .choice.js-map-type {
   display: none;
@@ -277,7 +256,9 @@ body:has(.layout.w100) .choice.js-map-type {
 body:not(:has(.layout.w100)) .choice.js-overlay-type {
   display: none;
 }
-
+body:not(:has(.layout.w100)) .choice.js-opacity {
+  display: none;
+}
 
 
 
@@ -291,7 +272,7 @@ body:not(:has(.layout.w100)) .choice.js-overlay-type {
   }
 }
 .choice__label {
-   margin     : 0;
+  margin     : 0;
   padding    : 0 0.25rem 0 0.5rem;
   line-height: 2rem;
   white-space: nowrap;
@@ -299,8 +280,6 @@ body:not(:has(.layout.w100)) .choice.js-overlay-type {
 
 .choice__select {
   margin            : 0;
-  min-width         : 7rem;
-  max-width         : 12rem;
   height            : 1.625rem;
   padding           : 0 2rem 0 0.5rem;
   border            : 1px solid var(--color--slate-700, #3d475c);
@@ -309,11 +288,6 @@ body:not(:has(.layout.w100)) .choice.js-overlay-type {
   color             : var(--color--slate-900, #181c25);
   font              : inherit;
   line-height       : 1.2;
-}
-
-
-.css-toggle-navigation {
-  display: none;
 }
 
 .button {
@@ -332,25 +306,30 @@ body:not(:has(.layout.w100)) .choice.js-overlay-type {
 
 }
 
+.css-about {
+  margin: 0 0.25rem 0 0.5rem;
+}
 
 #about-dialog {
-  /*display         : none;*/
   position        : absolute;
   top             : 50%;
   left            : 50%;
   transform       : translate(-50%, -50%);
-  min-width       : 50%;
-  min-height      : 40%;
+  min-width       : 60%;
+  height: auto;
   width           : auto;
-  max-width       : 80%;
-  max-height      : 80%;
+  max-width       : 90%;
+  max-height      : 90%;
   color           : var(--color--slate-50, #eff1f4);
   background-color: var(--color--slate, #525f7a);
   z-index         : 1000;
   overflow        : auto;
   border-radius   : 1rem;
   border          : none;
-  box-shadow      : 0 15px 30px 0 rgba(0, 0, 0, 0.45);
+
+/*  USe   --color--slate-900: #181c25; for set the  box shadow color*/
+  box-shadow: 0 15px 30px 0 rgba(24, 28, 37, 0.45);
+
 }
 
 #about-dialog a {
@@ -359,7 +338,8 @@ body:not(:has(.layout.w100)) .choice.js-overlay-type {
 }
 
 #close-about {
-  position: absolute;
+  position: sticky;
   right   : 1rem;
   top     : 1rem;
+  float:  right;
 }

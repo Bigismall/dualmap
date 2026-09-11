@@ -48,6 +48,8 @@ export enum MessageState {
   MoveMap = 'MoveMap', //Same as resize
   KeyPressed = 'KeyPressed',
   Reload = 'Reload',
+  HideOverlay = 'HideOverlay',
+  ShowOverlay = 'ShowOverlay',
 }
 
 export type Message =
@@ -62,7 +64,7 @@ export type Message =
       data: MapOptions;
     }
   | {
-      state: MessageState.Reload;
+      state: MessageState.Reload | MessageState.HideOverlay | MessageState.ShowOverlay;
     };
 
 export type DOMElement = Element | NodeListOf<HTMLElement> | null;

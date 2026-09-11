@@ -39,7 +39,6 @@ window.addEventListener('load', () => {
   const mapOptions = getMapOptions(urlParams);
   const mapType = urlParams.type;
   const mapWidth = urlParams.width;
-  const overlayType = urlParams.overlay;
   const scene = new Scene();
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
   let activeMap = MapFactory.create(mapType, $elements.get('map') as HTMLDivElement);
@@ -72,6 +71,7 @@ window.addEventListener('load', () => {
 
   new ResizeObserver(() => {
     osm.getInstance().invalidateSize();
+    overlayMap.getInstance()?.invalidateSize();
   }).observe(osm.$element);
 
   new SelectGroupClass($elements.get('mapTypeNav') as HTMLSelectElement, mapType, (event) => {
@@ -87,7 +87,7 @@ window.addEventListener('load', () => {
       layer: osm.getLayer(),
       type: mapType as MapType,
       width: mapWidth,
-      overlay: overlayType,
+      overlay: urlParams.overlay,
     });
   });
 
@@ -135,7 +135,7 @@ window.addEventListener('load', () => {
       layer: osm.getLayer(),
       type: currentMapType,
       width: proportion,
-      overlay: overlayType,
+      overlay: urlParams.overlay,
     });
   });
 
@@ -146,12 +146,6 @@ window.addEventListener('load', () => {
       (parseInt(opacity, 10) / 100).toFixed(2),
     );
   });
-
-  // if (overlayMap) {
-  //   //more strict check
-  //   osm.subscribe(overlayMap);
-  //   overlayMap.render();
-  // }
 
   osm.subscribe(activeMap);
   osm.subscribe(overlayMap);

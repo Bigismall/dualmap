@@ -40,6 +40,14 @@ export abstract class MapFrame {
   public destroy(): void {
     this.$element.innerText = '';
   }
+
+  public hide(): void {
+    this.$element.classList.add('hidden');
+  }
+
+  public show(): void {
+    this.$element.classList.remove('hidden');
+  }
 }
 
 export class MapObserver extends MapFrame implements Observer {

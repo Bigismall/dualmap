@@ -23,11 +23,8 @@
         railroads with Bing maps, topography, LIDAR and air traffic map."/>
     <meta name="theme-color" content="#333c4e"/>
     <meta name="author" content="Bigismall"/>
-
     <link rel="canonical" href="https://dualmaps.eu/"/>
-
     <title>Dual Maps – Compare Map Views Side by Side | dualmaps.eu</title>
-
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
@@ -95,10 +92,6 @@
     </ul>
 </dialog>
 <header>
-    <nav class="choice css-toggle-navigation" aria-label="Toggle navigation">
-        <input type="checkbox" id="toggle" name="toggle">
-        <label for="toggle">☰</label>
-    </nav>
     <nav class="choice js-layer-type" aria-label="Left map layer selection">
         <label for="layer-type-select" class="choice__label">Left layer</label>
         <select id="layer-type-select" name="layer-type" class="choice__select">
@@ -122,9 +115,7 @@
             <option value="w100">Full</option>
         </select>
     </nav>
-    <nav class="choice css-about" aria-label="About">
-        <button type="button" class="button" command="show-modal" commandfor="about-dialog">About</button>
-    </nav>
+
     <nav class="choice js-opacity" aria-label="Overlay opacity">
         <label for="opacity-select" class="choice__label">Opacity</label>
         <select id="opacity-select" name="width" class="choice__select">
@@ -166,7 +157,9 @@
             <option value="Lidar">Lidar</option>
         </select>
     </nav>
-
+    <nav class="choice css-about" aria-label="About">
+        <button type="button" class="button" command="show-modal" commandfor="about-dialog">About</button>
+    </nav>
 </header>
 <main class="layout js-layout">
     <h1 class="sr-only">Dual Maps – Compare Map Views Side by Side</h1>
