@@ -1,4 +1,12 @@
-import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM, WIDTH_50 } from './constants';
+import {
+  DEFAULT_CENTER,
+  DEFAULT_LAYER,
+  DEFAULT_MAP_TYPE,
+  DEFAULT_OVERLAY,
+  DEFAULT_ZOOM,
+  MAX_ZOOM,
+  WIDTH_50,
+} from './constants';
 import {
   isLayerName,
   isMapType,
@@ -9,6 +17,7 @@ import {
   type UrlParams,
 } from './types.ts';
 import { log } from './utils/console.ts';
+import { isEmptyString } from './utils/dom.ts';
 
 const MIN_ZOOM = 0;
 const EARTH_CIRCUMFERENCE_METERS = 40_075_016.686;
@@ -79,6 +88,7 @@ export const setUrlParams = (
   layer: LayerName,
   type: MapType,
   width: string,
+  overlay: LayerName,
   sq?: SquareBounds,
 ) => {
   const url = new URL(window.location.href);
@@ -88,6 +98,12 @@ export const setUrlParams = (
   url.searchParams.set('l', layer);
   url.searchParams.set('t', type);
   url.searchParams.set('w', width);
+
+  if (isEmptyString(overlay)) {
+    url.searchParams.delete('o');
+  } else {
+    url.searchParams.set('o', overlay);
+  }
 
   url.searchParams.delete('sq');
   url.searchParams.delete('sq[]');
@@ -110,7 +126,8 @@ export const getUrlParams = (): UrlParams => {
   const zoom = normalizeZoom(parsedZoom, DEFAULT_ZOOM);
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const rawType = urlParams.get('t') ?? '';
-  const type: MapType = isMapType(rawType) && rawType !== 'osm' ? (rawType as MapType) : DEFAULT_MAP_TYPE;
+  const type: MapType = isMapType(rawType) ? (rawType as MapType) : DEFAULT_MAP_TYPE;
+  const overlay = isLayerName(urlParams.get('o') ?? '') ? (urlParams.get('o') as LayerName) : DEFAULT_OVERLAY;
   const width = urlParams.get('w') ?? WIDTH_50;
   const sq = parseSquareBounds(urlParams.getAll('sq[]'));
 
@@ -120,6 +137,7 @@ export const getUrlParams = (): UrlParams => {
     zoom,
     layer,
     type,
+    overlay,
     width,
     sq,
   };

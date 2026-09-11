@@ -8,13 +8,18 @@ if (!import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
 }
 export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 export const DEFAULT_LAYER: LayerName = 'OSM';
+export const DEFAULT_OVERLAY = '';
 export const DEFAULT_MAP_TYPE: MapType = 'google';
 export const KEY_AXIS = '1';
 export const KEY_IMPORT_URL = '2';
 export const HIDDEN_CLASS = 'hidden';
+export const WIDTH_25 = 'w25';
+export const WIDTH_33 = 'w33';
 export const WIDTH_50 = 'w50';
 export const WIDTH_66 = 'w66';
 export const WIDTH_100 = 'w100';
+
+//OSM
 
 export const measureOptions = {
   unitSystem: 'metric',

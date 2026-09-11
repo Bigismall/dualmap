@@ -13,3 +13,5 @@ export const getMissingElements = ($elements: DOMElements): string[] =>
     .map(([key]) => key);
 
 export const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+export const isEmptyString = (str: string | null | undefined): boolean => !str || str.trim().length === 0;

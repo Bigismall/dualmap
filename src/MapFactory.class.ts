@@ -5,7 +5,6 @@ import {
   BingMapsFrame,
   GoogleMapsFrame,
   GoogleStreetViewFrame,
-  OpenStreetMapFrame,
   OSMBuildingsFrame,
   UMPFrame,
   WazeFrame,
@@ -28,8 +27,6 @@ export class MapFactory {
         return new GoogleMapsFrame($mapElement, mapOptions, { ...mapConfig, apiKey: GOOGLE_MAPS_API_KEY });
       case 'streetview':
         return new GoogleStreetViewFrame($mapElement, mapOptions, { ...mapConfig, apiKey: GOOGLE_MAPS_API_KEY });
-      case 'osm':
-        return new OpenStreetMapFrame($mapElement, mapOptions, mapConfig);
       case 'bing':
         return new BingMapsFrame($mapElement, mapOptions, mapConfig);
       case 'adsb':

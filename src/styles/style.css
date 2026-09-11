@@ -147,17 +147,45 @@ kbd {
   align-items          : stretch;
 }
 
+.layout.w25 {
+  grid-template-columns: 25% 75%;
+}
+.layout.w25 .layout__overlay {
+    display: none;
+}
+
+
+.layout.w33 {
+  grid-template-columns: 34% 66%;
+}
+.layout.w33 .layout__overlay {
+  display: none;
+}
+
 .layout.w50 {
   grid-template-columns: 50% 50%;
+}
+.layout.w50 .layout__overlay {
+  display: none;
 }
 
 .layout.w66 {
   grid-template-columns: 66% 34%;
 }
 
-.layout.w100 {
-  grid-template-columns: 100% 0%;
+.layout.w66 .layout__overlay {
+  display: none;
 }
+
+.layout.w100 {
+  grid-template-columns: 100% 0;
+}
+
+.layout.w100 .layout__overlay {
+  display: block;
+    width: 100%;
+}
+
 
 .layout__left,
 .layout__right {
@@ -166,12 +194,28 @@ kbd {
   height : 100%;
 }
 
+.layout__overlay {
+  display        : block;
+  position        : absolute;
+  top             : 2rem;
+  right            : auto;
+    left            : 0;
+  width           : 50%;
+  height          : calc(100% - 2rem);
+  z-index         : 1000;
+  /* Element has to be half transparent */
+  opacity: 0.7;
+
+}
+
 .layout__frame {
   display: block;
   margin : 0;
   padding: 0;
   border : none;
 }
+
+
 
 .axis {
   position        : absolute;
@@ -207,15 +251,7 @@ kbd {
   transform: translateX(calc(var(--axis-horizontal, 25%)));
 }
 
-/*
-body:has(.layout.w66) .axis__vertical--left {
-  left: 33%;
-}
 
-body:has(.layout.w66) .axis__vertical--right {
-  left: 83%;
-}
-*/
 .choice {
   display        : flex;
   flex-direction : row;
@@ -225,9 +261,22 @@ body:has(.layout.w66) .axis__vertical--right {
   gap            : 0.5rem;
 }
 
-.choice.js-map-type {
+
+
+.choice.js-map-type,
+.js-overlay-type {
   justify-content: flex-end;
 }
+
+body:has(.layout.w100) .choice.js-map-type {
+  display: none;
+}
+
+body:not(:has(.layout.w100)) .choice.js-overlay-type {
+  display: none;
+}
+
+
 
 
 .choice__label {

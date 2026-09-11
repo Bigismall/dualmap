@@ -53,6 +53,9 @@ export class MapObserver extends MapFrame implements Observer {
       this.setOptions(publication.data);
       this.render();
     }
+    if (publication.state === MessageState.Reload) {
+      this.render();
+    }
   }
 }
 

@@ -115,9 +115,11 @@
     <nav class="choice js-proportion" aria-label="Map proportion">
         <label for="proportion-select" class="choice__label">Layout</label>
         <select id="proportion-select" name="width" class="choice__select">
+            <option value="w25">25 / 75</option>
+            <option value="w33">33 / 67</option>
             <option value="w50">50 / 50</option>
             <option value="w66">66 / 34</option>
-            <option value="w100">100 / 0</option>
+            <option value="w100">Full</option>
         </select>
     </nav>
     <nav class="choice css-about" aria-label="About">
@@ -128,12 +130,25 @@
         <select id="map-type-select" name="map-type" class="choice__select">
             <option value="google">Google maps</option>
             <option value="streetview">Street view</option>
-            <option value="osm">OSM</option>
             <option value="osmb">3D</option>
             <option value="bing">Bing maps</option>
             <option value="waze">Waze</option>
             <option value="adsb">Radar</option>
             <option value="ump">UMP</option>
+        </select>
+    </nav>
+    <nav class="choice js-overlay-type" aria-label="Overlay map layer selection">
+        <label for="overlay-type-select" class="choice__label">Overlay</label>
+        <select id="overlay-type-select" name="overlay-type" class="choice__select">
+            <option value="">none</option>
+            <option value="OSM">OSM</option>
+            <option value="OSM DE">OSM DE</option>
+            <option value="Humanitarian">Humanitarian</option>
+            <option value="Topography">Topography</option>
+            <option value="Cyclo">Cyclo</option>
+            <option value="Satellite">Satellite</option>
+            <option value="Rail">Rail</option>
+            <option value="Lidar">Lidar</option>
         </select>
     </nav>
 
@@ -168,6 +183,8 @@
     <aside class="layout__left js-osm">
     </aside>
     <aside class="layout__right js-map">
+    </aside>
+    <aside class="layout__overlay js-overlay">
     </aside>
 </main>
 
