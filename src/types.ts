@@ -1,8 +1,10 @@
 export type MapType = 'google' | 'streetview' | 'osm' | 'bing' | 'adsb' | 'osmb' | 'waze' | 'ump';
+
 export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail' | 'Lidar';
+export type OverlayName = LayerName | '';
 
 // Create array based on the MapType
-const mapTypeArray: MapType[] = ['google', 'streetview', 'osm', 'bing', 'adsb', 'osmb', 'waze', 'ump'];
+const mapTypeArray: MapType[] = ['google', 'streetview', 'bing', 'adsb', 'osmb', 'waze', 'ump'];
 
 const layerNameArray: LayerName[] = [
   'OSM',
@@ -24,11 +26,9 @@ export type MapOptions = {
   zoom: number;
 };
 
-export type SquareBounds = [[number, number], [number, number]];
-
 export type MapConfig = {
   apiKey?: string;
-  layer?: LayerName;
+  layer?: LayerName | '';
   maxZoom: number;
   frame: boolean;
   type: MapType;
@@ -40,13 +40,16 @@ export type UrlParams = {
   zoom: number;
   layer: LayerName;
   type: MapType;
+  overlay: OverlayName;
   width: string;
-  sq?: SquareBounds;
 };
 
 export enum MessageState {
   MoveMap = 'MoveMap', //Same as resize
   KeyPressed = 'KeyPressed',
+  Reload = 'Reload',
+  HideOverlay = 'HideOverlay',
+  ShowOverlay = 'ShowOverlay',
 }
 
 export type Message =
@@ -59,6 +62,9 @@ export type Message =
   | {
       state: MessageState.MoveMap;
       data: MapOptions;
+    }
+  | {
+      state: MessageState.Reload | MessageState.HideOverlay | MessageState.ShowOverlay;
     };
 
 export type DOMElement = Element | NodeListOf<HTMLElement> | null;

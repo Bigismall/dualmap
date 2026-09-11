@@ -40,6 +40,14 @@ export abstract class MapFrame {
   public destroy(): void {
     this.$element.innerText = '';
   }
+
+  public hide(): void {
+    this.$element.classList.add('hidden');
+  }
+
+  public show(): void {
+    this.$element.classList.remove('hidden');
+  }
 }
 
 export class MapObserver extends MapFrame implements Observer {
@@ -51,6 +59,9 @@ export class MapObserver extends MapFrame implements Observer {
     log('Publication:', publication, 'Observer:', this.$element.title);
     if (publication.state === MessageState.MoveMap) {
       this.setOptions(publication.data);
+      this.render();
+    }
+    if (publication.state === MessageState.Reload) {
       this.render();
     }
   }

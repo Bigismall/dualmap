@@ -1,14 +1,23 @@
-import { DEFAULT_CENTER, DEFAULT_LAYER, DEFAULT_MAP_TYPE, DEFAULT_ZOOM, MAX_ZOOM, WIDTH_50 } from './constants';
+import {
+  DEFAULT_CENTER,
+  DEFAULT_LAYER,
+  DEFAULT_MAP_TYPE,
+  DEFAULT_OVERLAY,
+  DEFAULT_ZOOM,
+  MAX_ZOOM,
+  WIDTH_50,
+} from './constants';
 import {
   isLayerName,
   isMapType,
   type LayerName,
   type MapOptions,
   type MapType,
-  type SquareBounds,
+  type OverlayName,
   type UrlParams,
 } from './types.ts';
 import { log } from './utils/console.ts';
+import { isEmptyString } from './utils/dom.ts';
 
 const MIN_ZOOM = 0;
 const EARTH_CIRCUMFERENCE_METERS = 40_075_016.686;
@@ -45,42 +54,15 @@ const altitudeToZoom = (altitudeMeters: number, latitude: number): number => {
   return normalizeZoom(zoom, DEFAULT_ZOOM);
 };
 
-const parseSquareBoundsFromFlatValues = (flatValues: number[]): SquareBounds | undefined => {
-  if (flatValues.length !== 4) {
-    return undefined;
-  }
-
-  const [lat1, lng1, lat2, lng2] = flatValues;
-  if (!isValidCoordinatePair(lat1, lng1) || !isValidCoordinatePair(lat2, lng2)) {
-    return undefined;
-  }
-
-  return [
-    [lat1, lng1],
-    [lat2, lng2],
-  ];
+type UrlParamsType = {
+  options: MapOptions;
+  layer: LayerName;
+  type: MapType;
+  width: string;
+  overlay: OverlayName;
 };
 
-export const parseSquareBounds = (values: string[]): SquareBounds | undefined => {
-  if (values.length !== 4) {
-    return undefined;
-  }
-
-  const flatValues = values.map((value) => Number.parseFloat(value));
-  if (flatValues.some((value) => !Number.isFinite(value))) {
-    return undefined;
-  }
-
-  return parseSquareBoundsFromFlatValues(flatValues);
-};
-
-export const setUrlParams = (
-  options: MapOptions,
-  layer: LayerName,
-  type: MapType,
-  width: string,
-  sq?: SquareBounds,
-) => {
+export const setUrlParams = ({ options, layer, type, width, overlay }: UrlParamsType) => {
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString().slice(0, 12));
   url.searchParams.set('lng', options.lng.toString().slice(0, 12));
@@ -89,14 +71,12 @@ export const setUrlParams = (
   url.searchParams.set('t', type);
   url.searchParams.set('w', width);
 
-  url.searchParams.delete('sq');
-  url.searchParams.delete('sq[]');
-  if (sq) {
-    const flatValues = [sq[0][0], sq[0][1], sq[1][0], sq[1][1]];
-    flatValues.forEach((value) => {
-      url.searchParams.append('sq[]', value.toString());
-    });
+  if (isEmptyString(overlay)) {
+    url.searchParams.delete('o');
+  } else {
+    url.searchParams.set('o', overlay);
   }
+
   window.history.replaceState({}, '', url.toString());
 };
 
@@ -110,9 +90,9 @@ export const getUrlParams = (): UrlParams => {
   const zoom = normalizeZoom(parsedZoom, DEFAULT_ZOOM);
   const layer = isLayerName(urlParams.get('l') ?? '') ? (urlParams.get('l') as LayerName) : DEFAULT_LAYER;
   const rawType = urlParams.get('t') ?? '';
-  const type: MapType = isMapType(rawType) && rawType !== 'osm' ? (rawType as MapType) : DEFAULT_MAP_TYPE;
+  const type: MapType = isMapType(rawType) ? (rawType as MapType) : DEFAULT_MAP_TYPE;
+  const overlay = isLayerName(urlParams.get('o') ?? '') ? (urlParams.get('o') as LayerName) : DEFAULT_OVERLAY;
   const width = urlParams.get('w') ?? WIDTH_50;
-  const sq = parseSquareBounds(urlParams.getAll('sq[]'));
 
   return {
     lat,
@@ -120,8 +100,8 @@ export const getUrlParams = (): UrlParams => {
     zoom,
     layer,
     type,
+    overlay,
     width,
-    sq,
   };
 };
 
