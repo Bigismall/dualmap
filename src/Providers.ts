@@ -274,8 +274,8 @@ export class OsmOverlay extends MapPublisherObserver {
 
     this.currentLayer = layer;
 
-    const { type, width } = getUrlParams();
-    setUrlParams({ options: this.getMapOptions(), layer: layer, type: type, width: width, overlay: layer });
+    const { type, width, layer: urlLayer } = getUrlParams();
+    setUrlParams({ options: this.getMapOptions(), layer: urlLayer, type: type, width: width, overlay: layer });
   }
 
   getMapOptions = (): MapOptions => {

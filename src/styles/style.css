@@ -23,6 +23,8 @@
 
   --axis-horizontal: 25%;
   --axis-vertical  : 50%;
+  --overlay-opacity : 0.5;
+
 
   font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height            : 1.5;
@@ -187,7 +189,7 @@ kbd {
 }
 
 .layout.w100 .layout__left {
-  opacity: 0.4;
+  opacity: var(--overlay-opacity, 0.5);
 }
 
 .layout__left,

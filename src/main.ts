@@ -17,6 +17,7 @@ import { $, $$, getMissingElements, hasMissingElements } from './utils/dom.ts';
 
 window.addEventListener('load', () => {
   const $elements: DOMElements = new Map<string, DOMElement>([
+    ['document', document.documentElement],
     ['osm', $('.js-osm')],
     ['map', $('.js-map')],
     ['overlay', $('.js-overlay')],
@@ -25,6 +26,7 @@ window.addEventListener('load', () => {
     ['overlayTypeNav', $('.js-overlay-type')],
     ['layerTypeNav', $('.js-layer-type')],
     ['proportionNav', $('.js-proportion')],
+    ['opacityNav', $('.js-opacity')],
     ['axis', $$('.axis')],
   ]);
 
@@ -125,9 +127,6 @@ window.addEventListener('load', () => {
     if (proportion !== WIDTH_100) {
       activeMap = MapFactory.create(currentMapType as MapType, $elements.get('map') as HTMLDivElement);
       osm.subscribe(activeMap);
-      // osm.publish({
-      //   state: MessageState.Reload,
-      // });
       activeMap.render();
     }
 
@@ -138,6 +137,14 @@ window.addEventListener('load', () => {
       width: proportion,
       overlay: overlayType,
     });
+  });
+
+  new SelectGroupClass($elements.get('opacityNav') as HTMLSelectElement, '50', (event) => {
+    const opacity = (event.target as HTMLSelectElement).value;
+    ($elements.get('document') as HTMLHtmlElement).style.setProperty(
+      '--overlay-opacity',
+      (parseInt(opacity, 10) / 100).toFixed(2),
+    );
   });
 
   // if (overlayMap) {
