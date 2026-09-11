@@ -38,6 +38,27 @@ export class OSMBuildingsFrame extends MapObserver {
   }
 }
 
+export class OpenStreetMapFrame extends MapObserver {
+  public getUrl() {
+    const $leftMap = document.querySelector('.js-osm .leaflet-container') as HTMLElement | null;
+    const width = $leftMap?.clientWidth ?? window.innerWidth / 2;
+    const height = $leftMap?.clientHeight ?? window.innerHeight - 2 * rootFontSize;
+    const scale = 256 * 2 ** this.mapOptions.zoom;
+    const lngDelta = (width / scale) * 180;
+    const latitudeRadians = (this.mapOptions.lat * Math.PI) / 180;
+    const mercatorY = Math.log(Math.tan(Math.PI / 4 + latitudeRadians / 2));
+    const mercatorDelta = (height / scale) * Math.PI;
+    const topLatitude = (2 * Math.atan(Math.exp(mercatorY + mercatorDelta)) - Math.PI / 2) * (180 / Math.PI);
+    const bottomLatitude = (2 * Math.atan(Math.exp(mercatorY - mercatorDelta)) - Math.PI / 2) * (180 / Math.PI);
+    const left = Math.max(this.mapOptions.lng - lngDelta, -180);
+    const right = Math.min(this.mapOptions.lng + lngDelta, 180);
+    const bottom = Math.max(bottomLatitude, -85.05112878);
+    const top = Math.min(topLatitude, 85.05112878);
+
+    return `https://www.openstreetmap.org/export/embed?bbox=${left}%2C${bottom}%2C${right}%2C${top}&layer=mapnik`;
+  }
+}
+
 export class WazeFrame extends MapObserver {
   getUrl() {
     return `https://embed.waze.com/en/iframe?zoom=${this.mapOptions.zoom}&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}`;
