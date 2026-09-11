@@ -288,9 +288,9 @@ export class OsmOverlay extends MapPublisherObserver {
     };
   };
 
-    this.mapOptions = { ...options };
+  setMapOptions(options: MapOptions) {
     this.instance?.setView([options.lat, options.lng], options.zoom, {
       animate: false,
     });
-  };
+  }
 }
