@@ -29,7 +29,6 @@ const isValidCoordinatePair = (lat: number, lng: number): boolean =>
   Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
 
 const isValidLatitude = (value: number): boolean => Number.isFinite(value) && value >= -90 && value <= 90;
-
 const isValidLongitude = (value: number): boolean => Number.isFinite(value) && value >= -180 && value <= 180;
 
 const normalizeZoom = (value: number, fallback: number): number => {
@@ -60,9 +59,10 @@ type UrlParamsType = {
   type: MapType;
   width: string;
   overlay: OverlayName;
+  opacity: string;
 };
 
-export const setUrlParams = ({ options, layer, type, width, overlay }: UrlParamsType) => {
+export const setUrlParams = ({ options, layer, type, width, overlay, opacity }: UrlParamsType) => {
   const url = new URL(window.location.href);
   url.searchParams.set('lat', options.lat.toString().slice(0, 12));
   url.searchParams.set('lng', options.lng.toString().slice(0, 12));
@@ -76,6 +76,14 @@ export const setUrlParams = ({ options, layer, type, width, overlay }: UrlParams
   } else {
     url.searchParams.set('o', overlay);
   }
+
+  if (isEmptyString(opacity)) {
+    url.searchParams.delete('p');
+  } else {
+    url.searchParams.set('p', opacity);
+  }
+
+
 
   window.history.replaceState({}, '', url.toString());
 };
@@ -93,6 +101,7 @@ export const getUrlParams = (): UrlParams => {
   const type: MapType = isMapType(rawType) ? (rawType as MapType) : DEFAULT_MAP_TYPE;
   const overlay = isLayerName(urlParams.get('o') ?? '') ? (urlParams.get('o') as LayerName) : DEFAULT_OVERLAY;
   const width = urlParams.get('w') ?? WIDTH_50;
+  const opacity = urlParams.get('p') ?? ''; //TODO add value validation for opacity should be 0.1 - 1.0
 
   return {
     lat,
@@ -102,6 +111,7 @@ export const getUrlParams = (): UrlParams => {
     type,
     overlay,
     width,
+    opacity,
   };
 };
 

@@ -42,6 +42,7 @@ export type UrlParams = {
   type: MapType;
   overlay: OverlayName;
   width: string;
+  opacity: string;
 };
 
 export enum MessageState {
@@ -54,18 +55,18 @@ export enum MessageState {
 
 export type Message =
   | {
-      state: MessageState.KeyPressed;
-      data: {
-        key: string;
-      };
-    }
-  | {
-      state: MessageState.MoveMap;
-      data: MapOptions;
-    }
-  | {
-      state: MessageState.Reload | MessageState.HideOverlay | MessageState.ShowOverlay;
+    state: MessageState.KeyPressed;
+    data: {
+      key: string;
     };
+  }
+  | {
+    state: MessageState.MoveMap;
+    data: MapOptions;
+  }
+  | {
+    state: MessageState.Reload | MessageState.HideOverlay | MessageState.ShowOverlay;
+  };
 
 export type DOMElement = Element | NodeListOf<HTMLElement> | null;
 export type DOMElements = Map<string, DOMElement>;

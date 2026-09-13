@@ -2,7 +2,6 @@ import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
 import { Axis } from './Axis.class.ts';
 import { WIDTH_100, WIDTH_25, WIDTH_33, WIDTH_50, WIDTH_66 } from './constants.ts';
-
 import { osmLayers } from './layers.ts';
 import { MapFactory } from './MapFactory.class.ts';
 import './plugins/linearmeasurement/LinearMeasurement.css';
@@ -13,7 +12,7 @@ import './styles/style.css';
 
 import type { DOMElement, DOMElements, LayerName, MapType } from './types.ts';
 import { getMapOptions, getUrlParams, setUrlParams } from './url.ts';
-import { $, $$, getMissingElements, hasMissingElements } from './utils/dom.ts';
+import { $, $$, getMissingElements, hasMissingElements, isEmptyString } from './utils/dom.ts';
 
 window.addEventListener('load', () => {
   const $elements: DOMElements = new Map<string, DOMElement>([
@@ -39,6 +38,8 @@ window.addEventListener('load', () => {
   const mapOptions = getMapOptions(urlParams);
   const mapType = urlParams.type;
   const mapWidth = urlParams.width;
+  const mapOpacity = urlParams.opacity;
+  const mapOverlay = urlParams.overlay;
   const scene = new Scene();
   const axis = new Axis($elements.get('axis') as NodeListOf<HTMLElement>);
   let activeMap = MapFactory.create(mapType, $elements.get('map') as HTMLDivElement);
@@ -88,34 +89,34 @@ window.addEventListener('load', () => {
       type: mapType as MapType,
       width: getUrlParams().width,
       overlay: getUrlParams().overlay,
+      opacity: getUrlParams().opacity,
     });
   });
 
   new SelectGroupClass($elements.get('layerTypeNav') as HTMLSelectElement, urlParams.layer, (event) => {
     const mapLayer = (event.target as HTMLSelectElement).value as LayerName;
-
     if (osm.getInstance().hasLayer(osmLayers[osm.getLayer()][0])) {
       osm.switchLayerTo(mapLayer);
     }
   });
-  // Select group for overlay
 
-  new SelectGroupClass($elements.get('overlayTypeNav') as HTMLSelectElement, urlParams.overlay, (event) => {
-    const mapLayer = (event.target as HTMLSelectElement).value;
 
-    if (mapLayer === '') {
+  new SelectGroupClass($elements.get('overlayTypeNav') as HTMLSelectElement, mapOverlay, (event) => {
+    const mapOverlayName = (event.target as HTMLSelectElement).value;
+    if (isEmptyString(mapOverlayName)) {
       overlayMap.disable();
       return;
     }
 
     if (overlayMap.getInstance() === null) {
       $overlay.classList.remove('hidden');
-      overlayMap.init(mapLayer as LayerName);
-    } else {
-      if (overlayMap.getInstance()?.hasLayer(osmLayers[overlayMap.getLayer()][0])) {
-        overlayMap.switchLayerTo(mapLayer as LayerName);
-      }
+      overlayMap.init(mapOverlayName as LayerName);
     }
+
+    if (overlayMap.getInstance()?.hasLayer(osmLayers[overlayMap.getLayer()][0])) {
+      overlayMap.switchLayerTo(mapOverlayName as LayerName);
+    }
+
   });
 
   new SelectGroupClass($elements.get('proportionNav') as HTMLSelectElement, mapWidth, (event) => {
@@ -141,15 +142,30 @@ window.addEventListener('load', () => {
       type: currentMapType,
       width: proportion,
       overlay: urlParams.overlay,
+      opacity: urlParams.opacity,
     });
   });
 
-  new SelectGroupClass($elements.get('opacityNav') as HTMLSelectElement, '50', (event) => {
+  new SelectGroupClass($elements.get('opacityNav') as HTMLSelectElement, mapOpacity, (event) => {
     const opacity = (event.target as HTMLSelectElement).value;
+    const fractionOpacity = (parseInt(opacity, 10) / 100).toFixed(2);
+
     ($elements.get('document') as HTMLHtmlElement).style.setProperty(
       '--overlay-opacity',
-      (parseInt(opacity, 10) / 100).toFixed(2),
+      fractionOpacity,
     );
+    //Set urlParams for opacity
+    const urlParams = getUrlParams();
+
+    setUrlParams({
+      options: urlParams,
+      layer: urlParams.layer,
+      type: urlParams.type,
+      width: urlParams.width,
+      overlay: urlParams.overlay,
+      opacity: opacity,
+    });
+
   });
 
   osm.subscribe(activeMap);

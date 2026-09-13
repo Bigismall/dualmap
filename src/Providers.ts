@@ -95,7 +95,7 @@ export class OsmFrame extends MapPublisherObserver {
       state: MessageState.MoveMap,
       data: this.getMapOptions(),
     });
-    const { type, width, overlay } = getUrlParams();
+    const { type, width, overlay, opacity } = getUrlParams();
 
     setUrlParams({
       options: this.getMapOptions(),
@@ -103,6 +103,7 @@ export class OsmFrame extends MapPublisherObserver {
       type: type,
       width: width,
       overlay: overlay,
+      opacity: opacity,
     });
     this.publish({
       state: MessageState.ShowOverlay,
@@ -164,8 +165,8 @@ export class OsmFrame extends MapPublisherObserver {
 
     this.currentLayer = layer;
 
-    const { type, width, overlay } = getUrlParams();
-    setUrlParams({ options: this.getMapOptions(), layer: layer, type: type, width: width, overlay: overlay });
+    const { type, width, overlay, opacity } = getUrlParams();
+    setUrlParams({ options: this.getMapOptions(), layer: layer, type: type, width: width, overlay: overlay, opacity: opacity });
   }
 
   getMapOptions = (): MapOptions => ({
@@ -252,8 +253,8 @@ export class OsmOverlay extends MapPublisherObserver {
     this.instance = null;
     this.hide();
 
-    const { type, width, layer } = getUrlParams();
-    setUrlParams({ options, layer, type, width, overlay: '' });
+    const { type, width, layer, opacity } = getUrlParams();
+    setUrlParams({ options, layer, type, width, overlay: '', opacity: opacity });
   }
 
   switchLayerTo(layer: LayerName) {
@@ -280,8 +281,8 @@ export class OsmOverlay extends MapPublisherObserver {
 
     this.currentLayer = layer;
 
-    const { type, width, layer: urlLayer } = getUrlParams();
-    setUrlParams({ options: this.getMapOptions(), layer: urlLayer, type: type, width: width, overlay: layer });
+    const { type, width, layer: urlLayer, opacity } = getUrlParams();
+    setUrlParams({ options: this.getMapOptions(), layer: urlLayer, type: type, width: width, overlay: layer, opacity: opacity });
   }
 
   getMapOptions = (): MapOptions => {
