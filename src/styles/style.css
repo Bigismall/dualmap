@@ -23,13 +23,13 @@
 
   --axis-horizontal: 25%;
   --axis-vertical  : 50%;
-  --overlay-opacity : 0.5;
+  --overlay-opacity: 0.5;
 
 
   font-family            : Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height            : 1.5;
   font-weight            : 400;
-  font-size              : clamp(14px, 1.5vw, 16px);
+  font-size              : clamp(13px, 1.5vw, 16px);
   color                  : var(--color--slate-750, #333c4e);
   background-color       : var(--color--slate-50, #eff1f4);
   font-synthesis         : none;
@@ -83,6 +83,7 @@ header {
   justify-content : center;
   align-items     : stretch;
   flex-direction  : row;
+  gap             : 0.5rem;
 }
 
 h1,
@@ -175,7 +176,7 @@ kbd {
 
 body:has(.layout.w100 .layout__overlay:not(.hidden)) .layout__left {
   opacity: var(--overlay-opacity, 0.5);
-  }
+}
 
 .layout__left,
 .layout__right {
@@ -185,14 +186,14 @@ body:has(.layout.w100 .layout__overlay:not(.hidden)) .layout__left {
 }
 
 .layout__overlay {
-  display        : none;
-  position        : absolute;
-  top             : 2rem;
-  right            : auto;
-  left            : 0;
-  width           : 100%;
-  height          : calc(100% - 2rem);
-  z-index         : -1000;
+  display : none;
+  position: absolute;
+  top     : 2rem;
+  right   : auto;
+  left    : 0;
+  width   : 100%;
+  height  : calc(100% - 2rem);
+  z-index : -1000;
 }
 
 .layout__frame {
@@ -201,8 +202,6 @@ body:has(.layout.w100 .layout__overlay:not(.hidden)) .layout__left {
   padding: 0;
   border : none;
 }
-
-
 
 .axis {
   position        : absolute;
@@ -238,6 +237,10 @@ body:has(.layout.w100 .layout__overlay:not(.hidden)) .layout__left {
   transform: translateX(calc(var(--axis-horizontal, 25%)));
 }
 
+body:has(.layout.w100) .axis__vertical.axis__vertical--right {
+  display: none;
+}
+
 
 .choice {
   display        : flex;
@@ -256,14 +259,13 @@ body:has(.layout.w100) .choice.js-map-type {
 body:not(:has(.layout.w100)) .choice.js-overlay-type {
   display: none;
 }
+
 body:not(:has(.layout.w100)) .choice.js-opacity {
   display: none;
 }
 
-
-
 .choice__label {
-  display:none;
+  display: none;
 }
 
 @media screen and (min-width: 768px) {
@@ -271,23 +273,24 @@ body:not(:has(.layout.w100)) .choice.js-opacity {
     display: block;
   }
 }
+
 .choice__label {
   margin     : 0;
-  padding    : 0 0.25rem 0 0.5rem;
+  padding    : 0;
   line-height: 2rem;
   white-space: nowrap;
+  font-size  : 1rem;
 }
 
 .choice__select {
-  margin            : 0;
-  height            : 1.625rem;
-  padding           : 0 2rem 0 0.5rem;
-  border            : 1px solid var(--color--slate-700, #3d475c);
-  border-radius     : 0.25rem;
-  background-color  : var(--color--slate-50, #eff1f4);
-  color             : var(--color--slate-900, #181c25);
-  font              : inherit;
-  line-height       : 1.2;
+  margin          : 0;
+  height          : auto;
+  padding         : 0;
+  border          : 1px solid var(--color--slate-700, #3d475c);
+  border-radius   : 0.25rem;
+  background-color: var(--color--slate-50, #eff1f4);
+  color           : var(--color--slate-900, #181c25);
+  font            : inherit;
 }
 
 .button {
@@ -298,16 +301,11 @@ body:not(:has(.layout.w100)) .choice.js-opacity {
   line-height     : 2rem;
   cursor          : pointer;
   border          : none;
-  border-radius     : 0.25rem;
+  border-radius   : 0.25rem;
   outline         : none;
   color           : var(--color--slate-50, #eff1f4);
   background-color: var(--color-red-450, #ee402e);
-  font-size: 1rem;
-
-}
-
-.css-about {
-  margin: 0 0.25rem 0 0.5rem;
+  font-size       : 1rem;
 }
 
 #about-dialog {
@@ -316,7 +314,7 @@ body:not(:has(.layout.w100)) .choice.js-opacity {
   left            : 50%;
   transform       : translate(-50%, -50%);
   min-width       : 60%;
-  height: auto;
+  height          : auto;
   width           : auto;
   max-width       : 90%;
   max-height      : 90%;
@@ -327,7 +325,7 @@ body:not(:has(.layout.w100)) .choice.js-opacity {
   border-radius   : 1rem;
   border          : none;
 
-/*  USe   --color--slate-900: #181c25; for set the  box shadow color*/
+  /*  USe   --color--slate-900: #181c25; for set the  box shadow color*/
   box-shadow: 0 15px 30px 0 rgba(24, 28, 37, 0.45);
 
 }
@@ -341,5 +339,5 @@ body:not(:has(.layout.w100)) .choice.js-opacity {
   position: sticky;
   right   : 1rem;
   top     : 1rem;
-  float:  right;
+  float   : right;
 }

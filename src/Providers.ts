@@ -245,6 +245,17 @@ export class OsmOverlay extends MapPublisherObserver {
   getLayer() {
     return this.currentLayer;
   }
+
+  disable() {
+    const options = this.getMapOptions();
+    this.instance?.remove();
+    this.instance = null;
+    this.hide();
+
+    const { type, width, layer } = getUrlParams();
+    setUrlParams({ options, layer, type, width, overlay: '' });
+  }
+
   switchLayerTo(layer: LayerName) {
     if (this.instance === null) {
       return;
