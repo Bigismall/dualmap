@@ -1,7 +1,7 @@
 import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
 import { Axis } from './Axis.class.ts';
-import { WIDTH_25, WIDTH_33, WIDTH_50, WIDTH_66, WIDTH_100 } from './constants.ts';
+import { WIDTH_100, WIDTH_25, WIDTH_33, WIDTH_50, WIDTH_66 } from './constants.ts';
 
 import { osmLayers } from './layers.ts';
 import { MapFactory } from './MapFactory.class.ts';
@@ -101,14 +101,19 @@ window.addEventListener('load', () => {
   // Select group for overlay
 
   new SelectGroupClass($elements.get('overlayTypeNav') as HTMLSelectElement, urlParams.overlay, (event) => {
-    const mapLayer = (event.target as HTMLSelectElement).value as LayerName;
+    const mapLayer = (event.target as HTMLSelectElement).value;
+
+    if (mapLayer === '') {
+      overlayMap.disable();
+      return;
+    }
 
     if (overlayMap.getInstance() === null) {
       $overlay.classList.remove('hidden');
-      overlayMap.init(mapLayer);
+      overlayMap.init(mapLayer as LayerName);
     } else {
       if (overlayMap.getInstance()?.hasLayer(osmLayers[overlayMap.getLayer()][0])) {
-        overlayMap.switchLayerTo(mapLayer);
+        overlayMap.switchLayerTo(mapLayer as LayerName);
       }
     }
   });
