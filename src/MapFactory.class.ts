@@ -7,7 +7,6 @@ import {
   GoogleStreetViewFrame,
   OSMBuildingsFrame,
   UMPFrame,
-  WazeFrame,
 } from './Providers.ts';
 import type { MapType } from './types.ts';
 import { getMapOptions, getUrlParams } from './url.ts';
@@ -33,8 +32,6 @@ export class MapFactory {
         return new ADSBExchangeFrame($mapElement, mapOptions, mapConfig);
       case 'osmb':
         return new OSMBuildingsFrame($mapElement, mapOptions, mapConfig);
-      case 'waze':
-        return new WazeFrame($mapElement, mapOptions, mapConfig);
       case 'ump':
         return new UMPFrame($mapElement, mapOptions, mapConfig);
     }

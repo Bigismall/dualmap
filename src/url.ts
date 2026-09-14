@@ -2,6 +2,7 @@ import {
   DEFAULT_CENTER,
   DEFAULT_LAYER,
   DEFAULT_MAP_TYPE,
+  DEFAULT_OPACITY,
   DEFAULT_OVERLAY,
   DEFAULT_ZOOM,
   MAX_ZOOM,
@@ -83,8 +84,6 @@ export const setUrlParams = ({ options, layer, type, width, overlay, opacity }: 
     url.searchParams.set('p', opacity);
   }
 
-
-
   window.history.replaceState({}, '', url.toString());
 };
 
@@ -101,7 +100,7 @@ export const getUrlParams = (): UrlParams => {
   const type: MapType = isMapType(rawType) ? (rawType as MapType) : DEFAULT_MAP_TYPE;
   const overlay = isLayerName(urlParams.get('o') ?? '') ? (urlParams.get('o') as LayerName) : DEFAULT_OVERLAY;
   const width = urlParams.get('w') ?? WIDTH_50;
-  const opacity = urlParams.get('p') ?? ''; //TODO add value validation for opacity should be 0.1 - 1.0
+  const opacity = urlParams.get('p') ?? DEFAULT_OPACITY; //TODO add value validation for opacity should be 0.1 - 1.0
 
   return {
     lat,

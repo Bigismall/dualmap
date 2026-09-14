@@ -1,10 +1,10 @@
-export type MapType = 'google' | 'streetview' | 'osm' | 'bing' | 'adsb' | 'osmb' | 'waze' | 'ump';
+export type MapType = 'google' | 'streetview' | 'osm' | 'bing' | 'adsb' | 'osmb' | 'ump';
 
 export type LayerName = 'OSM' | 'OSM DE' | 'Humanitarian' | 'Topography' | 'Cyclo' | 'Satellite' | 'Rail' | 'Lidar';
 export type OverlayName = LayerName | '';
 
 // Create array based on the MapType
-const mapTypeArray: MapType[] = ['google', 'streetview', 'bing', 'adsb', 'osmb', 'waze', 'ump'];
+const mapTypeArray: MapType[] = ['google', 'streetview', 'bing', 'adsb', 'osmb', 'ump'];
 
 const layerNameArray: LayerName[] = [
   'OSM',
@@ -55,18 +55,18 @@ export enum MessageState {
 
 export type Message =
   | {
-    state: MessageState.KeyPressed;
-    data: {
-      key: string;
+      state: MessageState.KeyPressed;
+      data: {
+        key: string;
+      };
+    }
+  | {
+      state: MessageState.MoveMap;
+      data: MapOptions;
+    }
+  | {
+      state: MessageState.Reload | MessageState.HideOverlay | MessageState.ShowOverlay;
     };
-  }
-  | {
-    state: MessageState.MoveMap;
-    data: MapOptions;
-  }
-  | {
-    state: MessageState.Reload | MessageState.HideOverlay | MessageState.ShowOverlay;
-  };
 
 export type DOMElement = Element | NodeListOf<HTMLElement> | null;
 export type DOMElements = Map<string, DOMElement>;

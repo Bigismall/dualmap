@@ -1,7 +1,7 @@
 import 'leaflet-geosearch/dist/geosearch.css';
 import 'leaflet/dist/leaflet.css';
 import { Axis } from './Axis.class.ts';
-import { WIDTH_100, WIDTH_25, WIDTH_33, WIDTH_50, WIDTH_66 } from './constants.ts';
+import { WIDTH_25, WIDTH_33, WIDTH_50, WIDTH_66, WIDTH_100 } from './constants.ts';
 import { osmLayers } from './layers.ts';
 import { MapFactory } from './MapFactory.class.ts';
 import './plugins/linearmeasurement/LinearMeasurement.css';
@@ -100,7 +100,6 @@ window.addEventListener('load', () => {
     }
   });
 
-
   new SelectGroupClass($elements.get('overlayTypeNav') as HTMLSelectElement, mapOverlay, (event) => {
     const mapOverlayName = (event.target as HTMLSelectElement).value;
     if (isEmptyString(mapOverlayName)) {
@@ -116,7 +115,6 @@ window.addEventListener('load', () => {
     if (overlayMap.getInstance()?.hasLayer(osmLayers[overlayMap.getLayer()][0])) {
       overlayMap.switchLayerTo(mapOverlayName as LayerName);
     }
-
   });
 
   new SelectGroupClass($elements.get('proportionNav') as HTMLSelectElement, mapWidth, (event) => {
@@ -150,10 +148,7 @@ window.addEventListener('load', () => {
     const opacity = (event.target as HTMLSelectElement).value;
     const fractionOpacity = (parseInt(opacity, 10) / 100).toFixed(2);
 
-    ($elements.get('document') as HTMLHtmlElement).style.setProperty(
-      '--overlay-opacity',
-      fractionOpacity,
-    );
+    ($elements.get('document') as HTMLHtmlElement).style.setProperty('--overlay-opacity', fractionOpacity);
     //Set urlParams for opacity
     const urlParams = getUrlParams();
 
@@ -165,7 +160,6 @@ window.addEventListener('load', () => {
       overlay: urlParams.overlay,
       opacity: opacity,
     });
-
   });
 
   osm.subscribe(activeMap);

@@ -31,12 +31,6 @@ export class OSMBuildingsFrame extends MapObserver {
   }
 }
 
-export class WazeFrame extends MapObserver {
-  getUrl() {
-    return `https://embed.waze.com/en/iframe?zoom=${this.mapOptions.zoom}&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}`;
-  }
-}
-
 export class UMPFrame extends MapObserver {
   getUrl() {
     return `https://mapa.ump.waw.pl/ump-www/?zoom=${this.mapOptions.zoom}&lat=${this.mapOptions.lat}&lon=${this.mapOptions.lng}&layers=B0FFFFFFF`;
@@ -166,7 +160,14 @@ export class OsmFrame extends MapPublisherObserver {
     this.currentLayer = layer;
 
     const { type, width, overlay, opacity } = getUrlParams();
-    setUrlParams({ options: this.getMapOptions(), layer: layer, type: type, width: width, overlay: overlay, opacity: opacity });
+    setUrlParams({
+      options: this.getMapOptions(),
+      layer: layer,
+      type: type,
+      width: width,
+      overlay: overlay,
+      opacity: opacity,
+    });
   }
 
   getMapOptions = (): MapOptions => ({
@@ -282,7 +283,14 @@ export class OsmOverlay extends MapPublisherObserver {
     this.currentLayer = layer;
 
     const { type, width, layer: urlLayer, opacity } = getUrlParams();
-    setUrlParams({ options: this.getMapOptions(), layer: urlLayer, type: type, width: width, overlay: layer, opacity: opacity });
+    setUrlParams({
+      options: this.getMapOptions(),
+      layer: urlLayer,
+      type: type,
+      width: width,
+      overlay: layer,
+      opacity: opacity,
+    });
   }
 
   getMapOptions = (): MapOptions => {
