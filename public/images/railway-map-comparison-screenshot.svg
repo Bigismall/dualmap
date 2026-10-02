@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#e8eef6"/>
+  <rect x="32" y="32" width="560" height="536" rx="16" fill="#dedfd9"/>
+  <rect x="608" y="32" width="560" height="536" rx="16" fill="#d5e2d1"/>
+  <path d="M32 210h560M32 400h560M260 32v536M440 32v536M608 210h560M608 400h560M830 32v536M1030 32v536" fill="none" stroke="#fff" stroke-width="20"/>
+  <path d="M60 500L530 90M90 515L560 105" fill="none" stroke="#414956" stroke-width="9"/>
+  <path d="M650 500L1120 90M680 515L1150 105" fill="none" stroke="#414956" stroke-width="9"/>
+  <text x="600" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#182230">Railway map + satellite view</text>
+  <text x="600" y="330" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#344054">Replace this placeholder with a screenshot</text>
+</svg>
