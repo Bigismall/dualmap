@@ -1,0 +1,218 @@
+:root {
+  --color--slate-950: #0e1118;
+  --color--slate-900: #181c25;
+  --color--slate-850: #202632;
+  --color--slate-800: #2a3140;
+  --color--slate-750: #333c4e;
+  --color--slate-700: #3d475c;
+  --color--slate-650: #48536b;
+  --color--slate-600: #525f7a;
+  --color--slate-550: #5d6b89;
+  --color--slate-500: #687899;
+  --color--slate-450: #7385a9;
+  --color--slate-400: #8191b5;
+  --color--slate-350: #909ebe;
+  --color--slate-300: #a0acc7;
+  --color--slate-250: #b0b9d0;
+  --color--slate-200: #bfc7d9;
+  --color--slate-150: #cfd5e2;
+  --color--slate-100: #dfe3eb;
+  --color--slate-50 : #eff1f4;
+  --color--slate    : var(--color--slate-600);
+  --color-red-450   : #ee402e;
+
+  --page-background: var(--color--slate-50);
+  --page-text: var(--color--slate-750);
+  --page-muted: var(--color--slate-600);
+  --page-border: var(--color--slate-150);
+  --page-header-background: var(--color--slate-900);
+  --brand-color: var(--color-red-450);
+
+  line-height            : 1.5;
+  font-weight            : 400;
+  font-size              : clamp(13px, 1.5vw, 16px);
+  color                  : var(--color--slate-750, #333c4e);
+  background-color       : var(--color--slate-50, #eff1f4);
+  font-synthesis         : none;
+  text-rendering         : optimizeLegibility;
+  -webkit-font-smoothing : antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing             : border-box;
+
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  line-height: 1.65;
+}
+
+a {
+  color: var(--brand-color);
+}
+
+.page-header,
+.page-footer {
+  background: var(--page-header-background);
+  color: var(--color--slate-50);
+}
+
+.page-header__inner,
+.page-footer__inner,
+.page-content {
+  width: min(100% - 2rem, 1080px);
+  margin-inline: auto;
+}
+
+.page-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 4.5rem;
+}
+
+.brand,
+.page-header a,
+.page-footer a {
+  color: inherit;
+}
+
+.brand {
+  font-size: 1.15rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.page-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-content {
+  padding-block: clamp(2rem, 6vw, 5rem);
+}
+
+.breadcrumbs {
+  margin: 0 0 1.5rem;
+  color: var(--page-muted);
+  font-size: 0.9rem;
+}
+
+.breadcrumbs a {
+  color: inherit;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 3rem;
+}
+
+.hero h1 {
+  max-width: 15ch;
+  margin: 0 0 1rem;
+  font-size: clamp(2.25rem, 5vw, 3.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+
+.hero__intro {
+  color: var(--color--slate-700);
+  font-size: 1.15rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.7rem 1.1rem;
+  border-radius: 0.45rem;
+  background: var(--brand-color);
+  color: var(--color--slate-50);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.button:hover,
+.button:focus-visible {
+  background: var(--color--slate-800);
+}
+
+.hero figure {
+  margin: 0;
+}
+
+.hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 1rem 2rem rgb(14 17 24 / 16%);
+}
+
+figcaption {
+  margin-top: 0.65rem;
+  color: var(--page-muted);
+  font-size: 0.85rem;
+}
+
+.content-section {
+  max-width: 75ch;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--page-border);
+}
+
+.content-section h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.55rem;
+  line-height: 1.25;
+}
+
+.content-section p {
+  margin: 0.75rem 0;
+}
+
+.related-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.related-links a {
+  display: inline-block;
+  padding: 0.3rem 0;
+}
+
+.page-footer__inner {
+  padding-block: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.page-footer p {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .page-header__inner {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-block: 1rem;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}

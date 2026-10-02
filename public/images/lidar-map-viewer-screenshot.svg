@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <rect width="1200" height="600" fill="#e8eef6"/>
+  <rect x="32" y="32" width="560" height="536" rx="16" fill="#b7c7a1"/>
+  <rect x="608" y="32" width="560" height="536" rx="16" fill="#d3dfe8"/>
+  <path d="M40 430Q180 240 320 390T590 270M40 500Q200 310 350 450T590 350" fill="none" stroke="#768c5c" stroke-width="28"/>
+  <path d="M608 210h560M608 400h560M830 32v536M1030 32v536" fill="none" stroke="#fff" stroke-width="20"/>
+  <text x="600" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#182230">LIDAR relief + 3D buildings</text>
+  <text x="600" y="330" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#344054">Replace this placeholder with a screenshot</text>
+</svg>

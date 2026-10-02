@@ -21,8 +21,6 @@ export const WIDTH_33 = 'w33';
 export const WIDTH_50 = 'w50';
 export const WIDTH_66 = 'w66';
 
-
-
 export const measureOptions = {
   unitSystem: 'metric',
   color: '#3381ff',
