@@ -20,6 +20,6 @@
   "dependencies": {
     "@biomejs/biome": "^2.6.4",
     "leaflet": "^1.9.4",
-    "leaflet-geosearch": "^4.4.0"
+    "leaflet-geosearch": "^5.2.0"
   }
 }
